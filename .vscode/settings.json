@@ -1,0 +1,10 @@
+{
+  "files.watcherExclude": {
+    "**/frontend/node_modules/**": true
+  },
+  "files.useExperimentalFileWatcher": true,
+  "prettier.printWidth": 140,
+  "prettier.singleQuote": true,
+  "editor.formatOnSave": true,
+  "prettier.semi": false
+}
