@@ -12,7 +12,7 @@ Get the app directly on GitHub, here is the [v1.0](https://github.com/MBach/rn-b
 
 ![Add entry](https://mbach.github.io/rn-breastfeeding/screenshots/add_entry.jpg)
 
-![Timer](https://mbach.github.io/rn-breastfeeding/screenshots/timer.jpg)
+![Edit group](https://mbach.github.io/rn-breastfeeding/screenshots/edit_group.jpg)
 
 ![Edit date](https://mbach.github.io/rn-breastfeeding/screenshots/edit_date.jpg)
 
