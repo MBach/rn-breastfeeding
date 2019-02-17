@@ -21,17 +21,18 @@ class DataStore {
 
   @computed
   get groupedRecords() {
-    let groups = _.groupBy(this._records, record => {
-      return record.day
-    })
-
-    let result = _.map(groups, function(group, day) {
-      group = _.orderBy(group, ['date'], ['desc'])
-      return {
+    let groups = _.groupBy(this._records, record => record.day)
+    let result = _.map(groups, (g, day) => {
+      const group = _.orderBy(g, ['date'], ['desc'])
+      const index = group.findIndex(g => g.vitaminD)
+      const obj = {
         group,
         day,
-        key: group[0].id
+        key: group[0].date,
+        hasVitaminD: index >= 0
       }
+      console.log('obj', obj)
+      return obj
     })
 
     result = _.orderBy(result, ['day'], ['desc'])
@@ -46,12 +47,9 @@ class DataStore {
   @action
   addEntry = data => {
     this.updating = true
-    // FIXME
-    data.id = this._records.length
     let r = toJS(this._records)
     r.push(data)
     this._records = r
-    console.log('r', r)
     this.updating = false
   }
 

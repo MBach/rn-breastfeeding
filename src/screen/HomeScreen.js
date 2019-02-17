@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, ScrollView, View } from 'react-native'
+import { FlatList, ScrollView, Text, View } from 'react-native'
 import { ActivityIndicator, Button, Card, Chip, Dialog, FAB, List, Portal, TouchableRipple } from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
 import _ from 'lodash'
@@ -52,17 +52,23 @@ export default class HomeScreen extends Component {
       const lastGroup = dataStore.groupedRecords[0]
       const lastEntry = lastGroup.group[0]
       return (
-        <Card style={{ backgroundColor: '#dddddd', margin: 16 }} onPress={() => this.setState({ editLastEntry: true })}>
+        <Card style={{ backgroundColor: '#dddddd', margin: 8 }} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title
             title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`}
             subtitle={`${moment.unix(lastEntry.date).fromNow()}`}
           />
           <Card.Content style={{ flexDirection: 'row' }}>
-            <Chip style={{ marginRight: 8 }}>{mapChoice(lastEntry.choice)}</Chip>
-            <Chip style={{ marginRight: 8 }} icon="hourglass-empty">
-              {lastEntry.duration}
+            <Chip style={{ marginRight: 8 }}>
+              <Text style={{ fontSize: 13 }}>{mapChoice(lastEntry.choice)}</Text>
             </Chip>
-            {lastEntry.vitaminD && <Chip icon="brightness-5">Vitamine D</Chip>}
+            <Chip style={{ marginRight: 8 }} icon="hourglass-empty">
+              <Text style={{ fontSize: 13 }}>{lastEntry.duration}</Text>
+            </Chip>
+            {lastEntry.vitaminD && (
+              <Chip icon="brightness-5">
+                <Text style={{ fontSize: 13 }}>Vitamine D</Text>
+              </Chip>
+            )}
           </Card.Content>
         </Card>
       )
@@ -85,7 +91,11 @@ export default class HomeScreen extends Component {
     return (
       <TouchableRipple style={styles.list} onPress={() => this.editGroup(item)} rippleColor={palette.rippleColor}>
         <List.Section title={moment.unix(item.day).format('dddd Do MMMM YYYY')}>
-          <List.Item title={title} left={() => <List.Icon icon="edit" />} />
+          <List.Item
+            title={title}
+            left={() => <List.Icon icon="edit" />}
+            right={() => item.hasVitaminD && <List.Icon style={{ opacity: 0.5 }} icon="brightness-5" />}
+          />
         </List.Section>
       </TouchableRipple>
     )
@@ -104,11 +114,11 @@ export default class HomeScreen extends Component {
         <List.Item
           key={index}
           title={moment.unix(entry.date).format('HH:mm')}
-          description={mapChoice(entry.choice)}
+          description={`${mapChoice(entry.choice)}, ${entry.duration}`}
           right={() => (
             <TouchableRipple
               onPress={() => {
-                currentGroup.group = [...currentGroup.group.filter(item => item.id !== entry.id)]
+                currentGroup.group = [...currentGroup.group.filter(item => item.date !== entry.date)]
                 this.setState({ currentGroup })
               }}
             >

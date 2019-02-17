@@ -78,7 +78,6 @@ export default class AddEntryScreen extends Component {
       clearInterval(this.timer)
     } else {
       this.timer = setInterval(() => {
-        console.log('diff', new Date() - this.state.timerStart + this.state.elapsed)
         this.setState({ timer: new Date() - this.state.timerStart + this.state.elapsed })
       }, 1000)
     }
