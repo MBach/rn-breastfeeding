@@ -17,18 +17,9 @@ export default class HomeScreen extends Component {
   }
 
   state = {
-    hydrated: false,
     currentGroup: null,
     editGroupDialog: false,
     editLastEntry: false
-  }
-
-  componentDidMount() {
-    const hydrate = create({ storage: AsyncStorage, jsonify: true })
-    hydrate('dataStore', dataStore).then(async () => {
-      await dataStore.hydrateComplete()
-      this.setState({ hydrated: true })
-    })
   }
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
@@ -51,8 +42,8 @@ export default class HomeScreen extends Component {
       return (
         <Card style={{ backgroundColor: '#dddddd', margin: 16 }} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title
-            title={`Dernière tétée à ${moment(lastEntry.date).format('HH:mm')}`}
-            subtitle={`${moment(lastEntry.date).fromNow()}`}
+            title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`}
+            subtitle={`${moment.unix(lastEntry.date).fromNow()}`}
           />
           <Card.Content style={{ flexDirection: 'row' }}>
             <Chip style={{ marginRight: 8 }}>{mapChoice(lastEntry.choice)}</Chip>
@@ -97,7 +88,7 @@ export default class HomeScreen extends Component {
       data = currentGroup.group.map((entry, index) => (
         <List.Item
           key={index}
-          title={moment(entry.date).format('HH:mm')}
+          title={moment.unix(entry.date).format('HH:mm')}
           description={mapChoice(entry.choice)}
           right={() => (
             <TouchableRipple
@@ -115,7 +106,7 @@ export default class HomeScreen extends Component {
     return (
       <>
         <Dialog.Title>{moment.unix(currentGroup.day).format('dddd')}</Dialog.Title>
-        <Dialog.ScrollArea style={{ flex: 1, maxHeight: '50%' }}>
+        <Dialog.ScrollArea style={{ maxHeight: '75%' }}>
           <ScrollView>{data}</ScrollView>
         </Dialog.ScrollArea>
         <Dialog.Actions>
@@ -154,8 +145,8 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
-        {this.renderLastEntry()}
-        {this.state.hydrated ? (
+        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry()}
+        {dataStore.hydrated ? (
           <FlatList
             data={dataStore.groupedRecords}
             extractData={dataStore.groupedRecords.length}
@@ -163,11 +154,11 @@ export default class HomeScreen extends Component {
             renderItem={this.renderItem}
           />
         ) : (
-          <ActivityIndicator size="large" color="#f4511e" />
+          <ActivityIndicator size="large" color={palette.primaryColor} />
         )}
         <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
         <Portal>
-          <Dialog style={{ minHeight: '50%' }} visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
+          <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
             {this.editGroupDialog()}
           </Dialog>
           <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>

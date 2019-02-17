@@ -3015,10 +3015,10 @@ mobx-persist@^0.4.1:
   dependencies:
     serializr "^1.1.11"
 
-mobx-react@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-5.1.0.tgz#c978529b2ee4ee17701e221305df106f176242fd"
-  integrity sha1-yXhSmy7k7hdwHiITBd8QbxdiQv0=
+mobx-react@5.2.8:
+  version "5.2.8"
+  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-5.2.8.tgz#059c7f29254d7cd36e103d79113103b40348d3bf"
+  integrity sha512-VAkeqkrIpdoy3VPPoqvxjdQmcTT6hi7i3TsZSwcKbSrPbSTuWc7cp1EOiX/zV1wPWEuoNAQ22bCrskQwvdYTJA==
   dependencies:
     hoist-non-react-statics "^2.5.0"
     react-lifecycles-compat "^3.0.2"

@@ -43,6 +43,10 @@ export default class AddEntryScreen extends Component {
     this.startStopTimer()
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
   /// Date & time pickers
 
   showDatePicker = () => this.setState({ isDatePickerVisible: true })
@@ -103,13 +107,13 @@ export default class AddEntryScreen extends Component {
 
         /// Save data
         const data = {
-          date: day.toDate(),
+          date: day.unix(),
           day: day.startOf('day').unix(),
           duration: this.formatDate(),
           choice
         }
         dataStore.addEntry(data)
-        this.props.navigation.popToTop()
+        this.props.navigation.replace('Home')
       } else {
         this.setState({ showErrorDialog: true })
       }

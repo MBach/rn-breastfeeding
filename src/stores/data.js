@@ -1,8 +1,12 @@
-import { observable, action, computed } from 'mobx'
-import { persist } from 'mobx-persist'
+import { AsyncStorage } from 'react-native'
+import { observable, action, computed, toJS } from 'mobx'
+import { create, persist } from 'mobx-persist'
 import _ from 'lodash'
 
 class DataStore {
+  @observable hydrated = false
+  @observable updating = false
+
   @persist('list')
   @observable
   _records = []
@@ -17,7 +21,7 @@ class DataStore {
 
   @computed
   get groupedRecords() {
-    let groups = _.groupBy(this.records, record => {
+    let groups = _.groupBy(this._records, record => {
       return record.day
     })
 
@@ -35,14 +39,20 @@ class DataStore {
   }
 
   @action
-  hydrateComplete = async () => {}
+  hydrateComplete = async () => {
+    this.hydrated = true
+  }
 
   @action
   addEntry = data => {
-    data.id = this.records.length
-    let r = [...this.records]
+    this.updating = true
+    // FIXME
+    data.id = this._records.length
+    let r = toJS(this._records)
     r.push(data)
-    this.records = r
+    this._records = r
+    console.log('r', r)
+    this.updating = false
   }
 
   @action
@@ -55,3 +65,8 @@ class DataStore {
 }
 
 export default (dataStore = new DataStore())
+
+const hydrate = create({ storage: AsyncStorage, jsonify: true })
+hydrate('dataStore', dataStore).then(() => {
+  dataStore.hydrateComplete()
+})
