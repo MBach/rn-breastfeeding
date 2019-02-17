@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { AsyncStorage, FlatList, ScrollView, View } from 'react-native'
+import { FlatList, ScrollView, View } from 'react-native'
 import { ActivityIndicator, Button, Card, Chip, Dialog, FAB, List, Portal, TouchableRipple } from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
-import { create } from 'mobx-persist'
 import _ from 'lodash'
 import moment from 'moment'
 import 'moment/locale/fr'
@@ -12,8 +11,15 @@ import styles, { palette } from '../styles'
 @inject('dataStore')
 @observer
 export default class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Accueil'
+  /// Add action in header
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state
+    return {
+      title: 'Accueil'
+      //headerRight: (
+      //  <Button icon="brightness-3" color={palette.primaryTextColor} onPress={() => params.handleDarkMode && params.handleDarkMode()} />
+      //)
+    }
   }
 
   state = {
@@ -21,6 +27,12 @@ export default class HomeScreen extends Component {
     editGroupDialog: false,
     editLastEntry: false
   }
+
+  /*componentDidMount() {
+    this.props.navigation.setParams({ handleDarkMode: () => this.darkMode() })
+  }
+
+  darkMode = () => {}*/
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
 
@@ -47,7 +59,10 @@ export default class HomeScreen extends Component {
           />
           <Card.Content style={{ flexDirection: 'row' }}>
             <Chip style={{ marginRight: 8 }}>{mapChoice(lastEntry.choice)}</Chip>
-            <Chip icon="hourglass-empty">{lastEntry.duration}</Chip>
+            <Chip style={{ marginRight: 8 }} icon="hourglass-empty">
+              {lastEntry.duration}
+            </Chip>
+            {lastEntry.vitaminD && <Chip icon="brightness-5">Vitamine D</Chip>}
           </Card.Content>
         </Card>
       )

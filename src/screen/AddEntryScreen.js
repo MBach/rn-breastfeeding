@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import { Button, Chip, Dialog, FAB, Paragraph, Portal, TextInput } from 'react-native-paper'
+import { Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
@@ -31,6 +31,7 @@ export default class AddEntryScreen extends Component {
       elapsed: null,
       in: false,
       toggles: { left: false, right: false, both: false, bottle: false },
+      vitaminD: false,
       isRunning: false,
       showEditDurationDialog: false,
       showErrorDialog: false,
@@ -95,7 +96,7 @@ export default class AddEntryScreen extends Component {
   /// Validation
 
   validateEntry = () => {
-    const { day, timer } = this.state
+    const { day, timer, vitaminD } = this.state
     const { left, right, both, bottle } = this.state.toggles
     if (left || right || both || bottle) {
       if (timer) {
@@ -110,7 +111,8 @@ export default class AddEntryScreen extends Component {
           date: day.unix(),
           day: day.startOf('day').unix(),
           duration: this.formatDate(),
-          choice
+          choice,
+          vitaminD
         }
         dataStore.addEntry(data)
         this.props.navigation.replace('Home')
@@ -188,6 +190,15 @@ export default class AddEntryScreen extends Component {
           {this.renderButton('right')}
           {this.renderButton('both')}
           {this.renderButton('bottle')}
+        </View>
+        <View style={{ marginBottom: 16 }}>
+          <Text>Vitamine D</Text>
+          <Switch
+            value={this.state.vitaminD}
+            onValueChange={() => {
+              this.setState({ vitaminD: !this.state.vitaminD })
+            }}
+          />
         </View>
         <Text>Durée de la tétée</Text>
         <View style={styles.timerContainer}>
