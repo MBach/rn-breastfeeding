@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react/native'
@@ -7,6 +8,11 @@ import moment from 'moment'
 
 import { CHOICES, mapChoice } from '../config'
 import styles, { palette } from '../styles'
+
+const resetAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Home' })]
+})
 
 @inject('dataStore')
 @observer
@@ -114,7 +120,7 @@ export default class AddEntryScreen extends Component {
           vitaminD
         }
         dataStore.addEntry(data)
-        this.props.navigation.replace('Home')
+        this.props.navigation.dispatch(resetAction)
       } else {
         this.setState({ showErrorDialog: true })
       }

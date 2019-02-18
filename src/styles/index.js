@@ -36,6 +36,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc'
   },
+  chipMarginRight: {
+    marginRight: 8
+  },
+  chipText: {
+    fontSize: 13
+  },
   // add entry
   mainContainer: {
     flex: 1,

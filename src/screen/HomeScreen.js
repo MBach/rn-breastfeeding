@@ -2,37 +2,21 @@ import React, { Component } from 'react'
 import { FlatList, ScrollView, Text, View } from 'react-native'
 import { ActivityIndicator, Button, Card, Chip, Dialog, FAB, List, Portal, TouchableRipple } from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
-import _ from 'lodash'
 import moment from 'moment'
 import 'moment/locale/fr'
+import humanizeDuration from 'humanize-duration'
 import { mapChoice } from '../config'
 import styles, { palette } from '../styles'
 
 @inject('dataStore')
 @observer
 export default class HomeScreen extends Component {
-  /// Add action in header
-  static navigationOptions = ({ navigation }) => {
-    const { params } = navigation.state
-    return {
-      title: 'Accueil'
-      //headerRight: (
-      //  <Button icon="brightness-3" color={palette.primaryTextColor} onPress={() => params.handleDarkMode && params.handleDarkMode()} />
-      //)
-    }
-  }
-
+  static navigationOptions = () => ({ title: 'Accueil' })
   state = {
     currentGroup: null,
     editGroupDialog: false,
     editLastEntry: false
   }
-
-  /*componentDidMount() {
-    this.props.navigation.setParams({ handleDarkMode: () => this.darkMode() })
-  }
-
-  darkMode = () => {}*/
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
 
@@ -45,6 +29,15 @@ export default class HomeScreen extends Component {
     this.setState({ editGroupDialog: false })
   }
 
+  humanize = date =>
+    `Il y a ${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+      conjunction: ' et ',
+      units: ['d', 'h', 'm'],
+      language: 'fr',
+      round: true,
+      serialComma: false
+    })}`
+
   ///
 
   renderLastEntry() {
@@ -53,20 +46,17 @@ export default class HomeScreen extends Component {
       const lastEntry = lastGroup.group[0]
       return (
         <Card style={{ backgroundColor: '#dddddd', margin: 8 }} onPress={() => this.setState({ editLastEntry: true })}>
-          <Card.Title
-            title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`}
-            subtitle={`${moment.unix(lastEntry.date).fromNow()}`}
-          />
+          <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
           <Card.Content style={{ flexDirection: 'row' }}>
-            <Chip style={{ marginRight: 8 }}>
-              <Text style={{ fontSize: 13 }}>{mapChoice(lastEntry.choice)}</Text>
+            <Chip style={styles.chipMarginRight}>
+              <Text style={styles.chipText}>{mapChoice(lastEntry.choice)}</Text>
             </Chip>
-            <Chip style={{ marginRight: 8 }} icon="hourglass-empty">
-              <Text style={{ fontSize: 13 }}>{lastEntry.duration}</Text>
+            <Chip style={styles.chipMarginRight} icon="hourglass-empty">
+              <Text style={styles.chipText}>{lastEntry.duration}</Text>
             </Chip>
             {lastEntry.vitaminD && (
               <Chip icon="brightness-5">
-                <Text style={{ fontSize: 13 }}>Vitamine D</Text>
+                <Text style={styles.chipText}>Vitamine D</Text>
               </Chip>
             )}
           </Card.Content>
@@ -167,30 +157,28 @@ export default class HomeScreen extends Component {
     )
   }
 
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry()}
-        {dataStore.hydrated ? (
-          <FlatList
-            data={dataStore.groupedRecords}
-            extractData={dataStore.groupedRecords.length}
-            keyExtractor={item => `${item.key}`}
-            renderItem={this.renderItem}
-          />
-        ) : (
-          <ActivityIndicator size="large" color={palette.primaryColor} />
-        )}
-        <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
-        <Portal>
-          <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
-            {this.editGroupDialog()}
-          </Dialog>
-          <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
-            {this.editLastEntryDialog()}
-          </Dialog>
-        </Portal>
-      </View>
-    )
-  }
+  render = () => (
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      {dataStore.hydrated && !dataStore.updating && this.renderLastEntry()}
+      {dataStore.hydrated ? (
+        <FlatList
+          data={dataStore.groupedRecords}
+          extractData={dataStore.groupedRecords.length}
+          keyExtractor={item => `${item.key}`}
+          renderItem={this.renderItem}
+        />
+      ) : (
+        <ActivityIndicator size="large" color={palette.primaryColor} />
+      )}
+      <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
+      <Portal>
+        <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
+          {this.editGroupDialog()}
+        </Dialog>
+        <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
+          {this.editLastEntryDialog()}
+        </Dialog>
+      </Portal>
+    </View>
+  )
 }

@@ -2076,6 +2076,11 @@ http-errors@~1.6.2:
     setprototypeof "1.1.0"
     statuses ">= 1.4.0 < 2"
 
+humanize-duration@^3.17.0:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.17.0.tgz#a2cec75f9329ce68f8797b23d31d1f988992d11b"
+  integrity sha512-9em7CXFa0my1DF3aIQg0sTRyAX2znEOMHolUvu9nSTUjS+bRD32y0MH+Hnm3Xu0cSWrxpYb2isXSfH9pF2LP8g==
+
 iconv-lite@^0.4.17, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -3659,6 +3664,11 @@ react-native-paper@^2.11.1:
     hoist-non-react-statics "^3.1.0"
     react-lifecycles-compat "^3.0.4"
     react-native-safe-area-view "^0.12.0"
+
+react-native-quick-actions@^0.3.9:
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/react-native-quick-actions/-/react-native-quick-actions-0.3.9.tgz#784b31fb8cf312478b7d1846b46ccc2dadc401ca"
+  integrity sha512-o+vQjL47TPTlzi9I0PqcufMeEI0ZOE42wlOImRnH0VHrU/sPTqCqrptf6AG3au4t80JP0pR2pFYlRz/I/UaIYw==
 
 react-native-safe-area-view@^0.12.0:
   version "0.12.0"
