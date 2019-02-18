@@ -40,9 +40,9 @@ export default class HomeScreen extends Component {
 
   ///
 
-  renderLastEntry() {
-    if (dataStore.groupedRecords.length > 0) {
-      const lastGroup = dataStore.groupedRecords[0]
+  renderLastEntry(groupedRecords) {
+    if (groupedRecords.length > 0) {
+      const lastGroup = groupedRecords[0]
       const lastEntry = lastGroup.group[0]
       return (
         <Card style={{ backgroundColor: '#dddddd', margin: 8 }} onPress={() => this.setState({ editLastEntry: true })}>
@@ -157,28 +157,33 @@ export default class HomeScreen extends Component {
     )
   }
 
-  render = () => (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      {dataStore.hydrated && !dataStore.updating && this.renderLastEntry()}
-      {dataStore.hydrated ? (
-        <FlatList
-          data={dataStore.groupedRecords}
-          extractData={dataStore.groupedRecords.length}
-          keyExtractor={item => `${item.key}`}
-          renderItem={this.renderItem}
-        />
-      ) : (
-        <ActivityIndicator size="large" color={palette.primaryColor} />
-      )}
-      <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
-      <Portal>
-        <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
-          {this.editGroupDialog()}
-        </Dialog>
-        <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
-          {this.editLastEntryDialog()}
-        </Dialog>
-      </Portal>
-    </View>
-  )
+  render = () => {
+    const groupedRecords = dataStore.groupedRecords
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
+        {dataStore.hydrated && !dataStore.updating ? (
+          <FlatList
+            data={groupedRecords}
+            extractData={groupedRecords.length}
+            keyExtractor={item => `${item.key}`}
+            renderItem={this.renderItem}
+          />
+        ) : (
+          <ActivityIndicator size="large" color={palette.primaryColor} />
+        )}
+        <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
+        <Portal>
+          <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
+            {this.editGroupDialog()}
+          </Dialog>
+        </Portal>
+        <Portal>
+          <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
+            {this.editLastEntryDialog()}
+          </Dialog>
+        </Portal>
+      </View>
+    )
+  }
 }

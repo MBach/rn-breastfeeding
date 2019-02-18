@@ -51,12 +51,12 @@ export default class App extends Component {
   }
 
   render = () => (
-    <PaperProvider theme={theme}>
-      <Portal.Host>
-        <Provider {...stores}>
+    <Provider {...stores}>
+      <PaperProvider theme={theme}>
+        <Portal.Host>
           <AppNavigator />
-        </Provider>
-      </Portal.Host>
-    </PaperProvider>
+        </Portal.Host>
+      </PaperProvider>
+    </Provider>
   )
 }
