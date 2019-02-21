@@ -4,11 +4,15 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import { Provider } from 'mobx-react'
+import moment from 'moment'
+import SunCalc from 'suncalc'
+
 import AddEntryScreen from './screen/AddEntryScreen'
 import HomeScreen from './screen/HomeScreen'
 import LoadingScreen from './screen/LoadingScreen'
 import stores from './stores'
-import { palette, theme } from './styles'
+import { darkTheme, lightTheme } from './styles'
+import { pos } from './config'
 
 // Add an App shortcut with a long press
 QuickActions.setShortcutItems([
@@ -22,39 +26,44 @@ QuickActions.setShortcutItems([
   }
 ])
 
-const AppNavigator = createAppContainer(
-  createStackNavigator(
-    {
-      Loading: LoadingScreen,
-      Home: HomeScreen,
-      AddEntry: AddEntryScreen
-    },
-    {
-      initialRouteName: 'Loading',
-      defaultNavigationOptions: {
-        headerStyle: {
-          backgroundColor: palette.primaryColor
-        },
-        headerTintColor: palette.primaryTextColor,
-        headerTitleStyle: {
-          fontWeight: 'bold'
-        }
+const Stack = createStackNavigator(
+  {
+    Loading: LoadingScreen,
+    Home: HomeScreen,
+    AddEntry: AddEntryScreen
+  },
+  {
+    initialRouteName: 'Loading',
+    defaultNavigationOptions: {
+      headerTintColor: '#ffffff',
+      headerTitleStyle: {
+        fontWeight: 'bold'
       }
     }
-  )
+  }
 )
 
+const AppNavigator = createAppContainer(Stack)
+
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+    const times = SunCalc.getTimes(new Date(), pos.lat, pos.lng)
+    const m = moment()
+    this.state = {
+      theme: m.isAfter(times.dawn) && m.isBefore(times.dusk) ? lightTheme : darkTheme
+    }
+  }
   componentDidMount() {
     StatusBar.setBarStyle('light-content')
-    Platform.OS === 'android' && StatusBar.setBackgroundColor(palette.primaryDarkColor)
+    Platform.OS === 'android' && StatusBar.setBackgroundColor(this.state.theme.palette.primaryDarkColor)
   }
 
   render = () => (
     <Provider {...stores}>
-      <PaperProvider theme={theme}>
+      <PaperProvider theme={this.state.theme}>
         <Portal.Host>
-          <AppNavigator />
+          <AppNavigator screenProps={{ ...this.state.theme.colors }} />
         </Portal.Host>
       </PaperProvider>
     </Provider>

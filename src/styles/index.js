@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
-import { DefaultTheme } from 'react-native-paper'
+import { DarkTheme, DefaultTheme } from 'react-native-paper'
 
-export const palette = {
+const lightPalette = {
   primaryColor: '#c51162',
   primaryLight: '#fd558f',
   primaryDarkColor: '#8e0038',
@@ -10,37 +10,78 @@ export const palette = {
   secondaryLight: '#819ca9',
   secondaryDarkColor: '#29434e',
   secondaryTextColor: '#ffffff',
-  rippleColor: 'rgba(142, 0, 56, .32)'
+  rippleColor: 'rgba(142, 0, 56, .32)',
+  separator: '#cccccc',
+  headerTextColor: '#ffffff',
+  sectionTextColor: '#717171',
+  buttonColor: '#c51162'
 }
 
-export const theme = {
+const darkPalette = {
+  primaryColor: '#880e4f',
+  primaryLight: '#bc477b',
+  primaryDarkColor: '#560027',
+  secondaryColor: '#546e7a',
+  secondaryLight: '#819ca9',
+  secondaryDarkColor: '#29434e',
+  secondaryTextColor: '#ffffff',
+  rippleColor: 'rgba(142, 0, 56, .32)',
+  separator: '#444444',
+  headerTextColor: '#dddddd',
+  sectionTextColor: '#9B9B9B',
+  buttonColor: '#c51162'
+}
+
+export const lightTheme = {
   ...DefaultTheme,
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: palette.primaryColor,
-    accent: palette.primaryColor
-  }
+    primary: lightPalette.primaryColor,
+    secondary: lightPalette.secondaryColor,
+    accent: lightPalette.primaryColor
+  },
+  palette: lightPalette
+}
+
+export const darkTheme = {
+  ...DarkTheme,
+  roundness: 2,
+  colors: {
+    ...DarkTheme.colors,
+    primary: darkPalette.primaryColor,
+    secondary: darkPalette.secondaryColor,
+    accent: darkPalette.primaryColor
+  },
+  palette: darkPalette
 }
 
 const styles = StyleSheet.create({
   // home
+  cardLastEntry: {
+    margin: 8
+  },
   fab: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 20,
     margin: 16,
-    right: 0
+    alignSelf: 'center'
   },
   list: {
     flex: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc'
+    borderBottomWidth: 1
   },
   chipMarginRight: {
     marginRight: 8
   },
   chipText: {
     fontSize: 13
+  },
+  popupButtonsContainer: {
+    flexDirection: 'row',
+    minHeight: 30,
+    justifyContent: 'space-between',
+    marginHorizontal: 20
   },
   // add entry
   mainContainer: {
@@ -57,8 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
     fontWeight: 'bold',
-    borderBottomWidth: 3,
-    borderBottomColor: '#cccccc'
+    borderBottomWidth: 3
   },
   timerContainer: {
     flexDirection: 'row',
@@ -68,8 +108,7 @@ const styles = StyleSheet.create({
   timer: {
     fontSize: 36,
     fontWeight: 'bold',
-    borderBottomWidth: 3,
-    borderBottomColor: '#cccccc'
+    borderBottomWidth: 3
   },
   buttonsContainer: {
     flex: 1,
@@ -82,12 +121,6 @@ const styles = StyleSheet.create({
     margin: 16,
     borderRadius: 40,
     width: '40%'
-  },
-  timerStopped: {
-    backgroundColor: palette.primaryColor
-  },
-  timerRunning: {
-    backgroundColor: palette.secondaryColor
   },
   chipTimer: {
     flexGrow: 1,

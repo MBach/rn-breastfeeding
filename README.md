@@ -1,6 +1,6 @@
 ## Introduction
 
-This App is for tracking breastfeeding
+This App is for tracking breastfeeding. It's made in React-Native and has an automatic Night mode (based on a hardcoded location)
 
 ## Download
 
@@ -16,9 +16,9 @@ Get the app directly on GitHub, here is the [v1.0](https://github.com/MBach/rn-b
 
 ![Edit group](https://mbach.github.io/rn-breastfeeding/screenshots/edit_group.jpg)
 
-![Edit date](https://mbach.github.io/rn-breastfeeding/screenshots/edit_date.jpg)
+![Main dark](https://mbach.github.io/rn-breastfeeding/screenshots/main_dark.jpg)
 
-![Edit time](https://mbach.github.io/rn-breastfeeding/screenshots/edit_time.jpg)
+![Add entry dark](https://mbach.github.io/rn-breastfeeding/screenshots/add_entry_dark.jpg)
 
 ## Requirements
 

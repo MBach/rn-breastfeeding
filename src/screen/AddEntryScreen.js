@@ -1,28 +1,33 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
-import { Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import { withTheme, Button, Chip, Dialog, FAB, List, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
 
 import { CHOICES, mapChoice } from '../config'
-import styles, { palette } from '../styles'
+import styles from '../styles'
 
 const resetAction = StackActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Home' })]
 })
 
+function ThemedText({ style, palette, children }) {
+  return <Text style={{ ...style, color: palette.sectionTextColor }}>{children}</Text>
+}
+
 @inject('dataStore')
 @observer
-export default class AddEntryScreen extends Component {
+class AddEntryScreen extends Component {
   /// Add action in header
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigation, screenProps }) => {
     const { params } = navigation.state
     return {
       title: 'Ajouter une saisie',
-      headerRight: <Button icon="check" color={palette.primaryTextColor} onPress={() => params.handleSave && params.handleSave()} />
+      headerStyle: { backgroundColor: screenProps.primary },
+      headerRight: <Button icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
     }
   }
 
@@ -163,10 +168,11 @@ export default class AddEntryScreen extends Component {
   /// Renderers
 
   renderButton = value => {
+    const { palette } = this.props.theme
     return (
       <Button
         style={styles.buttons}
-        color={palette.primaryColor}
+        color={this.state.toggles[value] ? palette.primaryColor : palette.buttonColor}
         mode={this.state.toggles[value] ? 'contained' : 'outlined'}
         onPress={() => this.toggle(value)}
       >
@@ -176,20 +182,25 @@ export default class AddEntryScreen extends Component {
   }
 
   render() {
+    const { colors, palette } = this.props.theme
     const { day, isDatePickerVisible, isTimePickerVisible, isRunning, timer, showEditDurationDialog, showErrorDialog } = this.state
     const { left, right, both, bottle } = this.state.toggles
     return (
-      <View style={styles.mainContainer}>
-        <Text>Date</Text>
+      <View style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
+        <ThemedText palette={palette}>Date</ThemedText>
         <View style={styles.dateContainer}>
           <TouchableOpacity onPress={this.showDatePicker}>
-            <Text style={styles.date}>{day.format('DD/MM/YY')}</Text>
+            <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+              {day.format('DD/MM/YY')}
+            </ThemedText>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.showTimePicker}>
-            <Text style={styles.date}>{day.format('HH:mm')}</Text>
+            <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+              {day.format('HH:mm')}
+            </ThemedText>
           </TouchableOpacity>
         </View>
-        <Text>Sein</Text>
+        <ThemedText palette={palette}>Sein</ThemedText>
         <View style={styles.buttonsContainer}>
           {this.renderButton('left')}
           {this.renderButton('right')}
@@ -197,7 +208,7 @@ export default class AddEntryScreen extends Component {
           {this.renderButton('bottle')}
         </View>
         <View style={{ marginBottom: 16 }}>
-          <Text>Vitamine D</Text>
+          <ThemedText palette={palette}>Vitamine D</ThemedText>
           <Switch
             value={this.state.vitaminD}
             onValueChange={() => {
@@ -205,22 +216,34 @@ export default class AddEntryScreen extends Component {
             }}
           />
         </View>
-        <Text>Durée de la tétée</Text>
+        <ThemedText palette={palette}>Durée de la tétée</ThemedText>
         <View style={styles.timerContainer}>
-          <Button style={{ alignContent: 'center', justifyContent: 'center' }} mode="text" onPress={this.addTime(-60000)}>
+          <Button
+            color={palette.buttonColor}
+            style={{ alignContent: 'center', justifyContent: 'center' }}
+            mode="text"
+            onPress={this.addTime(-60000)}
+          >
             -1min
           </Button>
           <TouchableOpacity onPress={() => this.setState({ showEditDurationDialog: true })}>
-            <Text style={styles.timer}>{this.formatDate()}</Text>
+            <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: this.props.theme.palette.separator }}>
+              {this.formatDate()}
+            </ThemedText>
           </TouchableOpacity>
-          <Button style={{ alignContent: 'center', justifyContent: 'center' }} mode="text" onPress={this.addTime(60000)}>
+          <Button
+            color={palette.buttonColor}
+            style={{ alignContent: 'center', justifyContent: 'center' }}
+            mode="text"
+            onPress={this.addTime(60000)}
+          >
             +1min
           </Button>
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
         <FAB
-          style={[styles.fab, isRunning ? styles.timerRunning : styles.timerStopped]}
+          style={[styles.fab, { backgroundColor: isRunning ? colors.secondary : colors.primary }]}
           icon={isRunning ? 'pause' : 'timer'}
           onPress={() => this.startStopTimer()}
         />
@@ -254,7 +277,9 @@ export default class AddEntryScreen extends Component {
               </View>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={() => this.forceTimer()}>OK</Button>
+              <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
+                OK
+              </Button>
             </Dialog.Actions>
           </Dialog>
           <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
@@ -264,7 +289,9 @@ export default class AddEntryScreen extends Component {
               </Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={this.hideDialog('showErrorDialog')}>OK</Button>
+              <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
+                OK
+              </Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -272,3 +299,5 @@ export default class AddEntryScreen extends Component {
     )
   }
 }
+
+export default withTheme(AddEntryScreen)
