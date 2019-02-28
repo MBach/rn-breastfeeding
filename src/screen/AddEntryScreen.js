@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DeviceEventEmitter, Text, TouchableOpacity, View } from 'react-native'
+import { DeviceEventEmitter, Dimensions, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
@@ -40,7 +40,10 @@ class AddEntryScreen extends Component {
       day: moment(),
       showEditDurationDialog: false,
       showErrorDialog: false,
-      manualTimer: ''
+      manualTimer: '',
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.timerUpdated = null
     this.isRunningBackground = null
@@ -182,72 +185,88 @@ class AddEntryScreen extends Component {
     )
   }
 
+  onLayout = () =>
+    this.setState({
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
+    })
+
   render() {
     const { colors, palette } = this.props.theme
     const { day, isDatePickerVisible, isTimePickerVisible, showEditDurationDialog, showErrorDialog } = this.state
     const { left, right, both, bottle } = dataStore.toggles
     return (
-      <View style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
-        <ThemedText palette={palette}>Date</ThemedText>
-        <View style={styles.dateContainer}>
-          <TouchableOpacity onPress={this.showDatePicker}>
-            <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-              {day.format('DD/MM/YY')}
-            </ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.showTimePicker}>
-            <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-              {day.format('HH:mm')}
-            </ThemedText>
-          </TouchableOpacity>
+      <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
+        <View style={this.state.isLandscape ? styles.subContainerLandscape : false}>
+          <View>
+            <ThemedText palette={palette}>Date</ThemedText>
+            <View style={styles.dateContainer}>
+              <TouchableOpacity onPress={this.showDatePicker}>
+                <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+                  {day.format('DD/MM/YY')}
+                </ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.showTimePicker}>
+                <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+                  {day.format('HH:mm')}
+                </ThemedText>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ marginBottom: 16 }}>
+            <ThemedText palette={palette}>Vitamine D</ThemedText>
+            <Switch
+              value={dataStore.vitaminD}
+              onValueChange={() => {
+                dataStore.vitaminD = !dataStore.vitaminD
+              }}
+            />
+          </View>
+          <View>
+            <ThemedText palette={palette}>Sein</ThemedText>
+            <View style={styles.buttonsContainer}>
+              {this.renderButton('left')}
+              {this.renderButton('right')}
+              {this.renderButton('both')}
+              {this.renderButton('bottle')}
+            </View>
+          </View>
         </View>
-        <ThemedText palette={palette}>Sein</ThemedText>
-        <View style={styles.buttonsContainer}>
-          {this.renderButton('left')}
-          {this.renderButton('right')}
-          {this.renderButton('both')}
-          {this.renderButton('bottle')}
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <ThemedText palette={palette}>Vitamine D</ThemedText>
-          <Switch
-            value={dataStore.vitaminD}
-            onValueChange={() => {
-              dataStore.vitaminD = !dataStore.vitaminD
-            }}
+        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
+          <ThemedText palette={palette}>Durée de la tétée</ThemedText>
+          <View style={styles.timerContainer}>
+            <Button
+              color={palette.buttonColor}
+              style={{ alignContent: 'center', justifyContent: 'center' }}
+              mode="text"
+              onPress={() => RNBreastFeeding.addTime(-60000)}
+            >
+              -1min
+            </Button>
+            <TouchableOpacity onPress={() => this.setState({ showEditDurationDialog: true })}>
+              <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: this.props.theme.palette.separator }}>
+                {this.formatDate()}
+              </ThemedText>
+            </TouchableOpacity>
+            <Button
+              color={palette.buttonColor}
+              style={{ alignContent: 'center', justifyContent: 'center' }}
+              mode="text"
+              onPress={() => RNBreastFeeding.addTime(60000)}
+            >
+              +1min
+            </Button>
+          </View>
+          <FAB
+            style={[styles.fab, { backgroundColor: dataStore.isRunning ? colors.secondary : colors.primary }]}
+            icon={dataStore.isRunning ? 'pause' : 'timer'}
+            onPress={() => this.pauseResumeTimer()}
           />
-        </View>
-        <ThemedText palette={palette}>Durée de la tétée</ThemedText>
-        <View style={styles.timerContainer}>
-          <Button
-            color={palette.buttonColor}
-            style={{ alignContent: 'center', justifyContent: 'center' }}
-            mode="text"
-            onPress={() => RNBreastFeeding.addTime(-60000)}
-          >
-            -1min
-          </Button>
-          <TouchableOpacity onPress={() => this.setState({ showEditDurationDialog: true })}>
-            <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: this.props.theme.palette.separator }}>
-              {this.formatDate()}
-            </ThemedText>
-          </TouchableOpacity>
-          <Button
-            color={palette.buttonColor}
-            style={{ alignContent: 'center', justifyContent: 'center' }}
-            mode="text"
-            onPress={() => RNBreastFeeding.addTime(60000)}
-          >
-            +1min
-          </Button>
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
-        <FAB
-          style={[styles.fab, { backgroundColor: dataStore.isRunning ? colors.secondary : colors.primary }]}
-          icon={dataStore.isRunning ? 'pause' : 'timer'}
-          onPress={() => this.pauseResumeTimer()}
-        />
+
         <Portal>
           <Dialog visible={showEditDurationDialog} onDismiss={this.hideDialog('showEditDurationDialog')}>
             <Dialog.Title>Saisie manuelle</Dialog.Title>

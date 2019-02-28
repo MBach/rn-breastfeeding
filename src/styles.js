@@ -86,16 +86,29 @@ const styles = StyleSheet.create({
   // add entry
   mainContainer: {
     flex: 1,
-    padding: 16
+    padding: 16,
+    flexWrap: 'wrap',
+    width: '100%',
+    flexDirection: 'row'
+  },
+  subContainerLandscape: {
+    flex: 1,
+    width: '50%',
+    flexDirection: 'column'
+  },
+  fab2: {
+    position: 'absolute',
+    bottom: 0,
+    margin: 16,
+    alignSelf: 'center'
   },
   dateContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    maxHeight: 70
+    marginBottom: 16
   },
   date: {
-    marginTop: 16,
+    marginTop: 8,
     fontSize: 20,
     fontWeight: 'bold',
     borderBottomWidth: 3
@@ -111,14 +124,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3
   },
   buttonsContainer: {
-    flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    maxHeight: '30%'
+    marginBottom: 16,
+    justifyContent: 'space-around'
   },
   buttons: {
-    minHeight: 40,
-    margin: 16,
+    marginTop: 16,
     borderRadius: 40,
     width: '40%'
   },
