@@ -14,6 +14,11 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Matthieu BACHELIER
+ * @version 1.0
+ * @since 2019-02
+ */
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -28,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new AppShortcutsPackage(),
           new RNGestureHandlerPackage(),
+          new RNBreastFeedingPackage(),
           new VectorIconsPackage()
       );
     }

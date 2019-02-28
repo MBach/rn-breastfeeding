@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppState, FlatList, ScrollView, Text, View } from 'react-native'
+import { Animated, AppState, Easing, FlatList, ScrollView, Text, View } from 'react-native'
 import { withTheme, ActivityIndicator, Button, Card, Chip, Dialog, FAB, List, Portal, TouchableRipple } from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
 import moment from 'moment'
@@ -22,12 +22,31 @@ class HomeScreen extends Component {
       appState: AppState.currentState,
       currentGroup: null,
       editGroupDialog: false,
-      editLastEntry: false
+      editLastEntry: false,
+      opacity: new Animated.Value(1)
     }
   }
 
   componentDidMount() {
     AppState.addEventListener('change', this.refreshLastEntry)
+    if (dataStore.isRunningBackground) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(this.state.opacity, {
+            toValue: 0.05,
+            duration: 2000,
+            ease: Easing.ease,
+            useNativeDriver: true
+          }),
+          Animated.timing(this.state.opacity, {
+            toValue: 1,
+            duration: 2000,
+            ease: Easing.ease,
+            useNativeDriver: true
+          })
+        ])
+      ).start()
+    }
   }
 
   componentWillUnmount() {
@@ -209,7 +228,21 @@ class HomeScreen extends Component {
         ) : (
           <ActivityIndicator size="large" color={colors.primary} />
         )}
-        <FAB style={styles.fab} icon="add" onPress={() => this.props.navigation.navigate('AddEntry')} />
+        {dataStore.isRunningBackground ? (
+          <Animated.View>
+            <FAB
+              style={[styles.fab, { opacity: this.state.opacity, backgroundColor: colors.primary }]}
+              icon={'timer'}
+              onPress={() => this.props.navigation.navigate('AddEntry')}
+            />
+          </Animated.View>
+        ) : (
+          <FAB
+            style={[styles.fab, { backgroundColor: colors.primary }]}
+            icon={'add'}
+            onPress={() => this.props.navigation.navigate('AddEntry')}
+          />
+        )}
         <Portal>
           <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
             {this.editGroupDialog()}

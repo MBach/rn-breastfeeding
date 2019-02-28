@@ -7,6 +7,78 @@ class DataStore {
   @observable hydrated = false
   @observable updating = false
 
+  ///
+
+  @persist
+  @observable
+  _isRunning = false
+
+  @computed
+  get isRunning() {
+    return this._isRunning
+  }
+  set isRunning(r) {
+    this._isRunning = r
+  }
+
+  ///
+
+  @persist
+  @observable
+  _isRunningBackground = false
+
+  @computed
+  get isRunningBackground() {
+    return this._isRunningBackground
+  }
+  set isRunningBackground(r) {
+    this._isRunningBackground = r
+  }
+
+  ///
+
+  @persist
+  @observable
+  _vitaminD = false
+
+  @computed
+  get vitaminD() {
+    return this._vitaminD
+  }
+  set vitaminD(vit) {
+    this._vitaminD = vit
+  }
+
+  ///
+
+  @persist
+  @observable
+  _timer = 0
+
+  @computed
+  get timer() {
+    return this._timer
+  }
+  set timer(t) {
+    this._timer = t
+  }
+
+  ///
+
+  @persist('object')
+  @observable
+  _toggles = { left: false, right: false, both: false, bottle: false }
+
+  @computed
+  get toggles() {
+    return this._toggles
+  }
+  set toggles(data) {
+    this._toggles = data
+  }
+
+  ///
+
   @persist('list')
   @observable
   _records = []
@@ -37,6 +109,8 @@ class DataStore {
     return result
   }
 
+  ///
+
   @action
   hydrateComplete = async () => {
     this.hydrated = true
@@ -49,6 +123,11 @@ class DataStore {
     r.push(data)
     this.records = r
     this.updating = false
+    this.isRunning = false
+    this.isRunningBackground = false
+    this.toggles = { left: false, right: false, both: false, bottle: false }
+    this.vitaminD = false
+    this.timer = 0
   }
 
   @action

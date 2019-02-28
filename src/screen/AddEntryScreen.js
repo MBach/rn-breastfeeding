@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { DeviceEventEmitter, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
-import { withTheme, Button, Chip, Dialog, FAB, List, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import { withTheme, Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
+import RNBreastFeeding from '../RNBreastFeeding'
 
 import { CHOICES, mapChoice } from '../config'
 import styles from '../styles'
@@ -37,26 +38,37 @@ class AddEntryScreen extends Component {
       isDatePickerVisible: false,
       isTimePickerVisible: false,
       day: moment(),
-      timer: null,
-      timerStart: null,
-      elapsed: null,
-      in: false,
-      toggles: { left: false, right: false, both: false, bottle: false },
-      vitaminD: false,
-      isRunning: false,
       showEditDurationDialog: false,
       showErrorDialog: false,
       manualTimer: ''
     }
+    this.timerUpdated = null
+    this.isRunningBackground = null
   }
 
   componentDidMount() {
+    this.timerUpdated = DeviceEventEmitter.addListener('onTick', payload => {
+      if (payload.isRunning) {
+        dataStore.timer = parseInt(payload.timer)
+      }
+      dataStore.isRunning = payload.isRunning
+    })
+    this.isRunningBackground = DeviceEventEmitter.addListener('isRunningBackground', v => (dataStore.isRunningBackground = v))
+
     this.props.navigation.setParams({ handleSave: () => this.validateEntry() })
-    this.startStopTimer()
+    if (!dataStore.isRunningBackground) {
+      RNBreastFeeding.startTimer()
+      dataStore.isRunningBackground = true
+    }
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer)
+    if (this.timerUpdated) {
+      this.timerUpdated.remove()
+    }
+    if (this.isRunningBackground) {
+      this.isRunningBackground.remove()
+    }
   }
 
   /// Date & time pickers
@@ -83,33 +95,30 @@ class AddEntryScreen extends Component {
   showTimePicker = () => this.setState({ isTimePickerVisible: true })
   hideTimePicker = () => this.setState({ isTimePickerVisible: false })
 
-  startStopTimer = () => {
-    if (this.state.isRunning) {
-      this.setState({ elapsed: this.state.timer })
-      clearInterval(this.timer)
+  pauseResumeTimer = () => {
+    if (dataStore.isRunning) {
+      RNBreastFeeding.pauseTimer()
     } else {
-      this.timer = setInterval(() => {
-        this.setState({ timer: new Date() - this.state.timerStart + this.state.elapsed })
-      }, 1000)
+      RNBreastFeeding.resumeTimer()
     }
-    this.setState({ isRunning: !this.state.isRunning, timerStart: new Date() })
+    dataStore.isRunning = !dataStore.isRunning
   }
 
   /// Buttons
 
   toggle = v => {
     let toggles = { left: false, right: false, both: false, bottle: false }
-    toggles[v] = !this.state.toggles[v]
-    this.setState({ toggles })
+    toggles[v] = !dataStore.toggles[v]
+    dataStore.toggles = toggles
   }
 
   /// Validation
 
   validateEntry = () => {
-    const { day, timer, vitaminD } = this.state
-    const { left, right, both, bottle } = this.state.toggles
+    const { day } = this.state
+    const { left, right, both, bottle } = dataStore.toggles
     if (left || right || both || bottle) {
-      if (timer) {
+      if (dataStore.timer > 0) {
         let choice
         if (left) choice = CHOICES.LEFT
         if (right) choice = CHOICES.RIGHT
@@ -122,9 +131,10 @@ class AddEntryScreen extends Component {
           day: day.startOf('day').unix(),
           duration: this.formatDate(),
           choice,
-          vitaminD
+          vitaminD: dataStore.vitaminD
         }
         dataStore.addEntry(data)
+        RNBreastFeeding.deleteTimer()
         this.props.navigation.dispatch(resetAction)
       } else {
         this.setState({ showErrorDialog: true })
@@ -135,7 +145,7 @@ class AddEntryScreen extends Component {
   }
 
   formatDate = () => {
-    const d = moment.duration(this.state.timer)
+    const d = moment.duration(dataStore.timer)
     if (d.minutes() < 1) {
       return d.seconds() + 's'
     } else {
@@ -148,22 +158,13 @@ class AddEntryScreen extends Component {
   }
 
   forceTimer = () => {
-    let timer = moment.duration(this.state.manualTimer * 60 * 1000).asMilliseconds()
-    this.setState({ timer, elapsed: timer, showEditDurationDialog: false })
+    RNBreastFeeding.changeTo(this.state.manualTimer * 60 * 1000)
+    this.setState({ showEditDurationDialog: false })
   }
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
 
-  ///
-
   changeTimer = manualTimer => () => this.setState({ manualTimer })
-
-  addTime = value => () => {
-    let { timer } = this.state
-    timer += value
-    timer = timer - (timer % 60000)
-    this.setState({ timer, elapsed: timer })
-  }
 
   /// Renderers
 
@@ -172,8 +173,8 @@ class AddEntryScreen extends Component {
     return (
       <Button
         style={styles.buttons}
-        color={this.state.toggles[value] ? palette.primaryColor : palette.buttonColor}
-        mode={this.state.toggles[value] ? 'contained' : 'outlined'}
+        color={dataStore.toggles[value] ? palette.primaryColor : palette.buttonColor}
+        mode={dataStore.toggles[value] ? 'contained' : 'outlined'}
         onPress={() => this.toggle(value)}
       >
         {mapChoice(value)}
@@ -183,8 +184,8 @@ class AddEntryScreen extends Component {
 
   render() {
     const { colors, palette } = this.props.theme
-    const { day, isDatePickerVisible, isTimePickerVisible, isRunning, timer, showEditDurationDialog, showErrorDialog } = this.state
-    const { left, right, both, bottle } = this.state.toggles
+    const { day, isDatePickerVisible, isTimePickerVisible, showEditDurationDialog, showErrorDialog } = this.state
+    const { left, right, both, bottle } = dataStore.toggles
     return (
       <View style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
         <ThemedText palette={palette}>Date</ThemedText>
@@ -210,9 +211,9 @@ class AddEntryScreen extends Component {
         <View style={{ marginBottom: 16 }}>
           <ThemedText palette={palette}>Vitamine D</ThemedText>
           <Switch
-            value={this.state.vitaminD}
+            value={dataStore.vitaminD}
             onValueChange={() => {
-              this.setState({ vitaminD: !this.state.vitaminD })
+              dataStore.vitaminD = !dataStore.vitaminD
             }}
           />
         </View>
@@ -222,7 +223,7 @@ class AddEntryScreen extends Component {
             color={palette.buttonColor}
             style={{ alignContent: 'center', justifyContent: 'center' }}
             mode="text"
-            onPress={this.addTime(-60000)}
+            onPress={() => RNBreastFeeding.addTime(-60000)}
           >
             -1min
           </Button>
@@ -235,7 +236,7 @@ class AddEntryScreen extends Component {
             color={palette.buttonColor}
             style={{ alignContent: 'center', justifyContent: 'center' }}
             mode="text"
-            onPress={this.addTime(60000)}
+            onPress={() => RNBreastFeeding.addTime(60000)}
           >
             +1min
           </Button>
@@ -243,9 +244,9 @@ class AddEntryScreen extends Component {
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
         <FAB
-          style={[styles.fab, { backgroundColor: isRunning ? colors.secondary : colors.primary }]}
-          icon={isRunning ? 'pause' : 'timer'}
-          onPress={() => this.startStopTimer()}
+          style={[styles.fab, { backgroundColor: dataStore.isRunning ? colors.secondary : colors.primary }]}
+          icon={dataStore.isRunning ? 'pause' : 'timer'}
+          onPress={() => this.pauseResumeTimer()}
         />
         <Portal>
           <Dialog visible={showEditDurationDialog} onDismiss={this.hideDialog('showEditDurationDialog')}>
@@ -259,21 +260,11 @@ class AddEntryScreen extends Component {
                 onChangeText={manualTimer => this.setState({ manualTimer })}
               />
               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <Chip style={styles.chipTimer} onPress={this.changeTimer('5')}>
-                  5
-                </Chip>
-                <Chip style={styles.chipTimer} onPress={this.changeTimer('10')}>
-                  10
-                </Chip>
-                <Chip style={styles.chipTimer} onPress={this.changeTimer('15')}>
-                  15
-                </Chip>
-                <Chip style={styles.chipTimer} onPress={this.changeTimer('20')}>
-                  20
-                </Chip>
-                <Chip style={styles.chipTimer} onPress={this.changeTimer('25')}>
-                  25
-                </Chip>
+                {[5, 10, 15, 20, 25].map((e, key) => (
+                  <Chip key={key} style={styles.chipTimer} onPress={this.changeTimer(e.toString())}>
+                    {e}
+                  </Chip>
+                ))}
               </View>
             </Dialog.Content>
             <Dialog.Actions>
@@ -285,7 +276,9 @@ class AddEntryScreen extends Component {
           <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
             <Dialog.Content>
               <Paragraph>
-                {(left || right || both || bottle) && !timer ? 'Votre tétée n’a pas de durée' : 'Hmm... Vous n’avez rien saisi'}
+                {(left || right || both || bottle) && !dataStore.timer === 0
+                  ? 'Votre tétée n’a pas de durée'
+                  : 'Hmm... Vous n’avez rien saisi'}
               </Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
