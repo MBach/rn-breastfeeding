@@ -37,7 +37,7 @@ class AddEntryScreen extends Component {
     this.state = {
       isDatePickerVisible: false,
       isTimePickerVisible: false,
-      day: moment(),
+      day: dataStore.day ? moment.unix(dataStore.day) : moment(),
       showEditDurationDialog: false,
       showErrorDialog: false,
       manualTimer: '',
@@ -62,6 +62,7 @@ class AddEntryScreen extends Component {
     if (!dataStore.isRunningBackground) {
       RNBreastFeeding.startTimer()
       dataStore.isRunningBackground = true
+      dataStore.day = this.state.day.unix()
     }
   }
 
@@ -83,6 +84,7 @@ class AddEntryScreen extends Component {
     const mDate = moment(date)
     day.year(mDate.year())
     day.dayOfYear(mDate.dayOfYear())
+    dataStore.day = day.unix()
     this.setState({ day })
     this.hideDatePicker()
   }
@@ -92,6 +94,7 @@ class AddEntryScreen extends Component {
     const mTime = moment(time)
     day.hour(mTime.hour())
     day.minute(mTime.minute())
+    dataStore.day = day.unix()
     this.setState({ day })
     this.hideTimePicker()
   }

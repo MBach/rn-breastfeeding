@@ -11,6 +11,20 @@ class DataStore {
 
   @persist
   @observable
+  _day = null
+
+  @computed
+  get day() {
+    return this._day
+  }
+  set day(d) {
+    this._day = d
+  }
+
+  ///
+
+  @persist
+  @observable
   _isRunning = false
 
   @computed
@@ -128,6 +142,7 @@ class DataStore {
     this.toggles = { left: false, right: false, both: false, bottle: false }
     this.vitaminD = false
     this.timer = 0
+    this.day = null
   }
 
   @action
