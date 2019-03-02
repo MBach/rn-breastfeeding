@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BreastFeeding</string>
+    <string name="channel">Chronometer</string>
+    <string name="description">How much time since chronometer has started</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="on_hold">On hold</string>
 </resources>

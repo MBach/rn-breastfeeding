@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = "BFModule";
-    private static final String CHANNEL_ID = "channel_id";
+    private static final String CHANNEL_ID = "breastfeeding_id";
     private static final String ON_TICK = "onTick";
 
     private final ReactApplicationContext reactContext;
@@ -98,12 +98,15 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(reactContext, CHANNEL_ID).setContentTitle(formatTime())
-                .setSmallIcon(R.drawable.ic_timer_notification)
-                .setOngoing(true);
+                .setSmallIcon(R.drawable.ic_timer_notification);
+
+        Intent intent = new Intent(reactContext, MainActivity.class);
+        PendingIntent pending = PendingIntent.getActivity(reactContext, 666, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pending);
         if (isRunning) {
-            builder = builder.addAction(0, "Pause", pendingIntent);
+            builder = builder.addAction(0, reactContext.getString(R.string.pause), pendingIntent);
         } else {
-            builder = builder.addAction(0, "Reprendre", pendingIntent).setContentText("Interrompu");
+            builder = builder.addAction(0, reactContext.getString(R.string.resume), pendingIntent).setContentText(reactContext.getString(R.string.on_hold));
         }
 
         NotificationManager notificationManager = (NotificationManager) reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -126,9 +129,9 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         if (notificationManager == null) {
             return;
         }
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Title", NotificationManager.IMPORTANCE_DEFAULT);
-        notificationChannel.setDescription("Description");
-        notificationChannel.setShowBadge(true);
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, reactContext.getString(R.string.channel), NotificationManager.IMPORTANCE_LOW);
+        notificationChannel.setDescription(reactContext.getString(R.string.description));
+        notificationChannel.setSound(null, null);
         notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         notificationManager.createNotificationChannel(notificationChannel);
     }
@@ -144,15 +147,13 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
     Notification getNotification() {
         if (notification == null) {
-            Log.d(TAG, "notification is null, building...");
             Intent resultIntent = new Intent(reactContext, ChronoService.class);
             resultIntent.putExtra(ACTION_PAUSE, ACTION_PAUSE);
             PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             notification = new NotificationCompat.Builder(this.reactContext, CHANNEL_ID).setContentTitle("00:00")
-                    .addAction(0, "Pause", pendingIntent)
-                    .setSmallIcon(R.drawable.ic_timer_notification)
-                    .setOngoing(true).build();
+                    .addAction(0, reactContext.getString(R.string.pause), pendingIntent)
+                    .setSmallIcon(R.drawable.ic_timer_notification).build();
             return notification;
         } else {
             return notification;
@@ -161,7 +162,6 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startTimer() {
-        Log.d(TAG, "startTimer");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
