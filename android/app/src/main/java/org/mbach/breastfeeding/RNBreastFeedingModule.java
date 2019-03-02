@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -100,7 +101,10 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(reactContext, CHANNEL_ID).setContentTitle(formatTime())
                 .setSmallIcon(R.drawable.ic_timer_notification);
 
-        Intent intent = new Intent(reactContext, MainActivity.class);
+        Uri IntentUri = Uri.parse("rnbreastfeeding://rnbreastfeeding/chrono");
+        Intent intent = new Intent(Intent.ACTION_VIEW, IntentUri);
+        intent.setPackage("org.mbach.breastfeeding");
+
         PendingIntent pending = PendingIntent.getActivity(reactContext, 666, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pending);
         if (isRunning) {

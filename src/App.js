@@ -14,6 +14,8 @@ import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import { pos } from './config'
 
+const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
+
 // Add an App shortcut with a long press
 QuickActions.setShortcutItems([
   {
@@ -28,9 +30,9 @@ QuickActions.setShortcutItems([
 
 const Stack = createStackNavigator(
   {
-    Loading: LoadingScreen,
-    Home: HomeScreen,
-    AddEntry: AddEntryScreen
+    Loading: { screen: LoadingScreen, path: '/' },
+    Home: { screen: HomeScreen, path: '/home' },
+    AddEntry: { screen: AddEntryScreen, path: '/chrono' }
   },
   {
     initialRouteName: 'Loading',
@@ -43,7 +45,7 @@ const Stack = createStackNavigator(
   }
 )
 
-const AppNavigator = createAppContainer(Stack)
+const AppContainer = createAppContainer(Stack)
 
 export default class App extends Component {
   constructor(props) {
@@ -63,7 +65,7 @@ export default class App extends Component {
     <Provider {...stores}>
       <PaperProvider theme={this.state.theme}>
         <Portal.Host>
-          <AppNavigator screenProps={{ ...this.state.theme.colors }} />
+          <AppContainer uriPrefix={uriPrefix} screenProps={{ ...this.state.theme.colors }} />
         </Portal.Host>
       </PaperProvider>
     </Provider>
