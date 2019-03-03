@@ -52,7 +52,7 @@ class AddEntryScreen extends Component {
   componentDidMount() {
     this.timerUpdated = DeviceEventEmitter.addListener('onTick', payload => {
       if (payload.isRunning) {
-        dataStore.timer = parseInt(payload.timer)
+        dataStore.timer = payload.timer
       }
       dataStore.isRunning = payload.isRunning
     })
@@ -102,11 +102,7 @@ class AddEntryScreen extends Component {
   hideTimePicker = () => this.setState({ isTimePickerVisible: false })
 
   pauseResumeTimer = () => {
-    if (dataStore.isRunning) {
-      RNBreastFeeding.pauseTimer()
-    } else {
-      RNBreastFeeding.resumeTimer()
-    }
+    dataStore.isRunning ? RNBreastFeeding.pauseTimer() : RNBreastFeeding.resumeTimer()
     dataStore.isRunning = !dataStore.isRunning
   }
 

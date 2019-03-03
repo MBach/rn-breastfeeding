@@ -143,11 +143,4 @@ public class ChronoService extends Service {
             RNBreastFeedingModule.INSTANCE.updateNotificationButton(isRunning);
         }
     }
-
-    /*
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "onTaskRemoved");
-    }
-    */
 }

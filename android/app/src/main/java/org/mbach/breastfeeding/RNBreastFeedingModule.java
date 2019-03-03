@@ -77,7 +77,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
             updateNotificationButton(true);
         }
         WritableMap payload = Arguments.createMap();
-        payload.putString("timer", String.valueOf(millis));
+        payload.putDouble("timer", millis);
         payload.putBoolean("isRunning", isRunning);
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(ON_TICK, payload);
     }
