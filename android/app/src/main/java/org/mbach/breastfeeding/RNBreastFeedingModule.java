@@ -1,7 +1,6 @@
 package org.mbach.breastfeeding;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -32,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = "BFModule";
-    private static final String CHANNEL_ID = "breastfeeding_id";
+    static final String CHANNEL_ID = "breastfeeding_id";
     private static final String ON_TICK = "onTick";
 
     private final ReactApplicationContext reactContext;
@@ -40,12 +38,11 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     static final int NOTIFICATION_ID = 100;
     static RNBreastFeedingModule INSTANCE;
 
-    static final String ACTION_START = "ACTION_START";
-    static final String ACTION_PAUSE = "ACTION_PAUSE";
-    static final String ACTION_RESUME = "ACTION_RESUME";
+    static final String ACTION_PAUSE_RESUME = "ACTION_PAUSE_RESUME";
     static final String ACTION_STOP = "ACTION_STOP";
     static final String ACTION_CHANGE_TO = "ACTION_CHANGE_TO";
     static final String ACTION_ADD_TIME = "ACTION_ADD_TIME";
+    static final String TIMER_ID = "TIMER_ID";
 
     private Long millis = 0L;
 
@@ -58,8 +55,9 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     /**
      * Starts a service.
      */
-    private void startService(String action, Long value) {
+    private void startService(String timerId, String action, Long value) {
         Intent intent = new Intent(reactContext, ChronoService.class);
+        intent.putExtra(TIMER_ID, timerId);
         intent.putExtra(action, value);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             reactContext.startForegroundService(intent);
@@ -71,12 +69,13 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     /**
      * @param millis time to display
      */
-    void updateTimer(final Long millis, boolean isRunning) {
+    void updateTimer(final String timerId, final Long millis, boolean isRunning) {
         if (isRunning) {
             this.millis = millis;
             updateNotificationButton(true);
         }
         WritableMap payload = Arguments.createMap();
+        payload.putString("timerId", timerId);
         payload.putDouble("timer", millis);
         payload.putBoolean("isRunning", isRunning);
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(ON_TICK, payload);
@@ -89,11 +88,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         Intent resultIntent = new Intent(reactContext, ChronoService.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        if (isRunning) {
-            resultIntent.putExtra(ACTION_PAUSE, ACTION_PAUSE);
-        } else {
-            resultIntent.putExtra(ACTION_RESUME, ACTION_RESUME);
-        }
+        resultIntent.putExtra(ACTION_PAUSE_RESUME, ACTION_PAUSE_RESUME);
 
         PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -127,19 +122,6 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         return "RNBreastFeedingModule";
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannel() {
-        NotificationManager notificationManager = (NotificationManager) reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager == null) {
-            return;
-        }
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, reactContext.getString(R.string.channel), NotificationManager.IMPORTANCE_LOW);
-        notificationChannel.setDescription(reactContext.getString(R.string.description));
-        notificationChannel.setSound(null, null);
-        notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        notificationManager.createNotificationChannel(notificationChannel);
-    }
-
     @NonNull
     private String formatTime() {
         return String.format(Locale.getDefault(), "%02d:%02d",
@@ -149,10 +131,11 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
     }
 
+
     Notification getNotification() {
         if (notification == null) {
             Intent resultIntent = new Intent(reactContext, ChronoService.class);
-            resultIntent.putExtra(ACTION_PAUSE, ACTION_PAUSE);
+            resultIntent.putExtra(ACTION_PAUSE_RESUME, ACTION_PAUSE_RESUME);
             PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             notification = new NotificationCompat.Builder(this.reactContext, CHANNEL_ID).setContentTitle("00:00")
@@ -164,37 +147,24 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         }
     }
 
+
     @ReactMethod
-    public void startTimer() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel();
-        }
-        getNotification();
-        startService(ACTION_START, null);
+    public void pauseResumeTimer(final String timerId) {
+        startService(timerId, ACTION_PAUSE_RESUME, null);
     }
 
     @ReactMethod
-    public void pauseTimer() {
-        startService(ACTION_PAUSE, null);
+    public void stopTimers() {
+        startService(null, ACTION_STOP, null);
     }
 
     @ReactMethod
-    public void resumeTimer() {
-        startService(ACTION_RESUME, null);
+    public void addTime(final String timerId, final Double time) {
+        startService(timerId, ACTION_ADD_TIME, time.longValue());
     }
 
     @ReactMethod
-    public void deleteTimer() {
-        startService(ACTION_STOP, null);
-    }
-
-    @ReactMethod
-    public void addTime(final Double time) {
-        startService(ACTION_ADD_TIME, time.longValue());
-    }
-
-    @ReactMethod
-    public void changeTo(final Double time) {
-        startService(ACTION_CHANGE_TO, time.longValue());
+    public void changeTo(final String timerId, final Double time) {
+        startService(timerId, ACTION_CHANGE_TO, time.longValue());
     }
 }

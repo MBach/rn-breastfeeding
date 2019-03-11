@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Platform, StatusBar } from 'react-native'
+import { AsyncStorage, Platform, StatusBar } from 'react-native'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import { Provider } from 'mobx-react'
+import { create } from 'mobx-persist'
 import moment from 'moment'
 import SunCalc from 'suncalc'
 
@@ -47,27 +48,60 @@ const Stack = createStackNavigator(
 
 const AppContainer = createAppContainer(Stack)
 
+const getTheme = theme => {
+  if (theme === 'day') {
+    return lightTheme
+  } else if (theme === 'night') {
+    return darkTheme
+  } else {
+    const m = moment()
+    const times = SunCalc.getTimes(m.toDate(), pos.lat, pos.lng)
+    if (m.isAfter(times.dawn) && m.isBefore(times.dusk)) {
+      return lightTheme
+    } else {
+      return darkTheme
+    }
+  }
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props)
-    const times = SunCalc.getTimes(new Date(), pos.lat, pos.lng)
-    const m = moment()
     this.state = {
-      theme: m.isAfter(times.dawn) && m.isBefore(times.dusk) ? lightTheme : darkTheme
+      theme: null
     }
   }
-  componentDidMount() {
-    StatusBar.setBarStyle('light-content')
-    Platform.OS === 'android' && StatusBar.setBackgroundColor(this.state.theme.palette.primaryDarkColor)
+
+  updateTheme = theme =>
+    this.setState({
+      theme: getTheme(theme)
+    })
+
+  async componentDidMount() {
+    const hydrate = create({ storage: AsyncStorage, jsonify: true })
+    const res = await hydrate('dataStore', dataStore)
+    if (res) {
+      dataStore.hydrateComplete()
+      const theme = getTheme(res.theme)
+      this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
+      StatusBar.setBarStyle('light-content')
+    }
   }
 
-  render = () => (
-    <Provider {...stores}>
-      <PaperProvider theme={this.state.theme}>
-        <Portal.Host>
-          <AppContainer uriPrefix={uriPrefix} screenProps={{ ...this.state.theme.colors }} />
-        </Portal.Host>
-      </PaperProvider>
-    </Provider>
-  )
+  render = () => {
+    const { theme } = this.state
+    if (theme) {
+      return (
+        <Provider {...stores}>
+          <PaperProvider theme={theme}>
+            <Portal.Host>
+              <AppContainer uriPrefix={uriPrefix} screenProps={{ ...theme.colors, updateTheme: this.updateTheme }} />
+            </Portal.Host>
+          </PaperProvider>
+        </Provider>
+      )
+    } else {
+      return false
+    }
+  }
 }

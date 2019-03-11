@@ -1,10 +1,8 @@
 const RNBreastFeeding = {
   addTime: () => console.log('not implemented'),
   changeTo: () => console.log('not implemented'),
-  deleteTimer: () => console.log('not implemented'),
-  pauseTimer: () => console.log('not implemented'),
-  resumeTimer: () => console.log('not implemented'),
-  startTimer: () => console.log('not implemented')
+  pauseResumeTimer: () => console.log('not implemented'),
+  stopTimers: () => console.log('not implemented')
 }
 
 export default RNBreastFeeding

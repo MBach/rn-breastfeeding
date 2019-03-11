@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
 
-import { CHOICES, mapChoice } from '../config'
+import { CHOICES } from '../config'
 import styles from '../styles'
 
 const resetAction = StackActions.reset({
@@ -51,19 +51,23 @@ class AddEntryScreen extends Component {
 
   componentDidMount() {
     this.timerUpdated = DeviceEventEmitter.addListener('onTick', payload => {
-      if (payload.isRunning) {
-        dataStore.timer = payload.timer
+      const { timerId, isRunning, timer } = payload
+      if (isRunning) {
+        let timers = { ...dataStore.timers }
+        timers[timerId] = timer
+        dataStore.timers = timers
+        console.log('payload', timers)
       }
-      dataStore.isRunning = payload.isRunning
+      dataStore.isRunning[timerId] = isRunning
     })
     this.isRunningBackground = DeviceEventEmitter.addListener('isRunningBackground', v => (dataStore.isRunningBackground = v))
 
     this.props.navigation.setParams({ handleSave: () => this.validateEntry() })
-    if (!dataStore.isRunningBackground) {
+    /*if (!dataStore.isRunningBackground) {
       RNBreastFeeding.startTimer()
       dataStore.isRunningBackground = true
       dataStore.day = this.state.day.unix()
-    }
+    }*/
   }
 
   componentWillUnmount() {
@@ -101,53 +105,41 @@ class AddEntryScreen extends Component {
   showTimePicker = () => this.setState({ isTimePickerVisible: true })
   hideTimePicker = () => this.setState({ isTimePickerVisible: false })
 
-  pauseResumeTimer = () => {
-    dataStore.isRunning ? RNBreastFeeding.pauseTimer() : RNBreastFeeding.resumeTimer()
-    dataStore.isRunning = !dataStore.isRunning
+  pauseResumeTimer = timerId => {
+    RNBreastFeeding.pauseResumeTimer(timerId)
+    let value = dataStore.isRunning[timerId]
+    let isRunning = { left: false, right: false, bottle: false }
+    isRunning[timerId] = !value
+    console.log('isRunning', isRunning)
+    dataStore.isRunning = isRunning
   }
 
   /// Buttons
 
-  toggle = v => {
-    let toggles = { left: false, right: false, both: false, bottle: false }
-    toggles[v] = !dataStore.toggles[v]
-    dataStore.toggles = toggles
-  }
+  toggle = v => (dataStore.toggles[v] = !dataStore.toggles[v])
 
   /// Validation
 
   validateEntry = () => {
     const { day } = this.state
-    const { left, right, both, bottle } = dataStore.toggles
-    if (left || right || both || bottle) {
-      if (dataStore.timer > 0) {
-        let choice
-        if (left) choice = CHOICES.LEFT
-        if (right) choice = CHOICES.RIGHT
-        if (both) choice = CHOICES.BOTH
-        if (bottle) choice = CHOICES.BOTTLE
-
-        /// Save data
-        const data = {
-          date: day.unix(),
-          day: day.startOf('day').unix(),
-          duration: this.formatDate(),
-          choice,
-          vitaminD: dataStore.vitaminD
-        }
-        dataStore.addEntry(data)
-        RNBreastFeeding.deleteTimer()
-        this.props.navigation.dispatch(resetAction)
-      } else {
-        this.setState({ showErrorDialog: true })
+    if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || dataStore.timers['bottle'] > 0) {
+      /// Save data
+      const data = {
+        date: day.unix(),
+        day: day.startOf('day').unix(),
+        timers: { ...dataStore.timers },
+        vitaminD: dataStore.vitaminD
       }
+      dataStore.addEntry(data)
+      RNBreastFeeding.stopTimers()
+      this.props.navigation.dispatch(resetAction)
     } else {
       this.setState({ showErrorDialog: true })
     }
   }
 
-  formatDate = () => {
-    const d = moment.duration(dataStore.timer)
+  formatTime = timerId => {
+    const d = moment.duration(dataStore.timers[timerId])
     if (d.minutes() < 1) {
       return d.seconds() + 's'
     } else {
@@ -170,17 +162,31 @@ class AddEntryScreen extends Component {
 
   /// Renderers
 
-  renderButton = value => {
-    const { palette } = this.props.theme
+  renderButton = timerId => {
+    const { colors, palette } = this.props.theme
+    let image
+    switch (timerId) {
+      case CHOICES.LEFT:
+        image = require(`../assets/left.png`)
+        break
+      case CHOICES.RIGHT:
+        image = require(`../assets/right.png`)
+        break
+      case CHOICES.BOTTLE:
+        image = require(`../assets/bottle.png`)
+        break
+    }
     return (
-      <Button
-        style={styles.buttons}
-        color={dataStore.toggles[value] ? palette.primaryColor : palette.buttonColor}
-        mode={dataStore.toggles[value] ? 'contained' : 'outlined'}
-        onPress={() => this.toggle(value)}
-      >
-        {mapChoice(value)}
-      </Button>
+      <View style={{ flexDirection: 'column' }}>
+        <FAB
+          style={[styles.fab, { backgroundColor: dataStore.isRunning[timerId] ? colors.secondary : colors.primary }]}
+          icon={dataStore.isRunning[timerId] ? 'pause' : image}
+          onPress={() => this.pauseResumeTimer(timerId)}
+        />
+        <ThemedText palette={palette} style={styles.smallTimer}>
+          {this.formatTime(timerId)}
+        </ThemedText>
+      </View>
     )
   }
 
@@ -194,10 +200,10 @@ class AddEntryScreen extends Component {
   render() {
     const { colors, palette } = this.props.theme
     const { day, isDatePickerVisible, isTimePickerVisible, showEditDurationDialog, showErrorDialog } = this.state
-    const { left, right, both, bottle } = dataStore.toggles
+    const { left, right, bottle } = dataStore.toggles
     return (
       <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
-        <View style={this.state.isLandscape ? styles.subContainerLandscape : false}>
+        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
           <View>
             <ThemedText palette={palette}>Date</ThemedText>
             <View style={styles.dateContainer}>
@@ -222,18 +228,8 @@ class AddEntryScreen extends Component {
               }}
             />
           </View>
-          <View>
-            <ThemedText palette={palette}>Sein</ThemedText>
-            <View style={styles.buttonsContainer}>
-              {this.renderButton('left')}
-              {this.renderButton('right')}
-              {this.renderButton('both')}
-              {this.renderButton('bottle')}
-            </View>
-          </View>
-        </View>
-        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
-          <ThemedText palette={palette}>Durée de la tétée</ThemedText>
+
+          <ThemedText palette={palette}>Temps écoulé depuis le début</ThemedText>
           <View style={styles.timerContainer}>
             <Button
               color={palette.buttonColor}
@@ -244,8 +240,8 @@ class AddEntryScreen extends Component {
               -1min
             </Button>
             <TouchableOpacity onPress={() => this.setState({ showEditDurationDialog: true })}>
-              <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: this.props.theme.palette.separator }}>
-                {this.formatDate()}
+              <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: palette.separator }}>
+                {this.formatTime()}
               </ThemedText>
             </TouchableOpacity>
             <Button
@@ -257,11 +253,14 @@ class AddEntryScreen extends Component {
               +1min
             </Button>
           </View>
-          <FAB
-            style={[styles.fab, { backgroundColor: dataStore.isRunning ? colors.secondary : colors.primary }]}
-            icon={dataStore.isRunning ? 'pause' : 'timer'}
-            onPress={() => this.pauseResumeTimer()}
-          />
+        </View>
+        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
+          <ThemedText palette={palette}>Sein</ThemedText>
+          <View style={styles.buttonsContainer}>
+            {this.renderButton('left')}
+            {this.renderButton('right')}
+            {this.renderButton('bottle')}
+          </View>
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
@@ -294,9 +293,10 @@ class AddEntryScreen extends Component {
           <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
             <Dialog.Content>
               <Paragraph>
-                {(left || right || both || bottle) && !dataStore.timer === 0
-                  ? 'Votre tétée n’a pas de durée'
-                  : 'Hmm... Vous n’avez rien saisi'}
+                {dataStore.timers[left] === 0 &&
+                  dataStore.timers[right] === 0 &&
+                  dataStore.timers[bottle] === 0 &&
+                  'Votre saisie n’a pas de durée'}
               </Paragraph>
             </Dialog.Content>
             <Dialog.Actions>

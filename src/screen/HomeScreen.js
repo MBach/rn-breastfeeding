@@ -1,6 +1,18 @@
 import React, { Component } from 'react'
 import { Animated, AppState, Easing, FlatList, ScrollView, Text, View } from 'react-native'
-import { withTheme, ActivityIndicator, Button, Card, Chip, Dialog, FAB, List, Portal, TouchableRipple } from 'react-native-paper'
+import {
+  withTheme,
+  ActivityIndicator,
+  Button,
+  Card,
+  Chip,
+  Dialog,
+  FAB,
+  List,
+  Portal,
+  RadioButton,
+  TouchableRipple
+} from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
 import moment from 'moment'
 import 'moment/locale/fr'
@@ -11,16 +23,21 @@ import styles from '../styles'
 @inject('dataStore')
 @observer
 class HomeScreen extends Component {
-  static navigationOptions = ({ screenProps }) => ({
-    title: 'Accueil',
-    headerStyle: { backgroundColor: screenProps.primary }
-  })
+  static navigationOptions = ({ navigation, screenProps }) => {
+    const { params } = navigation.state
+    return {
+      title: 'Accueil',
+      headerStyle: { backgroundColor: screenProps.primary },
+      headerRight: <Button icon="more-vert" color="white" onPress={() => params.handleMore && params.handleMore()} />
+    }
+  }
 
   constructor(props) {
     super(props)
     this.state = {
       appState: AppState.currentState,
       currentGroup: null,
+      editThemeDialog: false,
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1)
@@ -28,6 +45,8 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
+    this.props.navigation.setParams({ handleMore: () => this.setState({ editThemeDialog: true }) })
+
     AppState.addEventListener('change', this.refreshLastEntry)
     if (dataStore.isRunningBackground) {
       Animated.loop(
@@ -93,9 +112,13 @@ class HomeScreen extends Component {
             <Chip style={styles.chipMarginRight}>
               <Text style={styles.chipText}>{mapChoice(lastEntry.choice)}</Text>
             </Chip>
-            <Chip style={styles.chipMarginRight} icon="hourglass-empty">
-              <Text style={styles.chipText}>{lastEntry.duration}</Text>
-            </Chip>
+            {lastEntry.timers.map(timer => {
+              return (
+                <Chip style={styles.chipMarginRight} icon="hourglass-empty">
+                  <Text style={styles.chipText}>{timer}</Text>
+                </Chip>
+              )
+            })}
             {lastEntry.vitaminD && (
               <Chip icon="brightness-5">
                 <Text style={styles.chipText}>Vitamine D</Text>
@@ -138,6 +161,65 @@ class HomeScreen extends Component {
     )
   }
 
+  /// Dialogs
+
+  changeTheme = theme => {
+    dataStore.theme = theme
+    this.props.screenProps.updateTheme(theme)
+  }
+
+  editThemeDialog = () => {
+    const { colors, palette } = this.props.theme
+    const items = [
+      {
+        title: 'Mode jour',
+        theme: 'day',
+        icon: 'wb-sunny'
+      },
+      {
+        title: 'Mode nuit',
+        theme: 'night',
+        icon: 'brightness-3'
+      },
+      {
+        title: 'Mode auto',
+        theme: 'auto',
+        icon: 'autorenew'
+      }
+    ]
+    return (
+      <Dialog visible={this.state.editThemeDialog} onDismiss={this.hideDialog('editThemeDialog')}>
+        <Dialog.Title>Préférences d'affichage</Dialog.Title>
+        <RadioButton.Group onValueChange={theme => this.changeTheme(theme)} value={dataStore.theme}>
+          <List.Section>
+            {items.map(({ title, theme, icon }, index) => (
+              <List.Item
+                key={index}
+                title={title}
+                style={{ height: 60, justifyContent: 'center' }}
+                onPress={() => this.changeTheme(theme)}
+                left={() => (
+                  <View style={{ justifyContent: 'center' }}>
+                    <RadioButton value={theme} />
+                  </View>
+                )}
+                right={() => <List.Icon color={colors.text} icon={icon} />}
+              />
+            ))}
+          </List.Section>
+        </RadioButton.Group>
+        <Dialog.Actions style={styles.popupButtonsContainer}>
+          <Button color={palette.buttonColor} onPress={this.hideDialog('editThemeDialog')}>
+            Annuler
+          </Button>
+          <Button color={palette.buttonColor} onPress={this.hideDialog('editThemeDialog')}>
+            OK
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    )
+  }
+
   editGroupDialog = () => {
     const { colors, palette } = this.props.theme
     let { currentGroup } = this.state
@@ -167,7 +249,7 @@ class HomeScreen extends Component {
       ))
     }
     return (
-      <>
+      <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
         <Dialog.Title>{moment.unix(currentGroup.day).format('dddd')}</Dialog.Title>
         <Dialog.ScrollArea style={{ maxHeight: '75%' }}>
           <ScrollView>{data}</ScrollView>
@@ -180,7 +262,7 @@ class HomeScreen extends Component {
             OK
           </Button>
         </Dialog.Actions>
-      </>
+      </Dialog>
     )
   }
 
@@ -191,13 +273,12 @@ class HomeScreen extends Component {
   }
 
   editLastEntryDialog = () => (
-    <>
+    <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
       <Dialog.Title>Modifier votre saisie</Dialog.Title>
       <Dialog.Content>
         <View>
           {this.renderButton('left')}
           {this.renderButton('right')}
-          {this.renderButton('both')}
           {this.renderButton('bottle')}
         </View>
       </Dialog.Content>
@@ -209,7 +290,7 @@ class HomeScreen extends Component {
           OK
         </Button>
       </Dialog.Actions>
-    </>
+    </Dialog>
   )
 
   render = () => {
@@ -231,28 +312,21 @@ class HomeScreen extends Component {
         {dataStore.isRunningBackground ? (
           <Animated.View>
             <FAB
-              style={[styles.fab, { opacity: this.state.opacity, backgroundColor: colors.primary }]}
+              style={[styles.fab, { bottom: 20, opacity: this.state.opacity, backgroundColor: colors.primary }]}
               icon={'timer'}
               onPress={() => this.props.navigation.navigate('AddEntry')}
             />
           </Animated.View>
         ) : (
           <FAB
-            style={[styles.fab, { backgroundColor: colors.primary }]}
+            style={[styles.fab, { bottom: 20, backgroundColor: colors.primary }]}
             icon={'add'}
             onPress={() => this.props.navigation.navigate('AddEntry')}
           />
         )}
-        <Portal>
-          <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
-            {this.editGroupDialog()}
-          </Dialog>
-        </Portal>
-        <Portal>
-          <Dialog visible={this.state.editLastEntry} onDismiss={this.hideDialog('editLastEntry')}>
-            {this.editLastEntryDialog()}
-          </Dialog>
-        </Portal>
+        <Portal>{this.editThemeDialog()}</Portal>
+        <Portal>{this.editGroupDialog()}</Portal>
+        <Portal>{this.editLastEntryDialog()}</Portal>
       </View>
     )
   }

@@ -1,11 +1,24 @@
-import { AsyncStorage } from 'react-native'
 import { observable, action, computed, toJS } from 'mobx'
-import { create, persist } from 'mobx-persist'
+import { persist } from 'mobx-persist'
 import _ from 'lodash'
 
 class DataStore {
   @observable hydrated = false
   @observable updating = false
+
+  ///
+
+  @persist
+  @observable
+  _theme = 'day'
+
+  @computed
+  get theme() {
+    return this._theme
+  }
+  set theme(t) {
+    this._theme = t
+  }
 
   ///
 
@@ -23,9 +36,9 @@ class DataStore {
 
   ///
 
-  @persist
+  @persist('object')
   @observable
-  _isRunning = false
+  _isRunning = { left: false, right: false, bottle: false }
 
   @computed
   get isRunning() {
@@ -65,23 +78,23 @@ class DataStore {
 
   ///
 
-  @persist
+  @persist('object')
   @observable
-  _timer = 0
+  _timers = { left: 0, right: 0, bottle: 0 }
 
   @computed
-  get timer() {
-    return this._timer
+  get timers() {
+    return this._timers
   }
-  set timer(t) {
-    this._timer = t
+  set timers(t) {
+    this._timers = t
   }
 
   ///
 
   @persist('object')
   @observable
-  _toggles = { left: false, right: false, both: false, bottle: false }
+  _toggles = { left: false, right: false, bottle: false }
 
   @computed
   get toggles() {
@@ -93,7 +106,7 @@ class DataStore {
 
   ///
 
-  @persist('list')
+  @persist('object')
   @observable
   _records = []
 
@@ -137,11 +150,11 @@ class DataStore {
     r.push(data)
     this.records = r
     this.updating = false
-    this.isRunning = false
+    this.isRunning = { left: false, right: false, bottle: false }
     this.isRunningBackground = false
-    this.toggles = { left: false, right: false, both: false, bottle: false }
+    this.toggles = { left: false, right: false, bottle: false }
+    this.timers = { left: 0, right: 0, bottle: 0 }
     this.vitaminD = false
-    this.timer = 0
     this.day = null
   }
 
@@ -155,8 +168,3 @@ class DataStore {
 }
 
 export default (dataStore = new DataStore())
-
-const hydrate = create({ storage: AsyncStorage, jsonify: true })
-hydrate('dataStore', dataStore).then(() => {
-  dataStore.hydrateComplete()
-})

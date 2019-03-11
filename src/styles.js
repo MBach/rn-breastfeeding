@@ -58,12 +58,17 @@ export const darkTheme = {
 
 const styles = StyleSheet.create({
   // home
+  menu: {
+    position: 'absolute',
+    left: '25%',
+    right: 4,
+    top: 4,
+    elevation: 4
+  },
   cardLastEntry: {
     margin: 8
   },
   fab: {
-    position: 'absolute',
-    bottom: 20,
     margin: 16,
     alignSelf: 'center'
   },
@@ -96,12 +101,6 @@ const styles = StyleSheet.create({
     width: '50%',
     flexDirection: 'column'
   },
-  fab2: {
-    position: 'absolute',
-    bottom: 0,
-    margin: 16,
-    alignSelf: 'center'
-  },
   dateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -123,16 +122,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderBottomWidth: 3
   },
-  buttonsContainer: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    marginBottom: 16,
-    justifyContent: 'space-around'
+  smallTimer: {
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
-  buttons: {
-    marginTop: 16,
-    borderRadius: 40,
-    width: '40%'
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16
   },
   chipTimer: {
     flexGrow: 1,
