@@ -7,6 +7,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactNativeQuickActions.AppShortcutsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
           new MainReactPackage(),
+          new RNAndroidLocationEnablerPackage(),
           new AppShortcutsPackage(),
           new RNGestureHandlerPackage(),
           new RNBreastFeedingPackage(),

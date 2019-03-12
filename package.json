@@ -21,6 +21,7 @@
     "moment": "^2.24.0",
     "react": "^16.8.4",
     "react-native": "^0.58.6",
+    "react-native-android-location-enabler": "^1.0.8",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-modal-datetime-picker": "^6.0.0",
     "react-native-paper": "^2.13.0",

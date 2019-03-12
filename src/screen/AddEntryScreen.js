@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
 
-import { CHOICES } from '../config'
+import { CHOICES, humanizeTime } from '../config'
 import styles from '../styles'
 
 const resetAction = StackActions.reset({
@@ -138,18 +138,7 @@ class AddEntryScreen extends Component {
     }
   }
 
-  formatTime = timerId => {
-    const d = moment.duration(dataStore.timers[timerId])
-    if (d.minutes() < 1) {
-      return d.seconds() + 's'
-    } else {
-      if (d.seconds() < 10) {
-        return d.minutes() + 'min 0' + d.seconds() + 's'
-      } else {
-        return d.minutes() + 'min ' + d.seconds() + 's'
-      }
-    }
-  }
+  formatTime = timerId => humanizeTime(dataStore.timers[timerId])
 
   forceTimer = () => {
     RNBreastFeeding.changeTo(this.state.manualTimer * 60 * 1000)

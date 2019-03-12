@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Easing, FlatList, ScrollView, Text, View } from 'react-native'
+import { Animated, AppState, Easing, FlatList, PermissionsAndroid, Platform, ScrollView, Text, View } from 'react-native'
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler'
 import {
   withTheme,
   ActivityIndicator,
@@ -17,7 +18,7 @@ import { inject, observer } from 'mobx-react/native'
 import moment from 'moment'
 import 'moment/locale/fr'
 import humanizeDuration from 'humanize-duration'
-import { mapChoice } from '../config'
+import { mapChoice, humanizeTime } from '../config'
 import styles from '../styles'
 
 @inject('dataStore')
@@ -101,6 +102,16 @@ class HomeScreen extends Component {
 
   ///
 
+  renderChip = (timerId, time) => {
+    return (
+      time > 0 && (
+        <Chip style={styles.chipMarginRight} icon="hourglass-empty">
+          <Text style={styles.chipText}>{`${mapChoice(timerId)} ${humanizeTime(time)}`}</Text>
+        </Chip>
+      )
+    )
+  }
+
   renderLastEntry(groupedRecords) {
     if (groupedRecords.length > 0) {
       const lastGroup = groupedRecords[0]
@@ -109,16 +120,9 @@ class HomeScreen extends Component {
         <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
           <Card.Content style={{ flexDirection: 'row' }}>
-            <Chip style={styles.chipMarginRight}>
-              <Text style={styles.chipText}>{mapChoice(lastEntry.choice)}</Text>
-            </Chip>
-            {lastEntry.timers.map(timer => {
-              return (
-                <Chip style={styles.chipMarginRight} icon="hourglass-empty">
-                  <Text style={styles.chipText}>{timer}</Text>
-                </Chip>
-              )
-            })}
+            {this.renderChip('left', lastEntry.timers['left'])}
+            {this.renderChip('right', lastEntry.timers['right'])}
+            {this.renderChip('bottle', lastEntry.timers['bottle'])}
             {lastEntry.vitaminD && (
               <Chip icon="brightness-5">
                 <Text style={styles.chipText}>Vitamine D</Text>
@@ -168,8 +172,36 @@ class HomeScreen extends Component {
     this.props.screenProps.updateTheme(theme)
   }
 
+  askLocation = async () => {
+    if (Platform.OS !== 'android') {
+      return
+    }
+    const res = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+    if (res === 'granted' || res === true) {
+      try {
+        const res2 = await RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({ interval: 10000, fastInterval: 5000 })
+        if (res2 === 'already-enabled' || res2 === 'enabled') {
+          console.log('Permission granted and location enabled')
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              dataStore.coords = { latitude: position.coords.latitude, longitude: position.coords.longitude }
+              //console.log('dataStore.coords updated', dataStore.coords.latitude, dataStore.coords.longitude)
+              this.changeTheme('auto')
+            },
+            error => console.log('error', error),
+            { enableHighAccuracy: false, timeout: 5000, maximumAge: 1000 }
+          )
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+    } else {
+      // res === never_ask_again
+    }
+  }
+
   editThemeDialog = () => {
-    const { colors, palette } = this.props.theme
+    const { colors } = this.props.theme
     const items = [
       {
         title: 'Mode jour',
@@ -184,7 +216,8 @@ class HomeScreen extends Component {
       {
         title: 'Mode auto',
         theme: 'auto',
-        icon: 'autorenew'
+        icon: 'autorenew',
+        callback: this.askLocation
       }
     ]
     return (
@@ -192,12 +225,12 @@ class HomeScreen extends Component {
         <Dialog.Title>Préférences d'affichage</Dialog.Title>
         <RadioButton.Group onValueChange={theme => this.changeTheme(theme)} value={dataStore.theme}>
           <List.Section>
-            {items.map(({ title, theme, icon }, index) => (
+            {items.map(({ title, theme, icon, callback }, index) => (
               <List.Item
                 key={index}
                 title={title}
                 style={{ height: 60, justifyContent: 'center' }}
-                onPress={() => this.changeTheme(theme)}
+                onPress={() => (callback ? callback() : this.changeTheme(theme))}
                 left={() => (
                   <View style={{ justifyContent: 'center' }}>
                     <RadioButton value={theme} />
@@ -208,14 +241,6 @@ class HomeScreen extends Component {
             ))}
           </List.Section>
         </RadioButton.Group>
-        <Dialog.Actions style={styles.popupButtonsContainer}>
-          <Button color={palette.buttonColor} onPress={this.hideDialog('editThemeDialog')}>
-            Annuler
-          </Button>
-          <Button color={palette.buttonColor} onPress={this.hideDialog('editThemeDialog')}>
-            OK
-          </Button>
-        </Dialog.Actions>
       </Dialog>
     )
   }

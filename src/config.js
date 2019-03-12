@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const CHOICES = {
   LEFT: 'left',
   RIGHT: 'right',
@@ -11,17 +13,22 @@ const mapChoice = c => {
       return 'Gauche'
     case CHOICES.RIGHT:
       return 'Droit'
-    case CHOICES.BOTH:
-      return 'Les deux'
     case CHOICES.BOTTLE:
       return 'Biberon'
   }
 }
 
-// Could be made dynamic, but who cares?
-const pos = {
-  lat: 47.2157398,
-  lng: -1.5556321
+const humanizeTime = time => {
+  const d = moment.duration(time)
+  if (d.minutes() < 1) {
+    return d.seconds() + 's'
+  } else {
+    if (d.seconds() < 10) {
+      return d.minutes() + 'min 0' + d.seconds() + 's'
+    } else {
+      return d.minutes() + 'min ' + d.seconds() + 's'
+    }
+  }
 }
 
-export { CHOICES, mapChoice, pos }
+export { CHOICES, mapChoice, humanizeTime }

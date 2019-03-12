@@ -22,6 +22,20 @@ class DataStore {
 
   ///
 
+  @persist('object')
+  @observable
+  _coords = { latitude: 46.227638, longitude: 2.213749 }
+
+  @computed
+  get coords() {
+    return this._coords
+  }
+  set coords(c) {
+    this._coords = c
+  }
+
+  ///
+
   @persist
   @observable
   _day = null

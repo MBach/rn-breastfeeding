@@ -13,7 +13,6 @@ import HomeScreen from './screen/HomeScreen'
 import LoadingScreen from './screen/LoadingScreen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
-import { pos } from './config'
 
 const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
 
@@ -48,14 +47,14 @@ const Stack = createStackNavigator(
 
 const AppContainer = createAppContainer(Stack)
 
-const getTheme = theme => {
-  if (theme === 'day') {
+const getTheme = (key, dataStore) => {
+  if (key === 'day') {
     return lightTheme
-  } else if (theme === 'night') {
+  } else if (key === 'night') {
     return darkTheme
   } else {
     const m = moment()
-    const times = SunCalc.getTimes(m.toDate(), pos.lat, pos.lng)
+    const times = SunCalc.getTimes(m.toDate(), dataStore.coords.latitude, dataStore.coords.longitude)
     if (m.isAfter(times.dawn) && m.isBefore(times.dusk)) {
       return lightTheme
     } else {
@@ -72,18 +71,19 @@ export default class App extends Component {
     }
   }
 
-  updateTheme = theme =>
-    this.setState({
-      theme: getTheme(theme)
-    })
+  updateTheme = key => {
+    const theme = getTheme(key, stores.dataStore)
+    this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
+  }
 
   async componentDidMount() {
     const hydrate = create({ storage: AsyncStorage, jsonify: true })
     const res = await hydrate('dataStore', dataStore)
     if (res) {
       dataStore.hydrateComplete()
-      const theme = getTheme(res.theme)
-      this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
+      //const theme = getTheme(res.theme, dataStore)
+      //this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
+      this.updateTheme(res.theme)
       StatusBar.setBarStyle('light-content')
     }
   }
