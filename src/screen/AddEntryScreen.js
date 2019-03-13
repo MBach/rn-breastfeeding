@@ -56,7 +56,6 @@ class AddEntryScreen extends Component {
         let timers = { ...dataStore.timers }
         timers[timerId] = timer
         dataStore.timers = timers
-        console.log('payload', timers)
       }
       dataStore.isRunning[timerId] = isRunning
     })

@@ -1,17 +1,20 @@
 package org.mbach.breastfeeding;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class RNTimer extends Timer {
 
+    private static final String TAG = "RNTimer";
+
     private class Chrono extends TimerTask {
         private long _start = SystemClock.elapsedRealtime();
-        private long _pause = 0;
+        private long _pause = SystemClock.elapsedRealtime();
         private long _pauseDuration = 0;
-        private boolean _isPaused = false;
+        private boolean _isPaused = true;
         private long _duration = 0;
         private final String timerId;
 
@@ -19,21 +22,21 @@ public class RNTimer extends Timer {
             this.timerId = timerId;
         }
 
-        synchronized void pause() {
+        void pause() {
             _pause = SystemClock.elapsedRealtime();
             _isPaused = true;
         }
 
-        synchronized void resume() {
+        void resume() {
             _pauseDuration += SystemClock.elapsedRealtime() - _pause;
             _isPaused = false;
         }
 
-        synchronized boolean isPaused() {
+        boolean isPaused() {
             return _isPaused;
         }
 
-        synchronized void add(long value) {
+        void add(long value) {
             long millis = SystemClock.elapsedRealtime() - _start - _pauseDuration + value;
             if (millis < 0) {
                 _start = SystemClock.elapsedRealtime();
@@ -50,7 +53,7 @@ public class RNTimer extends Timer {
             }
         }
 
-        synchronized void changeTo(long value) {
+        void changeTo(long value) {
             _start = SystemClock.elapsedRealtime() - value;
             // Request immediate update
             if (RNBreastFeedingModule.INSTANCE != null) {
@@ -59,7 +62,7 @@ public class RNTimer extends Timer {
             }
         }
 
-        synchronized private void updateDuration() {
+        private void updateDuration() {
             _duration = SystemClock.elapsedRealtime() - _start - _pauseDuration;
             double s = (double) _duration / 1000;
             _duration = Math.round(s) * 1000;
@@ -105,7 +108,7 @@ public class RNTimer extends Timer {
         chrono.add(value);
     }
 
-    void changeTo(long value){
+    void changeTo(long value) {
         chrono.changeTo(value);
     }
 

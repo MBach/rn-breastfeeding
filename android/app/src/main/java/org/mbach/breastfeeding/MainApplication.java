@@ -10,6 +10,7 @@ import com.facebook.soloader.SoLoader;
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactNativeQuickActions.AppShortcutsPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
 import java.util.Arrays;
@@ -22,38 +23,39 @@ import java.util.List;
  */
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
+
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.asList(
+                    new MainReactPackage(),
+                    new AsyncStoragePackage(),
+                    new RNAndroidLocationEnablerPackage(),
+                    new AppShortcutsPackage(),
+                    new RNGestureHandlerPackage(),
+                    new RNBreastFeedingPackage(),
+                    new VectorIconsPackage()
+            );
+        }
+
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+    };
+
     @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
     }
 
     @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.asList(
-          new MainReactPackage(),
-          new RNAndroidLocationEnablerPackage(),
-          new AppShortcutsPackage(),
-          new RNGestureHandlerPackage(),
-          new RNBreastFeedingPackage(),
-          new VectorIconsPackage()
-      );
+    public void onCreate() {
+        super.onCreate();
+        SoLoader.init(this, false);
     }
-
-    @Override
-    protected String getJSMainModuleName() {
-      return "index";
-    }
-  };
-
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
-
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this,false);
-  }
 }

@@ -28,9 +28,9 @@ public class ChronoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification());
-        }
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //    startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification());
+        //}
         Log.d(TAG, "onCreate");
     }
 
@@ -51,27 +51,31 @@ public class ChronoService extends Service {
         RNTimer timer = timers.get(timerId);
 
         if (intent.hasExtra(RNBreastFeedingModule.ACTION_PAUSE_RESUME)) {
+            Log.d(TAG, "request ACTION_PAUSE_RESUME");
             if (timer == null) {
-                timer = new RNTimer(timerId);
+                Log.d(TAG, "creating timer");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     createChannel();
                     startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification());
                 }
+                timer = new RNTimer(timerId);
                 timers.put(timerId, timer);
             }
-            for(Map.Entry<String, RNTimer> entry : timers.entrySet()) {
+            for (Map.Entry<String, RNTimer> entry : timers.entrySet()) {
                 RNTimer t = entry.getValue();
                 if (entry.getKey().equals(timerId)) {
                     // Toggle current timer
                     t.pauseResumeTimer();
+                    Log.d(TAG, "pauseResumeTimer()");
                 } else {
                     // Pause other timers
+                    Log.d(TAG, "Pause other timers" + entry.getKey());
                     t.pauseTimer();
                 }
             }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_STOP)) {
             Log.d(TAG, "request ACTION_STOP");
-            for(Map.Entry<String, RNTimer> entry : timers.entrySet()) {
+            for (Map.Entry<String, RNTimer> entry : timers.entrySet()) {
                 RNTimer t = entry.getValue();
                 t.cancel();
             }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { AsyncStorage, Platform, StatusBar } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
