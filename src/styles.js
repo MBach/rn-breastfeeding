@@ -76,8 +76,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomWidth: 1
   },
-  chipMarginRight: {
-    marginRight: 8
+  chipMargins: {
+    marginRight: 8,
+    marginTop: 8
   },
   chipText: {
     fontSize: 13

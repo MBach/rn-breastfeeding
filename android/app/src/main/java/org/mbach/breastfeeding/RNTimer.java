@@ -23,8 +23,10 @@ public class RNTimer extends Timer {
         }
 
         void pause() {
-            _pause = SystemClock.elapsedRealtime();
-            _isPaused = true;
+            if (!_isPaused) {
+                _pause = SystemClock.elapsedRealtime();
+                _isPaused = true;
+            }
         }
 
         void resume() {

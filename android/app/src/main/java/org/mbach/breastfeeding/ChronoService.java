@@ -66,10 +66,8 @@ public class ChronoService extends Service {
                 if (entry.getKey().equals(timerId)) {
                     // Toggle current timer
                     t.pauseResumeTimer();
-                    Log.d(TAG, "pauseResumeTimer()");
                 } else {
                     // Pause other timers
-                    Log.d(TAG, "Pause other timers" + entry.getKey());
                     t.pauseTimer();
                 }
             }

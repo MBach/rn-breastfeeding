@@ -3,7 +3,6 @@ import moment from 'moment'
 const CHOICES = {
   LEFT: 'left',
   RIGHT: 'right',
-  BOTH: 'both',
   BOTTLE: 'bottle'
 }
 
@@ -18,7 +17,16 @@ const mapChoice = c => {
   }
 }
 
-const humanizeTime = time => {
+const getMin = time => {
+  const d = moment.duration(time)
+  if (d.minutes() < 1) {
+    return '< 1min'
+  } else {
+    return d.minutes() + 'min'
+  }
+}
+
+const getMinAndSeconds = time => {
   const d = moment.duration(time)
   if (d.minutes() < 1) {
     return d.seconds() + 's'
@@ -31,4 +39,11 @@ const humanizeTime = time => {
   }
 }
 
-export { CHOICES, mapChoice, humanizeTime }
+const isNotRunning = timers => {
+  console.log('timers', timers['left'])
+  console.log('timers', timers['right'])
+  console.log('timers', timers['bottle'])
+  return timers['left'] === 0 && timers['right'] === 0 && timers['bottle'] === 0
+}
+
+export { CHOICES, mapChoice, getMin, getMinAndSeconds, isNotRunning }

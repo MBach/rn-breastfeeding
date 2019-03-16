@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
 
-import { CHOICES, humanizeTime } from '../config'
+import { CHOICES, getMinAndSeconds, isNotRunning } from '../config'
 import styles from '../styles'
 
 const resetAction = StackActions.reset({
@@ -46,7 +46,7 @@ class AddEntryScreen extends Component {
       isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.timerUpdated = null
-    this.isRunningBackground = null
+    this.inBackground = null
   }
 
   componentDidMount() {
@@ -59,22 +59,16 @@ class AddEntryScreen extends Component {
       }
       dataStore.isRunning[timerId] = isRunning
     })
-    this.isRunningBackground = DeviceEventEmitter.addListener('isRunningBackground', v => (dataStore.isRunningBackground = v))
 
     this.props.navigation.setParams({ handleSave: () => this.validateEntry() })
-    /*if (!dataStore.isRunningBackground) {
-      RNBreastFeeding.startTimer()
-      dataStore.isRunningBackground = true
+    if (!isNotRunning(dataStore.timers)) {
       dataStore.day = this.state.day.unix()
-    }*/
+    }
   }
 
   componentWillUnmount() {
     if (this.timerUpdated) {
       this.timerUpdated.remove()
-    }
-    if (this.isRunningBackground) {
-      this.isRunningBackground.remove()
     }
   }
 
@@ -109,8 +103,8 @@ class AddEntryScreen extends Component {
     let value = dataStore.isRunning[timerId]
     let isRunning = { left: false, right: false, bottle: false }
     isRunning[timerId] = !value
-    console.log('isRunning', isRunning)
     dataStore.isRunning = isRunning
+    dataStore.currentTimerId = timerId
   }
 
   /// Buttons
@@ -137,10 +131,10 @@ class AddEntryScreen extends Component {
     }
   }
 
-  formatTime = timerId => humanizeTime(dataStore.timers[timerId])
+  formatTime = timerId => getMinAndSeconds(dataStore.timers[timerId])
 
   forceTimer = () => {
-    RNBreastFeeding.changeTo(this.state.manualTimer * 60 * 1000)
+    RNBreastFeeding.changeTo(dataStore.currentTimerId, this.state.manualTimer * 60 * 1000)
     this.setState({ showEditDurationDialog: false })
   }
 
@@ -185,10 +179,63 @@ class AddEntryScreen extends Component {
       isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     })
 
+  /// Dialogs
+
+  renderEditDurationDialog() {
+    const { palette } = this.props.theme
+    const { showEditDurationDialog } = this.state
+    return (
+      <Portal>
+        <Dialog visible={showEditDurationDialog} onDismiss={this.hideDialog('showEditDurationDialog')}>
+          <Dialog.Title>Saisie manuelle</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              label="Durée en minutes"
+              mode="flat"
+              value={this.state.manualTimer}
+              keyboardType="numeric"
+              onChangeText={manualTimer => this.setState({ manualTimer })}
+            />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              {[5, 10, 15, 20, 25].map((e, key) => (
+                <Chip key={key} style={styles.chipTimer} onPress={this.changeTimer(e.toString())}>
+                  {e}
+                </Chip>
+              ))}
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
+              OK
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
+
+  renderErrorDialog() {
+    const { palette } = this.props.theme
+    const { showErrorDialog } = this.state
+    return (
+      <Portal>
+        <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
+          <Dialog.Content>
+            <Paragraph>Votre saisie n’a pas de durée</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
+              OK
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
+
   render() {
     const { colors, palette } = this.props.theme
-    const { day, isDatePickerVisible, isTimePickerVisible, showEditDurationDialog, showErrorDialog } = this.state
-    const { left, right, bottle } = dataStore.toggles
+    const { day, isDatePickerVisible, isTimePickerVisible } = this.state
     return (
       <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
         <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
@@ -216,27 +263,28 @@ class AddEntryScreen extends Component {
               }}
             />
           </View>
-
-          <ThemedText palette={palette}>Temps écoulé depuis le début</ThemedText>
+          <ThemedText palette={palette}>Temps passé</ThemedText>
           <View style={styles.timerContainer}>
             <Button
+              disabled={isNotRunning(dataStore.timers)}
               color={palette.buttonColor}
               style={{ alignContent: 'center', justifyContent: 'center' }}
               mode="text"
-              onPress={() => RNBreastFeeding.addTime(-60000)}
+              onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, -60000)}
             >
               -1min
             </Button>
-            <TouchableOpacity onPress={() => this.setState({ showEditDurationDialog: true })}>
+            <TouchableOpacity onPress={() => dataStore.currentTimerId && this.setState({ showEditDurationDialog: true })}>
               <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: palette.separator }}>
-                {this.formatTime()}
+                {this.formatTime(dataStore.currentTimerId)}
               </ThemedText>
             </TouchableOpacity>
             <Button
+              disabled={isNotRunning(dataStore.timers)}
               color={palette.buttonColor}
               style={{ alignContent: 'center', justifyContent: 'center' }}
               mode="text"
-              onPress={() => RNBreastFeeding.addTime(60000)}
+              onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, 60000)}
             >
               +1min
             </Button>
@@ -252,48 +300,8 @@ class AddEntryScreen extends Component {
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
-
-        <Portal>
-          <Dialog visible={showEditDurationDialog} onDismiss={this.hideDialog('showEditDurationDialog')}>
-            <Dialog.Title>Saisie manuelle</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                label="Durée en minutes"
-                mode="flat"
-                value={this.state.manualTimer}
-                keyboardType="numeric"
-                onChangeText={manualTimer => this.setState({ manualTimer })}
-              />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                {[5, 10, 15, 20, 25].map((e, key) => (
-                  <Chip key={key} style={styles.chipTimer} onPress={this.changeTimer(e.toString())}>
-                    {e}
-                  </Chip>
-                ))}
-              </View>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
-                OK
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-          <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
-            <Dialog.Content>
-              <Paragraph>
-                {dataStore.timers[left] === 0 &&
-                  dataStore.timers[right] === 0 &&
-                  dataStore.timers[bottle] === 0 &&
-                  'Votre saisie n’a pas de durée'}
-              </Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
-                OK
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+        {this.renderEditDurationDialog()}
+        {this.renderErrorDialog()}
       </View>
     )
   }

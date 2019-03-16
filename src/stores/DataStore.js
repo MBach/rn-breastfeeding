@@ -63,17 +63,16 @@ class DataStore {
   }
 
   ///
-
   @persist
   @observable
-  _isRunningBackground = false
+  _currentTimerId = null
 
   @computed
-  get isRunningBackground() {
-    return this._isRunningBackground
+  get currentTimerId() {
+    return this._currentTimerId
   }
-  set isRunningBackground(r) {
-    this._isRunningBackground = r
+  set currentTimerId(timerId) {
+    this._currentTimerId = timerId
   }
 
   ///
@@ -165,11 +164,11 @@ class DataStore {
     this.records = r
     this.updating = false
     this.isRunning = { left: false, right: false, bottle: false }
-    this.isRunningBackground = false
     this.toggles = { left: false, right: false, bottle: false }
     this.timers = { left: 0, right: 0, bottle: 0 }
     this.vitaminD = false
     this.day = null
+    this.currentTimerId = null
   }
 
   @action
