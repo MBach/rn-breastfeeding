@@ -82,8 +82,6 @@ export default class App extends Component {
     const res = await hydrate('dataStore', dataStore)
     if (res) {
       dataStore.hydrateComplete()
-      //const theme = getTheme(res.theme, dataStore)
-      //this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
       this.updateTheme(res.theme)
       StatusBar.setBarStyle('light-content')
     }

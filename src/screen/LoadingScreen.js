@@ -3,6 +3,16 @@ import { Linking } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 
+/**
+ * This class is used to dispatch route when one is :
+ * - launching the App from the notification area, if the timer is running in background
+ * - launching the App from the Quick Action area (longpress), from the "Desktop"
+ * - otherwise, it just redirects to the Home
+ *
+ * @author Matthieu BACHELIER
+ * @since 2019-02
+ * @version 1.0
+ */
 export default class LoadingScreen extends Component {
   static navigationOptions = {
     header: null

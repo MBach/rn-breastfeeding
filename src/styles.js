@@ -58,13 +58,6 @@ export const darkTheme = {
 
 const styles = StyleSheet.create({
   // home
-  menu: {
-    position: 'absolute',
-    left: '25%',
-    right: 4,
-    top: 4,
-    elevation: 4
-  },
   cardLastEntry: {
     margin: 8
   },

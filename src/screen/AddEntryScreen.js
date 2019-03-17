@@ -19,6 +19,13 @@ function ThemedText({ style, palette, children }) {
   return <Text style={{ ...style, color: palette.sectionTextColor }}>{children}</Text>
 }
 
+/**
+ * This class is for adding a new dataSet to the store.
+ *
+ * @author Matthieu BACHELIER
+ * @since 2019-02
+ * @version 1.0
+ */
 @inject('dataStore')
 @observer
 class AddEntryScreen extends Component {

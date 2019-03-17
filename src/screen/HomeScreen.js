@@ -21,6 +21,14 @@ import humanizeDuration from 'humanize-duration'
 import { mapChoice, getMin, getMinAndSeconds, isNotRunning } from '../config'
 import styles from '../styles'
 
+/**
+ * This class is the Home Screen.
+ * It contains the last entry on top and a FlatList of events grouped by day. One can create an entry by clicking on the + button at the bottom.
+ *
+ * @author Matthieu BACHELIER
+ * @since 2019-02
+ * @version 1.0
+ */
 @inject('dataStore')
 @observer
 class HomeScreen extends Component {
@@ -327,14 +335,14 @@ class HomeScreen extends Component {
         )}
         {isNotRunning(dataStore.timers) ? (
           <FAB
-            style={[styles.fab, { bottom: 20, backgroundColor: colors.primary }]}
+            style={[styles.fab, { position: 'absolute', bottom: 20, backgroundColor: colors.primary }]}
             icon={'add'}
             onPress={() => this.props.navigation.navigate('AddEntry')}
           />
         ) : (
           <Animated.View>
             <FAB
-              style={[styles.fab, { bottom: 20, opacity: this.state.opacity, backgroundColor: colors.primary }]}
+              style={[styles.fab, { position: 'absolute', bottom: 20, opacity: this.state.opacity, backgroundColor: colors.primary }]}
               icon={'timer'}
               onPress={() => this.props.navigation.navigate('AddEntry')}
             />
