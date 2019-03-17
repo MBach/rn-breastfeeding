@@ -39,11 +39,6 @@ const getMinAndSeconds = time => {
   }
 }
 
-const isNotRunning = timers => {
-  console.log('timers', timers['left'])
-  console.log('timers', timers['right'])
-  console.log('timers', timers['bottle'])
-  return timers['left'] === 0 && timers['right'] === 0 && timers['bottle'] === 0
-}
+const isNotRunning = timers => timers['left'] === 0 && timers['right'] === 0 && timers['bottle'] === 0
 
 export { CHOICES, mapChoice, getMin, getMinAndSeconds, isNotRunning }

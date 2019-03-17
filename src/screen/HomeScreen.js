@@ -130,7 +130,7 @@ class HomeScreen extends Component {
       return (
         <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
-          <Card.Content style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}
             {this.renderChip('bottle', lastEntry.timers['bottle'])}
@@ -192,7 +192,6 @@ class HomeScreen extends Component {
       try {
         const res2 = await RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({ interval: 10000, fastInterval: 5000 })
         if (res2 === 'already-enabled' || res2 === 'enabled') {
-          console.log('Permission granted and location enabled')
           navigator.geolocation.getCurrentPosition(
             position => {
               dataStore.coords = { latitude: position.coords.latitude, longitude: position.coords.longitude }
@@ -240,7 +239,7 @@ class HomeScreen extends Component {
                 <List.Item
                   key={index}
                   title={title}
-                  style={{ height: 60, justifyContent: 'center' }}
+                  style={styles.settingsItem}
                   onPress={() => (callback ? callback() : this.changeTheme(theme))}
                   left={() => (
                     <View style={{ justifyContent: 'center' }}>
@@ -301,7 +300,7 @@ class HomeScreen extends Component {
       <Portal>
         <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
           <Dialog.Title>{moment.unix(currentGroup.day).format('dddd')}</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '75%' }}>
+          <Dialog.ScrollArea style={styles.containerDialog}>
             <ScrollView>{data}</ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions style={styles.popupButtonsContainer}>

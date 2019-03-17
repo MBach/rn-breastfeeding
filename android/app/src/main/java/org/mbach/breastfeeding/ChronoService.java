@@ -1,14 +1,9 @@
 package org.mbach.breastfeeding;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -28,16 +23,10 @@ public class ChronoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        //    startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification());
-        //}
-        Log.d(TAG, "onCreate");
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind");
-        Log.d(TAG, intent.toString());
         return null;
     }
 
@@ -53,13 +42,11 @@ public class ChronoService extends Service {
         if (intent.hasExtra(RNBreastFeedingModule.ACTION_PAUSE_RESUME)) {
             Log.d(TAG, "request ACTION_PAUSE_RESUME");
             if (timer == null) {
-                Log.d(TAG, "creating timer");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    createChannel();
-                    startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification());
-                }
                 timer = new RNTimer(timerId);
                 timers.put(timerId, timer);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification(timerId));
             }
             for (Map.Entry<String, RNTimer> entry : timers.entrySet()) {
                 RNTimer t = entry.getValue();
@@ -70,6 +57,9 @@ public class ChronoService extends Service {
                     // Pause other timers
                     t.pauseTimer();
                 }
+            }
+            if (RNBreastFeedingModule.INSTANCE != null) {
+                RNBreastFeedingModule.INSTANCE.updateNotificationButton(timerId, timer.isRunning());
             }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_STOP)) {
             Log.d(TAG, "request ACTION_STOP");
@@ -94,22 +84,5 @@ public class ChronoService extends Service {
         return START_NOT_STICKY;
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannel() {
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager == null) {
-            return;
-        }
-        NotificationChannel notificationChannel = new NotificationChannel(RNBreastFeedingModule.CHANNEL_ID, getString(R.string.channel), NotificationManager.IMPORTANCE_LOW);
-        notificationChannel.setDescription(getString(R.string.description));
-        notificationChannel.setSound(null, null);
-        notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        notificationManager.createNotificationChannel(notificationChannel);
-    }
 
-    private void updateNotificationButton(boolean isRunning) {
-        if (RNBreastFeedingModule.INSTANCE != null) {
-            RNBreastFeedingModule.INSTANCE.updateNotificationButton(isRunning);
-        }
-    }
 }

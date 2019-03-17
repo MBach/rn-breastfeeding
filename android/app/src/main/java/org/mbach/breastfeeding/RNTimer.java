@@ -1,14 +1,11 @@
 package org.mbach.breastfeeding;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class RNTimer extends Timer {
-
-    private static final String TAG = "RNTimer";
 
     private class Chrono extends TimerTask {
         private long _start = SystemClock.elapsedRealtime();
@@ -114,4 +111,7 @@ public class RNTimer extends Timer {
         chrono.changeTo(value);
     }
 
+    boolean isRunning() {
+        return !chrono.isPaused();
+    }
 }

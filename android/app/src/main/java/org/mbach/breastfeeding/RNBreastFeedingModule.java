@@ -1,6 +1,7 @@
 package org.mbach.breastfeeding;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -50,6 +52,22 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         super(reactContext);
         this.reactContext = reactContext;
         INSTANCE = this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createChannel() {
+        NotificationManager notificationManager = (NotificationManager) reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            return;
+        }
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, reactContext.getString(R.string.channel), NotificationManager.IMPORTANCE_LOW);
+        notificationChannel.setDescription(reactContext.getString(R.string.description));
+        notificationChannel.setSound(null, null);
+        notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        notificationManager.createNotificationChannel(notificationChannel);
     }
 
     /**
@@ -72,7 +90,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     void updateTimer(final String timerId, final Long millis, boolean isRunning) {
         if (isRunning) {
             this.millis = millis;
-            updateNotificationButton(true);
+            updateNotificationButton(timerId,true);
         }
         WritableMap payload = Arguments.createMap();
         payload.putString("timerId", timerId);
@@ -84,11 +102,12 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     /**
      * @param isRunning check if running
      */
-    void updateNotificationButton(boolean isRunning) {
+    void updateNotificationButton(final String timerId, boolean isRunning) {
         Intent resultIntent = new Intent(reactContext, ChronoService.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         resultIntent.putExtra(ACTION_PAUSE_RESUME, ACTION_PAUSE_RESUME);
+        resultIntent.putExtra(TIMER_ID, timerId);
 
         PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -117,7 +136,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @Override
+    @NonNull
     public String getName() {
         return "RNBreastFeedingModule";
     }
@@ -132,13 +151,14 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     }
 
 
-    Notification getNotification() {
+    Notification getNotification(String timerId) {
         if (notification == null) {
             Intent resultIntent = new Intent(reactContext, ChronoService.class);
             resultIntent.putExtra(ACTION_PAUSE_RESUME, ACTION_PAUSE_RESUME);
+            resultIntent.putExtra(TIMER_ID, timerId);
             PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            notification = new NotificationCompat.Builder(this.reactContext, CHANNEL_ID).setContentTitle("00:00")
+            notification = new NotificationCompat.Builder(reactContext, CHANNEL_ID).setContentTitle("00:00")
                     .addAction(0, reactContext.getString(R.string.pause), pendingIntent)
                     .setSmallIcon(R.drawable.ic_timer_notification).build();
             return notification;

@@ -69,6 +69,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomWidth: 1
   },
+  rowWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
   chipMargins: {
     marginRight: 8,
     marginTop: 8
@@ -76,11 +80,18 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 13
   },
+  containerDialog: {
+    maxHeight: '75%'
+  },
   popupButtonsContainer: {
     flexDirection: 'row',
     minHeight: 30,
     justifyContent: 'space-between',
     marginHorizontal: 20
+  },
+  settingsItem: {
+    height: 60,
+    justifyContent: 'center'
   },
   // add entry
   mainContainer: {
