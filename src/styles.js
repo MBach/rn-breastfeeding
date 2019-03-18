@@ -65,6 +65,10 @@ const styles = StyleSheet.create({
     margin: 16,
     alignSelf: 'center'
   },
+  absFab: {
+    position: 'absolute',
+    bottom: 20
+  },
   list: {
     flex: 1,
     borderBottomWidth: 1

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Easing, FlatList, PermissionsAndroid, Platform, ScrollView, Text, View } from 'react-native'
+import { Animated, AppState, Dimensions, Easing, FlatList, PermissionsAndroid, Platform, ScrollView, Text, View } from 'react-native'
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler'
 import {
   withTheme,
@@ -49,7 +49,8 @@ class HomeScreen extends Component {
       editThemeDialog: false,
       editGroupDialog: false,
       editLastEntry: false,
-      opacity: new Animated.Value(1)
+      opacity: new Animated.Value(1),
+      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.autoRefresh = null
   }
@@ -86,6 +87,11 @@ class HomeScreen extends Component {
     AppState.removeEventListener('change', this.refreshLastEntry)
     clearInterval(this.autoRefresh)
   }
+
+  onLayout = () =>
+    this.setState({
+      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
+    })
 
   refreshLastEntry = nextAppState => {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -128,7 +134,10 @@ class HomeScreen extends Component {
       const lastGroup = groupedRecords[0]
       const lastEntry = lastGroup.group[0]
       return (
-        <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
+        <Card
+          style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, flexGrow: 0, minWidth: '50%', maxWidth: '50%' } : false]}
+          onPress={() => this.setState({ editLastEntry: true })}
+        >
           <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
           <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
@@ -316,11 +325,41 @@ class HomeScreen extends Component {
     )
   }
 
+  renderFab = isStopped => {
+    const { colors } = this.props.theme
+    let extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
+    if (isStopped) {
+      return (
+        <FAB
+          style={[styles.fab, styles.absFab, extraFab, { backgroundColor: colors.primary }]}
+          icon={'add'}
+          onPress={() => this.props.navigation.navigate('AddEntry')}
+        />
+      )
+    } else {
+      return (
+        <Animated.View style={[styles.absFab, extraFab]}>
+          <FAB
+            style={[styles.fab, { opacity: this.state.opacity, backgroundColor: colors.primary }]}
+            icon={'timer'}
+            onPress={() => this.props.navigation.navigate('AddEntry')}
+          />
+        </Animated.View>
+      )
+    }
+  }
+
   render = () => {
     const { colors } = this.props.theme
     const groupedRecords = dataStore.groupedRecords
     return (
-      <View style={{ backgroundColor: colors.background, flex: 1, justifyContent: 'center' }}>
+      <View
+        onLayout={this.onLayout}
+        style={[
+          { backgroundColor: colors.background, flex: 1, justifyContent: 'center' },
+          this.state.isLandscape ? { flexDirection: 'row' } : false
+        ]}
+      >
         {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
         {dataStore.hydrated && !dataStore.updating ? (
           <FlatList
@@ -332,21 +371,7 @@ class HomeScreen extends Component {
         ) : (
           <ActivityIndicator size="large" color={colors.primary} />
         )}
-        {isNotRunning(dataStore.timers) ? (
-          <FAB
-            style={[styles.fab, { position: 'absolute', bottom: 20, backgroundColor: colors.primary }]}
-            icon={'add'}
-            onPress={() => this.props.navigation.navigate('AddEntry')}
-          />
-        ) : (
-          <Animated.View>
-            <FAB
-              style={[styles.fab, { position: 'absolute', bottom: 20, opacity: this.state.opacity, backgroundColor: colors.primary }]}
-              icon={'timer'}
-              onPress={() => this.props.navigation.navigate('AddEntry')}
-            />
-          </Animated.View>
-        )}
+        {this.renderFab(isNotRunning(dataStore.timers))}
         {this.editThemeDialog()}
         {this.editGroupDialog()}
       </View>

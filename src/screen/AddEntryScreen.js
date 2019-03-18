@@ -48,8 +48,6 @@ class AddEntryScreen extends Component {
       showEditDurationDialog: false,
       showErrorDialog: false,
       manualTimer: '',
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
       isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.timerUpdated = null
@@ -78,6 +76,11 @@ class AddEntryScreen extends Component {
       this.timerUpdated.remove()
     }
   }
+
+  onLayout = () =>
+    this.setState({
+      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
+    })
 
   /// Date & time pickers
 
@@ -178,13 +181,6 @@ class AddEntryScreen extends Component {
       </View>
     )
   }
-
-  onLayout = () =>
-    this.setState({
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
-      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
-    })
 
   /// Dialogs
 
