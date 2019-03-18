@@ -135,7 +135,7 @@ class HomeScreen extends Component {
       const lastEntry = lastGroup.group[0]
       return (
         <Card
-          style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, flexGrow: 0, minWidth: '50%', maxWidth: '50%' } : false]}
+          style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}
           onPress={() => this.setState({ editLastEntry: true })}
         >
           <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
@@ -153,7 +153,7 @@ class HomeScreen extends Component {
       )
     } else {
       return (
-        <Card style={styles.cardLastEntry}>
+        <Card style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}>
           <Card.Title title="Pas encore de dernière tétée" subtitle="Cliquez sur le bouton pour commencer" />
         </Card>
       )
@@ -327,8 +327,8 @@ class HomeScreen extends Component {
 
   renderFab = isStopped => {
     const { colors } = this.props.theme
-    let extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
     if (isStopped) {
+      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: '50%', marginLeft: -24 }
       return (
         <FAB
           style={[styles.fab, styles.absFab, extraFab, { backgroundColor: colors.primary }]}
@@ -337,6 +337,7 @@ class HomeScreen extends Component {
         />
       )
     } else {
+      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
       return (
         <Animated.View style={[styles.absFab, extraFab]}>
           <FAB
