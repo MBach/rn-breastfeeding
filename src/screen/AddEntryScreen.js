@@ -75,6 +75,9 @@ class AddEntryScreen extends Component {
     if (this.timerUpdated) {
       this.timerUpdated.remove()
     }
+    if (this.props.navigation.state.params.autoRefresh) {
+      this.props.navigation.state.params.autoRefresh()
+    }
   }
 
   onLayout = () =>

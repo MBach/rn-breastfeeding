@@ -56,26 +56,11 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleMore: () => this.setState({ editThemeDialog: true }) })
+    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.setState({ editThemeDialog: true }) })
 
     AppState.addEventListener('change', this.refreshLastEntry)
     if (!isNotRunning(dataStore.timers)) {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(this.state.opacity, {
-            toValue: 0.05,
-            duration: 2000,
-            ease: Easing.ease,
-            useNativeDriver: true
-          }),
-          Animated.timing(this.state.opacity, {
-            toValue: 1,
-            duration: 2000,
-            ease: Easing.ease,
-            useNativeDriver: true
-          })
-        ])
-      ).start()
+      this.createAnimation()
     }
 
     this.autoRefresh = setInterval(() => {
@@ -87,6 +72,24 @@ class HomeScreen extends Component {
     AppState.removeEventListener('change', this.refreshLastEntry)
     clearInterval(this.autoRefresh)
   }
+
+  createAnimation = () =>
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(this.state.opacity, {
+          toValue: 0.05,
+          duration: 2000,
+          ease: Easing.ease,
+          useNativeDriver: true
+        }),
+        Animated.timing(this.state.opacity, {
+          toValue: 1,
+          duration: 2000,
+          ease: Easing.ease,
+          useNativeDriver: true
+        })
+      ])
+    ).start()
 
   onLayout = () =>
     this.setState({
@@ -328,13 +331,22 @@ class HomeScreen extends Component {
   renderFab = isStopped => {
     const { colors } = this.props.theme
     if (isStopped) {
-      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: '50%', marginLeft: -24 }
+      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
       return (
-        <FAB
-          style={[styles.fab, styles.absFab, extraFab, { backgroundColor: colors.primary }]}
-          icon={'add'}
-          onPress={() => this.props.navigation.navigate('AddEntry')}
-        />
+        <View style={[styles.absFab, extraFab]}>
+          <FAB
+            style={[styles.fab, { backgroundColor: colors.primary }]}
+            icon={'add'}
+            onPress={() =>
+              this.props.navigation.navigate('AddEntry', {
+                autoRefresh: () => {
+                  this.createAnimation()
+                  this.forceUpdate()
+                }
+              })
+            }
+          />
+        </View>
       )
     } else {
       const extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
