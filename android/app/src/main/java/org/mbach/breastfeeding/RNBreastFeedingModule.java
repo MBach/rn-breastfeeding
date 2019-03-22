@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = "BFModule";
-    static final String CHANNEL_ID = "breastfeeding_id";
+    private static final String CHANNEL_ID = "breastfeeding_id";
     private static final String ON_TICK = "onTick";
 
     private final ReactApplicationContext reactContext;
@@ -55,6 +56,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -112,8 +114,15 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         PendingIntent pendingIntent = PendingIntent.getService(reactContext, 42, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        int statusBarColor = Color.parseColor("#880e4f");
+        if (reactContext.getCurrentActivity() != null) {
+            statusBarColor = reactContext.getCurrentActivity().getWindow().getStatusBarColor();
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(reactContext, CHANNEL_ID).setContentTitle(formatTime())
-                .setSmallIcon(R.drawable.ic_timer_notification);
+                .setSmallIcon(R.drawable.ic_timer_notification)
+                .setColorized(true)
+                .setColor(statusBarColor);
 
         Uri IntentUri = Uri.parse("rnbreastfeeding://rnbreastfeeding/chrono");
         Intent intent = new Intent(Intent.ACTION_VIEW, IntentUri);

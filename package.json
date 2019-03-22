@@ -20,7 +20,7 @@
     "mobx-persist": "^0.4.1",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
-    "react": "^16.8.4",
+    "react": "^16.8.5",
     "react-native": "^0.59.1",
     "react-native-android-location-enabler": "^1.0.8",
     "react-native-gesture-handler": "^1.1.0",
@@ -35,10 +35,10 @@
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@babel/runtime": "^7.4.0",
+    "@babel/runtime": "^7.4.2",
     "babel-jest": "^24.5.0",
     "jest": "^24.5.0",
     "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "^16.8.4"
+    "react-test-renderer": "^16.8.5"
   }
 }
