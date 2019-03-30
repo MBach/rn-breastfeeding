@@ -113,10 +113,6 @@ class AddEntryScreen extends Component {
 
   pauseResumeTimer = timerId => {
     RNBreastFeeding.pauseResumeTimer(timerId)
-    let value = dataStore.isRunning[timerId]
-    let isRunning = { left: false, right: false, bottle: false }
-    isRunning[timerId] = !value
-    dataStore.isRunning = isRunning
     dataStore.currentTimerId = timerId
   }
 

@@ -23,12 +23,21 @@ public class RNTimer extends Timer {
             if (!_isPaused) {
                 _pause = SystemClock.elapsedRealtime();
                 _isPaused = true;
+                requestImmediateUpdate();
             }
         }
 
         void resume() {
             _pauseDuration += SystemClock.elapsedRealtime() - _pause;
             _isPaused = false;
+            requestImmediateUpdate();
+        }
+
+        void requestImmediateUpdate() {
+            if (RNBreastFeedingModule.INSTANCE != null) {
+                updateDuration();
+                RNBreastFeedingModule.INSTANCE.updateTimer(timerId, _duration, !_isPaused);
+            }
         }
 
         boolean isPaused() {
@@ -45,20 +54,12 @@ public class RNTimer extends Timer {
             } else {
                 _start -= value;
             }
-            // Request immediate update
-            if (RNBreastFeedingModule.INSTANCE != null) {
-                updateDuration();
-                RNBreastFeedingModule.INSTANCE.updateTimer(timerId, _duration, !_isPaused);
-            }
+            requestImmediateUpdate();
         }
 
         void changeTo(long value) {
             _start = SystemClock.elapsedRealtime() - value;
-            // Request immediate update
-            if (RNBreastFeedingModule.INSTANCE != null) {
-                updateDuration();
-                RNBreastFeedingModule.INSTANCE.updateTimer(timerId, _duration, !_isPaused);
-            }
+            requestImmediateUpdate();
         }
 
         private void updateDuration() {

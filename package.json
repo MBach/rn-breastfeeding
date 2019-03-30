@@ -13,19 +13,19 @@
     "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.2.1",
+    "@react-native-community/async-storage": "^1.2.2",
     "humanize-duration": "^3.18.0",
     "lodash": "^4.17.11",
-    "mobx": "^5.9.0",
+    "mobx": "^5.9.4",
     "mobx-persist": "^0.4.1",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
-    "react": "^16.8.5",
-    "react-native": "^0.59.1",
+    "react": "^16.8.6",
+    "react-native": "^0.59.2",
     "react-native-android-location-enabler": "^1.0.8",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-modal-datetime-picker": "^6.1.0",
-    "react-native-paper": "^2.14.0",
+    "react-native-paper": "^2.15.0",
     "react-native-quick-actions": "^0.3.9",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.5.1",
@@ -39,6 +39,6 @@
     "babel-jest": "^24.5.0",
     "jest": "^24.5.0",
     "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "^16.8.5"
+    "react-test-renderer": "^16.8.6"
   }
 }
