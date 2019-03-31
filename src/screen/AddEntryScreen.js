@@ -6,8 +6,9 @@ import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react/native'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
+import i18n from '../locales/i18n'
 
-import { CHOICES, getMinAndSeconds, isNotRunning } from '../config'
+import { getMinAndSeconds, isNotRunning } from '../config'
 import styles from '../styles'
 
 const resetAction = StackActions.reset({
@@ -33,7 +34,7 @@ class AddEntryScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => {
     const { params } = navigation.state
     return {
-      title: 'Ajouter une saisie',
+      title: i18n.t('navigation.addEntry'),
       headerStyle: { backgroundColor: screenProps.primary },
       headerRight: <Button icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
     }
@@ -157,14 +158,14 @@ class AddEntryScreen extends Component {
     const { colors, palette } = this.props.theme
     let image
     switch (timerId) {
-      case CHOICES.LEFT:
-        image = require(`../assets/left.png`)
+      case 'left':
+        image = require(`../assets/en/left.png`)
         break
-      case CHOICES.RIGHT:
-        image = require(`../assets/right.png`)
+      case 'right':
+        image = require(`../assets/en/right.png`)
         break
-      case CHOICES.BOTTLE:
-        image = require(`../assets/bottle.png`)
+      case 'bottle':
+        image = require(`../assets/en/bottle.png`)
         break
     }
     return (
@@ -189,10 +190,10 @@ class AddEntryScreen extends Component {
     return (
       <Portal>
         <Dialog visible={showEditDurationDialog} onDismiss={this.hideDialog('showEditDurationDialog')}>
-          <Dialog.Title>Saisie manuelle</Dialog.Title>
+          <Dialog.Title>{i18n.t('add.manualEntry')}</Dialog.Title>
           <Dialog.Content>
             <TextInput
-              label="Durée en minutes"
+              label={i18n.t('add.durationPlaceholder')}
               mode="flat"
               value={this.state.manualTimer}
               keyboardType="numeric"
@@ -208,7 +209,7 @@ class AddEntryScreen extends Component {
           </Dialog.Content>
           <Dialog.Actions>
             <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
-              OK
+              {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -223,11 +224,11 @@ class AddEntryScreen extends Component {
       <Portal>
         <Dialog visible={showErrorDialog} onDismiss={this.hideDialog('showErrorDialog')}>
           <Dialog.Content>
-            <Paragraph>Votre saisie n’a pas de durée</Paragraph>
+            <Paragraph>{i18n.t('add.noDuration')}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
             <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
-              OK
+              {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -242,22 +243,22 @@ class AddEntryScreen extends Component {
       <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
         <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
           <View>
-            <ThemedText palette={palette}>Date</ThemedText>
+            <ThemedText palette={palette}>{i18n.t('add.date')}</ThemedText>
             <View style={styles.dateContainer}>
               <TouchableOpacity onPress={this.showDatePicker}>
                 <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-                  {day.format('DD/MM/YY')}
+                  {i18n.formatDay(day)}
                 </ThemedText>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.showTimePicker}>
                 <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-                  {day.format('HH:mm')}
+                  {i18n.formatTime(day)}
                 </ThemedText>
               </TouchableOpacity>
             </View>
           </View>
           <View style={{ marginBottom: 16 }}>
-            <ThemedText palette={palette}>Vitamine D</ThemedText>
+            <ThemedText palette={palette}>{i18n.t('vitaminD')}</ThemedText>
             <Switch
               value={dataStore.vitaminD}
               onValueChange={() => {
@@ -265,7 +266,7 @@ class AddEntryScreen extends Component {
               }}
             />
           </View>
-          <ThemedText palette={palette}>Temps passé</ThemedText>
+          <ThemedText palette={palette}>{i18n.t('add.timeSpent')}</ThemedText>
           <View style={styles.timerContainer}>
             <Button
               disabled={isNotRunning(dataStore.timers)}
@@ -274,7 +275,7 @@ class AddEntryScreen extends Component {
               mode="text"
               onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, -60000)}
             >
-              -1min
+              {i18n.t('add.remove1min')}
             </Button>
             <TouchableOpacity onPress={() => dataStore.currentTimerId && this.setState({ showEditDurationDialog: true })}>
               <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: palette.separator }}>
@@ -288,12 +289,12 @@ class AddEntryScreen extends Component {
               mode="text"
               onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, 60000)}
             >
-              +1min
+              {i18n.t('add.add1min')}
             </Button>
           </View>
         </View>
         <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
-          <ThemedText palette={palette}>Sein</ThemedText>
+          <ThemedText palette={palette}>{i18n.t('add.breast')}</ThemedText>
           <View style={styles.buttonsContainer}>
             {this.renderButton('left')}
             {this.renderButton('right')}
@@ -301,7 +302,13 @@ class AddEntryScreen extends Component {
           </View>
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
-        <DateTimePicker isVisible={isTimePickerVisible} onConfirm={this.handleTimePicked} onCancel={this.hideTimePicker} mode="time" />
+        <DateTimePicker
+          isVisible={isTimePickerVisible}
+          onConfirm={this.handleTimePicked}
+          onCancel={this.hideTimePicker}
+          mode="time"
+          is24Hour={i18n.uses24HourClock}
+        />
         {this.renderEditDurationDialog()}
         {this.renderErrorDialog()}
       </View>

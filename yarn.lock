@@ -2783,6 +2783,11 @@ humanize-duration@^3.18.0:
   resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.18.0.tgz#ba07a945d6d4358b9751fecabe27864bf965afbc"
   integrity sha512-reYy4EJMqlhX13TDlgSqLYfVGKOoixoEzsSL6DBlp22dScWN8Q2eMgDF4L0q28mzbgO40rnBy3WyEUQEhfYALw==
 
+i18n-js@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.2.1.tgz#26cea8e327207bebccf1030baa761c5245ceb63b"
+  integrity sha512-AN8Ol+7QMcRml338l5W7JeNsJgXZqXHOwF+e2iKu6gqRM87bmbxk3g2CAfapo7+5ASKOhl+0PiH+YP8OjN+rXg==
+
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -5235,6 +5240,11 @@ react-native-gesture-handler@^1.1.0:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.2"
     prop-types "^15.5.10"
+
+react-native-localize@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.1.1.tgz#ce1ad85e36d3e56fe6c116ca291b280cd4273518"
+  integrity sha512-Ezs8VUCsjXBNayXPbEMGKOqJmw36f1Vq842LO6atlynt7W6JGzObkstdGp8Fp2ifjtal1GTFTtXm++TnBDol3g==
 
 react-native-modal-datetime-picker@^6.1.0:
   version "6.1.0"

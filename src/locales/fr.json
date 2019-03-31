@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "addEntry": "Ajouter une saisie"
+  },
+  "vitaminD": "Vitamine D",
+  "cancel": "Annuler",
+  "ok": "OK",
+  "left": "Gauche",
+  "right": "Droit",
+  "bottle": "Biberon",
+  "home": {
+    "noEntry": "Pas encore de dernière tétée",
+    "add": "Toucher le bouton + pour commencer",
+    "mode": {
+      "title": "Préférences d'affichage",
+      "day": "Mode jour",
+      "night": "Mode nuit",
+      "auto": "Mode auto"
+    },
+    "groupedEntries": {
+      "noData": "Aucune saisie"
+    }
+  },
+  "add": {
+    "date": "Date",
+    "timeSpent": "Temps passé",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "Sein",
+    "manualEntry": "Saisie manuelle",
+    "durationPlaceholder": "Durée en minutes",
+    "noDuration": "Votre saisie n’a pas de durée"
+  }
+}

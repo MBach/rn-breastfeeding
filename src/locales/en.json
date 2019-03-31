@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "Home",
+    "addEntry": "Add a new entry"
+  },
+  "vitaminD": "Vitamin D",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "left": "Left",
+  "right": "Right",
+  "bottle": "Bottle",
+  "home": {
+    "noEntry": "No breastfeeds has been done yet",
+    "add": "Tap the + button to start",
+    "mode": {
+      "title": "Display settings",
+      "day": "Day mode",
+      "night": "Night mode",
+      "auto": "Automatic"
+    },
+    "groupedEntries": {
+      "noData": "No data"
+    }
+  },
+  "add": {
+    "date": "Date",
+    "timeSpent": "Time spent",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "Breast",
+    "manualEntry": "Manual entry",
+    "durationPlaceholder": "Duration in minutes",
+    "noDuration": "Your entry has no duration"
+  }
+}

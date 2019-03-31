@@ -1,22 +1,5 @@
 import moment from 'moment'
 
-const CHOICES = {
-  LEFT: 'left',
-  RIGHT: 'right',
-  BOTTLE: 'bottle'
-}
-
-const mapChoice = c => {
-  switch (c) {
-    case CHOICES.LEFT:
-      return 'Gauche'
-    case CHOICES.RIGHT:
-      return 'Droit'
-    case CHOICES.BOTTLE:
-      return 'Biberon'
-  }
-}
-
 const getMin = time => {
   const d = moment.duration(time)
   if (d.minutes() < 1) {
@@ -41,4 +24,4 @@ const getMinAndSeconds = time => {
 
 const isNotRunning = timers => timers['left'] === 0 && timers['right'] === 0 && timers['bottle'] === 0
 
-export { CHOICES, mapChoice, getMin, getMinAndSeconds, isNotRunning }
+export { getMin, getMinAndSeconds, isNotRunning }

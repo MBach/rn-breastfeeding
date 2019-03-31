@@ -16,9 +16,8 @@ import {
 } from 'react-native-paper'
 import { inject, observer } from 'mobx-react/native'
 import moment from 'moment'
-import 'moment/locale/fr'
-import humanizeDuration from 'humanize-duration'
-import { mapChoice, getMin, getMinAndSeconds, isNotRunning } from '../config'
+import i18n from '../locales/i18n'
+import { getMin, getMinAndSeconds, isNotRunning } from '../config'
 import styles from '../styles'
 
 /**
@@ -35,7 +34,7 @@ class HomeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => {
     const { params } = navigation.state
     return {
-      title: 'Accueil',
+      title: i18n.t('navigation.home'),
       headerStyle: { backgroundColor: screenProps.primary },
       headerRight: <Button icon="more-vert" color="white" onPress={() => params.handleMore && params.handleMore()} />
     }
@@ -114,21 +113,12 @@ class HomeScreen extends Component {
     this.setState({ editGroupDialog: false })
   }
 
-  humanize = date =>
-    `Il y a ${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
-      conjunction: ' et ',
-      units: ['d', 'h', 'm'],
-      language: 'fr',
-      round: true,
-      serialComma: false
-    })}`
-
   ///
 
   renderChip = (timerId, time) =>
     time > 0 && (
       <Chip style={styles.chipMargins}>
-        <Text style={styles.chipText}>{`${mapChoice(timerId)} ${getMinAndSeconds(time)}`}</Text>
+        <Text style={styles.chipText}>{i18n.t(timerId) + ' ' + getMinAndSeconds(time)}</Text>
       </Chip>
     )
 
@@ -141,14 +131,14 @@ class HomeScreen extends Component {
           style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}
           onPress={() => this.setState({ editLastEntry: true })}
         >
-          <Card.Title title={`Dernière tétée à ${moment.unix(lastEntry.date).format('HH:mm')}`} subtitle={this.humanize(lastEntry.date)} />
+          <Card.Title title={i18n.formatLastEntry(lastEntry.date)} subtitle={i18n.humanize(lastEntry.date)} />
           <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}
             {this.renderChip('bottle', lastEntry.timers['bottle'])}
             {lastEntry.vitaminD && (
               <Chip style={styles.chipMargins} icon="brightness-5">
-                <Text style={styles.chipText}>Vitamine D</Text>
+                <Text style={styles.chipText}>{i18n.t('vitaminD')}</Text>
               </Chip>
             )}
           </Card.Content>
@@ -157,19 +147,13 @@ class HomeScreen extends Component {
     } else {
       return (
         <Card style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}>
-          <Card.Title title="Pas encore de dernière tétée" subtitle="Cliquez sur le bouton pour commencer" />
+          <Card.Title title={i18n.t('home.noEntry')} subtitle={i18n.t('home.add')} />
         </Card>
       )
     }
   }
 
   renderItem = ({ item }) => {
-    let title = ''
-    if (item.group.length < 2) {
-      title = '1 tétée'
-    } else {
-      title = `${item.group.length} tétées`
-    }
     const { colors, palette } = this.props.theme
     return (
       <TouchableRipple
@@ -177,9 +161,9 @@ class HomeScreen extends Component {
         onPress={() => this.editGroup(item)}
         rippleColor={palette.rippleColor}
       >
-        <List.Section title={moment.unix(item.day).format('dddd Do MMMM YYYY')}>
+        <List.Section title={i18n.formatLongDay(item.day)}>
           <List.Item
-            title={title}
+            title={i18n.formatItem(item.group.length)}
             left={() => <List.Icon icon="edit" color={colors.text} style={{ opacity: 0.75 }} />}
             right={() => item.hasVitaminD && <List.Icon color={colors.text} style={{ opacity: 0.5 }} icon="brightness-5" />}
           />
@@ -225,17 +209,17 @@ class HomeScreen extends Component {
     const { colors } = this.props.theme
     const items = [
       {
-        title: 'Mode jour',
+        title: i18n.t('home.mode.day'),
         theme: 'day',
         icon: 'wb-sunny'
       },
       {
-        title: 'Mode nuit',
+        title: i18n.t('home.mode.night'),
         theme: 'night',
         icon: 'brightness-3'
       },
       {
-        title: 'Mode auto',
+        title: i18n.t('home.mode.auto'),
         theme: 'auto',
         icon: 'autorenew',
         callback: this.askLocation
@@ -244,7 +228,7 @@ class HomeScreen extends Component {
     return (
       <Portal>
         <Dialog visible={this.state.editThemeDialog} onDismiss={this.hideDialog('editThemeDialog')}>
-          <Dialog.Title>Préférences d'affichage</Dialog.Title>
+          <Dialog.Title>{i18n.t('home.mode.title')}</Dialog.Title>
           <RadioButton.Group onValueChange={theme => this.changeTheme(theme)} value={dataStore.theme}>
             <List.Section>
               {items.map(({ title, theme, icon, callback }, index) => (
@@ -276,23 +260,23 @@ class HomeScreen extends Component {
     }
     let data
     if (currentGroup.group.length === 0) {
-      data = <List.Item title="Aucune saisie" />
+      data = <List.Item title={i18n.t('home.groupedEntries.noData')} />
     } else {
       data = currentGroup.group.map((entry, index) => {
         let description = []
         if (entry.timers['left'] > 0) {
-          description.push(`${mapChoice('left')} :  ${getMin(entry.timers['left'])}`)
+          description.push(i18n.t('left') + `:  ${getMin(entry.timers['left'])}`)
         }
         if (entry.timers['right'] > 0) {
-          description.push(`${mapChoice('right')} : ${getMin(entry.timers['right'])}`)
+          description.push(i18n.t('right') + `: ${getMin(entry.timers['right'])}`)
         }
         if (entry.timers['bottle'] > 0) {
-          description.push(`${mapChoice('bottle')} : ${getMin(entry.timers['bottle'])}`)
+          description.push(i18n.t('bottle') + `: ${getMin(entry.timers['bottle'])}`)
         }
         return (
           <List.Item
             key={index}
-            title={moment.unix(entry.date).format('HH:mm')}
+            title={i18n.formatTime(entry.date)}
             description={description.join(', ')}
             right={() => (
               <TouchableRipple
@@ -317,10 +301,10 @@ class HomeScreen extends Component {
           </Dialog.ScrollArea>
           <Dialog.Actions style={styles.popupButtonsContainer}>
             <Button color={palette.buttonColor} onPress={this.hideDialog('editGroupDialog')}>
-              Annuler
+              {i18n.t('cancel')}
             </Button>
             <Button color={palette.buttonColor} onPress={() => this.update(currentGroup)}>
-              OK
+              {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
         </Dialog>

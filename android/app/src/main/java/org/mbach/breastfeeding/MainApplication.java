@@ -10,6 +10,7 @@ import com.facebook.soloader.SoLoader;
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactNativeQuickActions.AppShortcutsPackage;
+import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
+                    new RNLocalizePackage(),
                     new AsyncStoragePackage(),
                     new RNAndroidLocationEnablerPackage(),
                     new AppShortcutsPackage(),

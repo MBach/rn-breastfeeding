@@ -8,6 +8,7 @@ import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
 import moment from 'moment'
 import SunCalc from 'suncalc'
+import i18n, { loadLocale } from './locales/i18n'
 
 import AddEntryScreen from './screen/AddEntryScreen'
 import HomeScreen from './screen/HomeScreen'
@@ -16,18 +17,6 @@ import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 
 const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
-
-// Add an App shortcut with a long press
-QuickActions.setShortcutItems([
-  {
-    type: 'Chrono',
-    title: 'Ajouter une saisie',
-    icon: 'ic_timer_48dp',
-    userInfo: {
-      url: 'AddEntry'
-    }
-  }
-])
 
 const Stack = createStackNavigator(
   {
@@ -78,6 +67,18 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
+    loadLocale()
+    // Add an App shortcut with a long press
+    QuickActions.setShortcutItems([
+      {
+        type: 'Chrono',
+        title: i18n.t('navigation.addEntry'),
+        icon: 'ic_timer_48dp',
+        userInfo: {
+          url: 'AddEntry'
+        }
+      }
+    ])
     const hydrate = create({ storage: AsyncStorage, jsonify: true })
     const res = await hydrate('dataStore', dataStore)
     if (res) {
