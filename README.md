@@ -18,8 +18,6 @@ Get the app directly on GitHub, here is the [v1.0](https://github.com/MBach/rn-b
 
 ![Main dark](https://mbach.github.io/rn-breastfeeding/screenshots/main_dark.jpg)
 
-![Add entry dark](https://mbach.github.io/rn-breastfeeding/screenshots/add_entry_dark.jpg)
-
 ## Requirements
 
 Android 5.0 - API level 21
@@ -39,4 +37,5 @@ This project may be used under the terms of the GNU General Public License versi
 ### Launcher Icon
 
 Launcher icon was designed by Janna Millionnaya
+
 https://www.shutterstock.com/ru/g/baldyrgan
