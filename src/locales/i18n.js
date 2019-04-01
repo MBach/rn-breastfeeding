@@ -3,14 +3,16 @@ import humanizeDuration from 'humanize-duration'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import 'moment/locale/fr'
+import 'moment/locale/ru'
 
 import en from './en.json'
 import fr from './fr.json'
+import ru from './ru.json'
 
 i18n.defaultLocale = 'en'
 i18n.locale = 'en'
 i18n.fallbacks = true
-i18n.translations = { en, fr }
+i18n.translations = { en, fr, ru }
 
 export const loadLocale = () => {
   for (const locale of RNLocalize.getLocales()) {
@@ -31,6 +33,8 @@ i18n.formatLastEntry = date => {
       return `Last breastfeed at ${moment.unix(date).format(f)}`
     case 'fr':
       return `Dernière tétée à ${moment.unix(date).format(f)}`
+    case 'ru':
+      return `Последнее кормление грудью в ${moment.unix(date).format(f)}`
   }
 }
 
@@ -51,6 +55,14 @@ i18n.formatItem = n => {
       } else {
         item = `${n} tétées`
       }
+      break
+    case 'ru':
+      if (n < 2) {
+        item = '1 кормление грудью'
+      } else {
+        item = `${n} кормления грудью`
+      }
+      break
   }
   return item
 }
@@ -75,6 +87,11 @@ i18n.humanize = date => {
         conjunction: ' et ',
         ...defaultOptions
       })}`
+    case 'ru':
+      return `${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+        conjunction: ' и ',
+        ...defaultOptions
+      })} назад`
   }
 }
 
@@ -84,6 +101,7 @@ i18n.formatLongDay = date => {
     case 'en':
       return moment.unix(date).format('dddd, MMMM Do YYYY')
     case 'fr':
+    case 'ru':
       return moment.unix(date).format('dddd Do MMMM YYYY')
   }
 }
@@ -94,6 +112,7 @@ i18n.formatDay = date => {
     case 'en':
       return date.format('MM/DD/YY')
     case 'fr':
+    case 'ru':
       return date.format('DD/MM/YY')
   }
 }
