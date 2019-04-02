@@ -26,6 +26,13 @@ Android 5.0 - API level 21
 
 You would like to translate this App in your language, or submit a bug / feature request? Please contribute!
 
+### Translations
+
+![en](https://mbach.github.io/rn-breastfeeding/flags/gb.png)
+![es](https://mbach.github.io/rn-breastfeeding/flags/es.png)
+![fr](https://mbach.github.io/rn-breastfeeding/flags/fr.png)
+![ru](https://mbach.github.io/rn-breastfeeding/flags/ru.png)
+
 ## Copyright info
 
 Copyright (C) 2019 Matthieu Bachelier
