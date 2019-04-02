@@ -156,23 +156,11 @@ class AddEntryScreen extends Component {
 
   renderButton = timerId => {
     const { colors, palette } = this.props.theme
-    let image
-    switch (timerId) {
-      case 'left':
-        image = require(`../assets/en/left.png`)
-        break
-      case 'right':
-        image = require(`../assets/en/right.png`)
-        break
-      case 'bottle':
-        image = require(`../assets/en/bottle.png`)
-        break
-    }
     return (
       <View style={{ flexDirection: 'column' }}>
         <FAB
           style={[styles.fab, { backgroundColor: dataStore.isRunning[timerId] ? colors.secondary : colors.primary }]}
-          icon={dataStore.isRunning[timerId] ? 'pause' : image}
+          icon={dataStore.isRunning[timerId] ? 'pause' : i18n.getLocalizedButton(timerId)}
           onPress={() => this.pauseResumeTimer(timerId)}
         />
         <ThemedText palette={palette} style={styles.smallTimer}>

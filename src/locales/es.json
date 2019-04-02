@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "addEntry": "Añadir una entrada"
+  },
+  "vitaminD": "Vitamina D",
+  "cancel": "Cancelar",
+  "ok": "OK",
+  "left": "Izquierda",
+  "right": "Derecha",
+  "bottle": "Biberón",
+  "home": {
+    "noEntry": "No hay última alimentación",
+    "add": "Toque el botón + para comenzar.",
+    "mode": {
+      "title": "Preferencias de pantalla",
+      "day": "Modo diurno",
+      "night": "Modo nocturno",
+      "auto": "Modo automático"
+    },
+    "groupedEntries": {
+      "noData": "Sin convulsiones"
+    }
+  },
+  "add": {
+    "date": "Fecha",
+    "timeSpent": "Hora pasada",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "Pecho",
+    "manualEntry": "Entrada manual",
+    "durationPlaceholder": "Duración en minutos",
+    "noDuration": "Tu entrada no tiene duración"
+  }
+}

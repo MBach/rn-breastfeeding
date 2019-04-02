@@ -30,7 +30,7 @@
     "react-native-paper": "^2.15.0",
     "react-native-quick-actions": "^0.3.9",
     "react-native-vector-icons": "^6.4.2",
-    "react-navigation": "^3.6.0",
+    "react-navigation": "^3.6.1",
     "suncalc": "^1.8.0"
   },
   "devDependencies": {
@@ -38,8 +38,8 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/runtime": "^7.4.2",
-    "babel-jest": "^24.5.0",
-    "jest": "^24.5.0",
+    "babel-jest": "^24.6.0",
+    "jest": "^24.6.0",
     "metro-react-native-babel-preset": "^0.53.1",
     "react-test-renderer": "^16.8.6"
   }
