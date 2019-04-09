@@ -28,9 +28,13 @@ You would like to translate this App in your language, or submit a bug / feature
 
 ### Translations
 
+Except French (and English), all languages are machine translated
+
+![de](https://mbach.github.io/rn-breastfeeding/flags/de.png)
 ![en](https://mbach.github.io/rn-breastfeeding/flags/gb.png)
 ![es](https://mbach.github.io/rn-breastfeeding/flags/es.png)
 ![fr](https://mbach.github.io/rn-breastfeeding/flags/fr.png)
+![ja](https://mbach.github.io/rn-breastfeeding/flags/ja.png)
 ![ru](https://mbach.github.io/rn-breastfeeding/flags/ru.png)
 
 ## Copyright info

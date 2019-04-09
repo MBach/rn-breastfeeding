@@ -13,7 +13,7 @@
     "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.2.2",
+    "@react-native-community/async-storage": "^1.2.4",
     "humanize-duration": "^3.18.0",
     "i18n-js": "^3.2.1",
     "lodash": "^4.17.11",
@@ -22,24 +22,24 @@
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
     "react": "^16.8.6",
-    "react-native": "^0.59.3",
+    "react-native": "^0.59.4",
     "react-native-android-location-enabler": "^1.0.8",
     "react-native-gesture-handler": "^1.1.0",
-    "react-native-localize": "^1.1.1",
+    "react-native-localize": "^1.1.2",
     "react-native-modal-datetime-picker": "^6.1.0",
-    "react-native-paper": "^2.15.0",
-    "react-native-quick-actions": "^0.3.9",
+    "react-native-paper": "^2.15.1",
+    "react-native-quick-actions": "^0.3.10",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.6.1",
     "suncalc": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
+    "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@babel/runtime": "^7.4.2",
-    "babel-jest": "^24.6.0",
-    "jest": "^24.6.0",
+    "@babel/runtime": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
     "metro-react-native-babel-preset": "^0.53.1",
     "react-test-renderer": "^16.8.6"
   }

@@ -13,6 +13,15 @@ export const loadLocale = () => {
       i18n.locale = locale.languageCode
       i18n.uses24HourClock = RNLocalize.uses24HourClock()
       switch (locale.languageCode) {
+        case 'de':
+          import('./de.json').then(de => {
+            i18n.translations = { de }
+            i18n.leftButton = require('../assets/de/left.png')
+            i18n.rightButton = require('../assets/de/right.png')
+            i18n.bottleButton = require('../assets/de/bottle.png')
+            import('moment/locale/de').then(() => moment.locale('de'))
+          })
+          break
         default:
         case 'en':
           import('./en.json').then(en => {
@@ -40,6 +49,15 @@ export const loadLocale = () => {
             import('moment/locale/fr').then(() => moment.locale('fr'))
           })
           break
+        case 'ja':
+          import('./ja.json').then(ja => {
+            i18n.translations = { ja }
+            i18n.leftButton = require('../assets/ja/left.png')
+            i18n.rightButton = require('../assets/ja/right.png')
+            i18n.bottleButton = require('../assets/ja/bottle.png')
+            import('moment/locale/ja').then(() => moment.locale('ja'))
+          })
+          break
         case 'ru':
           import('./ru.json').then(ru => {
             i18n.translations = { ru }
@@ -58,6 +76,8 @@ export const loadLocale = () => {
 i18n.formatLastEntry = date => {
   const f = i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A'
   switch (i18n.locale) {
+    case 'de':
+      return `Letzte Fütterung vor ${moment.unix(date).format(f)}`
     default:
     case 'en':
       return `Last breastfeed at ${moment.unix(date).format(f)}`
@@ -65,6 +85,8 @@ i18n.formatLastEntry = date => {
       return `Última amamantamiento a las ${moment.unix(date).format(f)}`
     case 'fr':
       return `Dernière tétée à ${moment.unix(date).format(f)}`
+    case 'ja':
+      return `${moment.unix(date).format(f)}の最後の母乳`
     case 'ru':
       return `Последнее кормление грудью в ${moment.unix(date).format(f)}`
   }
@@ -73,6 +95,13 @@ i18n.formatLastEntry = date => {
 i18n.formatItem = n => {
   let item = ''
   switch (i18n.locale) {
+    case 'de':
+      if (n == 1) {
+        item = '1 Futtermittel'
+      } else {
+        item = `${n} Fütterungen`
+      }
+      break
     default:
     case 'en':
       if (n == 1) {
@@ -95,6 +124,9 @@ i18n.formatItem = n => {
         item = `${n} tétées`
       }
       break
+    case 'ja':
+      item = `${n}母乳`
+      break
     case 'ru':
       if (n == 1) {
         item = '1 кормление грудью'
@@ -114,25 +146,36 @@ i18n.humanize = date => {
     round: true,
     serialComma: false
   }
+  const duration = moment.duration(moment().diff(moment.unix(date)))
   switch (language) {
+    case 'de':
+      return `Vor ${humanizeDuration(duration, {
+        conjunction: ' und ',
+        ...defaultOptions
+      })}`
     default:
     case 'en':
-      return `${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+      return `${humanizeDuration(duration, {
         conjunction: ' and ',
         ...defaultOptions
       })} ago`
     case 'es':
-      return `Hace ${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+      return `Hace ${humanizeDuration(duration, {
         conjunction: ' y ',
         ...defaultOptions
       })}`
     case 'fr':
-      return `Il y a ${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+      return `Il y a ${humanizeDuration(duration, {
         conjunction: ' et ',
         ...defaultOptions
       })}`
+    case 'ja':
+      return `${humanizeDuration(duration, {
+        conjunction: '',
+        ...defaultOptions
+      })}前`
     case 'ru':
-      return `${humanizeDuration(moment.duration(moment().diff(moment.unix(date))), {
+      return `${humanizeDuration(duration, {
         conjunction: ' и ',
         ...defaultOptions
       })} назад`
@@ -144,10 +187,13 @@ i18n.formatLongDay = date => {
     default:
     case 'en':
       return moment.unix(date).format('dddd, MMMM Do YYYY')
+    case 'de':
     case 'es':
     case 'fr':
     case 'ru':
       return moment.unix(date).format('dddd Do MMMM YYYY')
+    case 'ja':
+      return moment.unix(date).format('YYYY MMMM dddd Do')
   }
 }
 
@@ -156,10 +202,13 @@ i18n.formatDay = date => {
     default:
     case 'en':
       return date.format('MM/DD/YY')
+    case 'de':
     case 'es':
     case 'fr':
     case 'ru':
       return date.format('DD/MM/YY')
+    case 'ja':
+      return date.format('YY/MM/DD')
   }
 }
 

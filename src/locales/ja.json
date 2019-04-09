@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "家",
+    "addEntry": "エントリを追加する"
+  },
+  "vitaminD": "ビタミンD",
+  "cancel": "キャンセル",
+  "ok": "OK",
+  "left": "左",
+  "right": "右",
+  "bottle": "哺乳瓶",
+  "home": {
+    "noEntry": "母乳育児はまだ行われていません",
+    "add": "開始するには+ボタンをタップしてください",
+    "mode": {
+      "title": "ディスプレイの設定",
+      "day": "日モード",
+      "night": "夜モード",
+      "auto": "自動"
+    },
+    "groupedEntries": {
+      "noData": "データなし"
+    }
+  },
+  "add": {
+    "date": "日付",
+    "timeSpent": "使った時間",
+    "remove1min": "-1分",
+    "add1min": "+1分",
+    "breast": "乳",
+    "manualEntry": "手動入力",
+    "durationPlaceholder": "期間（分）",
+    "noDuration": "あなたのエントリーは期間がありません"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "addEntry": "Einen neuen Eintrag hinzufügen"
+  },
+  "vitaminD": "Vitamin-D",
+  "cancel": "Stornieren",
+  "ok": "OK",
+  "left": "Links",
+  "right": "Recht",
+  "bottle": "Flasche",
+  "home": {
+    "noEntry": "Es wurde noch nicht gestillt",
+    "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
+    "mode": {
+      "title": "Bildschirmeinstellungen",
+      "day": "Tages-Modus",
+      "night": "Nacht-Modus",
+      "auto": "Automatik"
+    },
+    "groupedEntries": {
+      "noData": "Keine Daten"
+    }
+  },
+  "add": {
+    "date": "Datum",
+    "timeSpent": "Zeitaufwand",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "Brust",
+    "manualEntry": "Manueller Eintrag",
+    "durationPlaceholder": "Dauer in Minuten",
+    "noDuration": "Ihr Eintrag hat keine Dauer"
+  }
+}

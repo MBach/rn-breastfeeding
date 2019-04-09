@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">乳房授乳</string>
+    <string name="channel">クロノメーター</string>
+    <string name="description">クロノメーターが起動してからの経過時間</string>
+    <string name="on_hold">保留</string>
+    <string name="pause">一切り</string>
+    <string name="resume">再開</string>
+</resources>
