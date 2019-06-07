@@ -1,4 +1,4 @@
-package org.mbach.breastfeeding;
+package io.matierenoire.breastfeeding;
 
 import com.facebook.react.ReactActivity;
 

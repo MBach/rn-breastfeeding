@@ -3,7 +3,7 @@ import { DeviceEventEmitter, Dimensions, Text, TouchableOpacity, View } from 're
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
-import { observer, inject } from 'mobx-react/native'
+import { observer, inject } from 'mobx-react'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
 import i18n from '../locales/i18n'

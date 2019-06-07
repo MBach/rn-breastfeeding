@@ -14,7 +14,7 @@ import {
   RadioButton,
   TouchableRipple
 } from 'react-native-paper'
-import { inject, observer } from 'mobx-react/native'
+import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 import i18n from '../locales/i18n'
 import { getMin, getMinAndSeconds, isNotRunning } from '../config'

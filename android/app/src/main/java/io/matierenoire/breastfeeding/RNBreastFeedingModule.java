@@ -1,4 +1,4 @@
-package org.mbach.breastfeeding;
+package io.matierenoire.breastfeeding;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -126,7 +126,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
 
         Uri IntentUri = Uri.parse("rnbreastfeeding://rnbreastfeeding/chrono");
         Intent intent = new Intent(Intent.ACTION_VIEW, IntentUri);
-        intent.setPackage("org.mbach.breastfeeding");
+        intent.setPackage("io.matierenoire.breastfeeding");
 
         PendingIntent pending = PendingIntent.getActivity(reactContext, 666, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pending);
