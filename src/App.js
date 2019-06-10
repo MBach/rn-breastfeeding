@@ -67,7 +67,7 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
-    loadLocale()
+    await loadLocale()
     // Add an App shortcut with a long press
     QuickActions.setShortcutItems([
       {

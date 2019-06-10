@@ -7,7 +7,7 @@ i18n.defaultLocale = 'en'
 i18n.locale = 'en'
 i18n.fallbacks = true
 
-export const loadLocale = () => {
+export const loadLocale = async () => {
   for (const locale of RNLocalize.getLocales()) {
     if (i18n.translations[locale.languageCode] !== null) {
       i18n.locale = locale.languageCode
