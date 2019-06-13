@@ -5155,10 +5155,10 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-native-android-location-enabler@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-1.0.8.tgz#faa42f8b14adc0099bdec5fb3ac1d92c9804e953"
-  integrity sha512-gMb5pldxumR7VKVWwoTHOaeoeoFdHM5VN/bqPM+4dVHCm/sTLBmLiCEfsrc/36usVYe1p8m2Xi7K0ru3r83bPw==
+react-native-android-location-enabler@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-1.0.9.tgz#359ce694105067751b2960f7f1709c41425a237d"
+  integrity sha512-88zGJb95TLOHQ+4W4H7L1fhpTzBs0OWYPeXs/is+w5GZDR6kFBO4si0kuSxGaB6l3JeXIe53xu5hqqj1DfGhJw==
 
 react-native-animatable@^1.2.4:
   version "1.3.2"
