@@ -4,7 +4,7 @@ This App is for tracking breastfeeding. It's made in React-Native and has an aut
 
 ## Download
 
-Get the app directly on GitHub, here is the [v1.0](https://github.com/MBach/rn-breastfeeding/releases/download/v1.0/rn-breastfeeding-1.0.apk)
+Get the app on the Play Store [here](https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding)
 
 ## Screenshots
 
