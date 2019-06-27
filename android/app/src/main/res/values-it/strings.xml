@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Allattamento al seno</string>
+    <string name="channel">Cronometro</string>
+    <string name="description">Quanto tempo è trascorso dal cronometro</string>
+    <string name="on_hold">In attesa</string>
+    <string name="pause">Pausa</string>
+    <string name="resume">Riprendi</string>
+</resources>

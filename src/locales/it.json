@@ -1,0 +1,35 @@
+{
+  "navigation": {
+    "home": "Casa",
+    "addEntry": "Aggiungi una voce"
+  },
+  "vitaminD": "Vitamina D",
+  "cancel": "Annulla",
+  "ok": "OK",
+  "left": "Sinistra",
+  "right": "Giusto",
+  "bottle": "Bottiglia",
+  "home": {
+    "noEntry": "Non ancora un ultimo feed",
+    "add": "Tocca il pulsante + per iniziare",
+    "mode": {
+      "title": "Preferenze di visualizzazione",
+      "day": "Modalità giorno",
+      "night": "Modalità notte",
+      "auto": "Modalità auto"
+    },
+    "groupedEntries": {
+      "noData": "Nessuna voce"
+    }
+  },
+  "add": {
+    "date": "Data",
+    "timeSpent": "Il tempo è passato",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "Seno",
+    "manualEntry": "Inserimento manuale",
+    "durationPlaceholder": "Durata in minuti",
+    "noDuration": "La tua voce non ha durata"
+  }
+}

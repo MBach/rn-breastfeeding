@@ -49,6 +49,15 @@ export const loadLocale = async () => {
             import('moment/locale/fr').then(() => moment.locale('fr'))
           })
           break
+        case 'it':
+          import('./it.json').then(it => {
+            i18n.translations = { it }
+            i18n.leftButton = require('../assets/it/left.png')
+            i18n.rightButton = require('../assets/it/right.png')
+            i18n.bottleButton = require('../assets/it/bottle.png')
+            import('moment/locale/it').then(() => moment.locale('it'))
+          })
+          break
         case 'ja':
           import('./ja.json').then(ja => {
             i18n.translations = { ja }
@@ -85,6 +94,8 @@ i18n.formatLastEntry = date => {
       return `Última amamantamiento a las ${moment.unix(date).format(f)}`
     case 'fr':
       return `Dernière tétée à ${moment.unix(date).format(f)}`
+    case 'it':
+      return `Ultima poppata alle ${moment.unix(date).format(f)}`
     case 'ja':
       return `${moment.unix(date).format(f)}の最後の母乳`
     case 'ru':
@@ -122,6 +133,13 @@ i18n.formatItem = n => {
         item = '1 tétée'
       } else {
         item = `${n} tétées`
+      }
+      break
+    case 'it':
+      if (n == 1) {
+        item = '1 allattamento al seno'
+      } else {
+        item = `${n} allattamenti al seno`
       }
       break
     case 'ja':
@@ -169,6 +187,11 @@ i18n.humanize = date => {
         conjunction: ' et ',
         ...defaultOptions
       })}`
+    case 'it':
+      return `${humanizeDuration(duration, {
+        conjunction: ' e ',
+        ...defaultOptions
+      })} fa`
     case 'ja':
       return `${humanizeDuration(duration, {
         conjunction: '',
@@ -190,6 +213,7 @@ i18n.formatLongDay = date => {
     case 'de':
     case 'es':
     case 'fr':
+    case 'it':
     case 'ru':
       return moment.unix(date).format('dddd Do MMMM YYYY')
     case 'ja':
@@ -205,6 +229,7 @@ i18n.formatDay = date => {
     case 'de':
     case 'es':
     case 'fr':
+    case 'it':
     case 'ru':
       return date.format('DD/MM/YY')
     case 'ja':
