@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "954958868925",
+    "firebase_url": "https://rn-breastfeeding.firebaseio.com",
+    "project_id": "rn-breastfeeding",
+    "storage_bucket": "rn-breastfeeding.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954958868925:android:68aa9ce476154434",
+        "android_client_info": {
+          "package_name": "io.matierenoire.breastfeeding"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954958868925-inh064euo4mrdt38a8jst9hq13mi85uv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.matierenoire.breastfeeding",
+            "certificate_hash": "874369bc4cc3945fb40e6137373e9a21bdfa9429"
+          }
+        },
+        {
+          "client_id": "954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByoHx72yD0FYBFR2TezptkMIz7kFJ6Y2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

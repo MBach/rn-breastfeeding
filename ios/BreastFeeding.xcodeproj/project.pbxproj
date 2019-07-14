@@ -53,6 +53,17 @@
 		29B3315A7AD849CC884DB460 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FEA4CEF5D134D78BF1D22C6 /* Octicons.ttf */; };
 		D84BF9DB9825476394A35B18 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4CB700B6184464C83E7439D /* SimpleLineIcons.ttf */; };
 		60D2C9A50726452A8DD54188 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9B2E989CB714B33B59E9972 /* Zocial.ttf */; };
+		6C817FF9346C4A9DBCCE339A /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DCBC2306A90411FA280E0A6 /* libRNCAsyncStorage.a */; };
+		780E012EBB6A4F82A73DC03D /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A42D3D2953746B1A9D9CBAF /* libRNGestureHandler.a */; };
+		E0BFF59D47C34D6B807E904F /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3A0FBAD03FF468B9F902E49 /* libRNGestureHandler-tvOS.a */; };
+		3669366AC4DB46F1B0B33709 /* libRNLocalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49CAA07E3B04D46A749554E /* libRNLocalize.a */; };
+		585E555F07194D828E0E07D3 /* libRNLocalize-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9475A237A8B544A4B8B30036 /* libRNLocalize-tvOS.a */; };
+		4A553B2E5C4048679E677485 /* libRNQuickAction.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B60EC5EE924B5293803C8E /* libRNQuickAction.a */; };
+		55A7252F90594BC8B0991828 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D2CF5A819D04F3D95927C9A /* libRNVectorIcons.a */; };
+		7B22E7072F5346FF839DBBBF /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3DD5BE2EB8C4FB8A2790944 /* libRNVectorIcons-tvOS.a */; };
+		032F8914711849D1A14697A7 /* libRNFBDatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8513D999CF76473EA0D8DB3C /* libRNFBDatabase.a */; };
+		8C1ACAEED4C74761A880D85E /* libRNFBApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 747040C5E40A4C45A3C4EE7D /* libRNFBApp.a */; };
+		4C66D2C13FA14C19B865A313 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A234EBD39BD94461A10442C5 /* libRNFirebase.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -374,6 +385,25 @@
 		4FEA4CEF5D134D78BF1D22C6 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		B4CB700B6184464C83E7439D /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		E9B2E989CB714B33B59E9972 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F8BA25F119A14108AEF2C900 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6DCBC2306A90411FA280E0A6 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		4B46BB38AA994C40B510E00B /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		8A42D3D2953746B1A9D9CBAF /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F3A0FBAD03FF468B9F902E49 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		411B59827F744D4AA8575511 /* RNLocalize.xcodeproj */ = {isa = PBXFileReference; name = "RNLocalize.xcodeproj"; path = "../node_modules/react-native-localize/ios/RNLocalize.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F49CAA07E3B04D46A749554E /* libRNLocalize.a */ = {isa = PBXFileReference; name = "libRNLocalize.a"; path = "libRNLocalize.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		9475A237A8B544A4B8B30036 /* libRNLocalize-tvOS.a */ = {isa = PBXFileReference; name = "libRNLocalize-tvOS.a"; path = "libRNLocalize-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		495AA49CE41B4A47AD3C8959 /* RNQuickAction.xcodeproj */ = {isa = PBXFileReference; name = "RNQuickAction.xcodeproj"; path = "../node_modules/react-native-quick-actions/RNQuickAction/RNQuickAction.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B7B60EC5EE924B5293803C8E /* libRNQuickAction.a */ = {isa = PBXFileReference; name = "libRNQuickAction.a"; path = "libRNQuickAction.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		EF906F426ECF4316A717FBDD /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; name = "RNVectorIcons.xcodeproj"; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		7D2CF5A819D04F3D95927C9A /* libRNVectorIcons.a */ = {isa = PBXFileReference; name = "libRNVectorIcons.a"; path = "libRNVectorIcons.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		A3DD5BE2EB8C4FB8A2790944 /* libRNVectorIcons-tvOS.a */ = {isa = PBXFileReference; name = "libRNVectorIcons-tvOS.a"; path = "libRNVectorIcons-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		4068E02BC588401C89EEFC4D /* RNFBDatabase.xcodeproj */ = {isa = PBXFileReference; name = "RNFBDatabase.xcodeproj"; path = "../node_modules/@react-native-firebase/database/ios/RNFBDatabase.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		8513D999CF76473EA0D8DB3C /* libRNFBDatabase.a */ = {isa = PBXFileReference; name = "libRNFBDatabase.a"; path = "libRNFBDatabase.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		379CE642D0B0422DA574E1E4 /* RNFBApp.xcodeproj */ = {isa = PBXFileReference; name = "RNFBApp.xcodeproj"; path = "../node_modules/@react-native-firebase/app/ios/RNFBApp.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		747040C5E40A4C45A3C4EE7D /* libRNFBApp.a */ = {isa = PBXFileReference; name = "libRNFBApp.a"; path = "libRNFBApp.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5AD27B570350455F9E83F55C /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; name = "RNFirebase.xcodeproj"; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		A234EBD39BD94461A10442C5 /* libRNFirebase.a */ = {isa = PBXFileReference; name = "libRNFirebase.a"; path = "libRNFirebase.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,6 +431,14 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				6C817FF9346C4A9DBCCE339A /* libRNCAsyncStorage.a in Frameworks */,
+				780E012EBB6A4F82A73DC03D /* libRNGestureHandler.a in Frameworks */,
+				3669366AC4DB46F1B0B33709 /* libRNLocalize.a in Frameworks */,
+				4A553B2E5C4048679E677485 /* libRNQuickAction.a in Frameworks */,
+				55A7252F90594BC8B0991828 /* libRNVectorIcons.a in Frameworks */,
+				032F8914711849D1A14697A7 /* libRNFBDatabase.a in Frameworks */,
+				8C1ACAEED4C74761A880D85E /* libRNFBApp.a in Frameworks */,
+				4C66D2C13FA14C19B865A313 /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +456,9 @@
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
 				28C951F2B65C458697D8C00B /* libRNVectorIcons-tvOS.a in Frameworks */,
 				DAFC89DDD2604DD09D02CACC /* libRNLocalize-tvOS.a in Frameworks */,
+				E0BFF59D47C34D6B807E904F /* libRNGestureHandler-tvOS.a in Frameworks */,
+				585E555F07194D828E0E07D3 /* libRNLocalize-tvOS.a in Frameworks */,
+				7B22E7072F5346FF839DBBBF /* libRNVectorIcons-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,6 +630,14 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				F8BA25F119A14108AEF2C900 /* RNCAsyncStorage.xcodeproj */,
+				4B46BB38AA994C40B510E00B /* RNGestureHandler.xcodeproj */,
+				411B59827F744D4AA8575511 /* RNLocalize.xcodeproj */,
+				495AA49CE41B4A47AD3C8959 /* RNQuickAction.xcodeproj */,
+				EF906F426ECF4316A717FBDD /* RNVectorIcons.xcodeproj */,
+				4068E02BC588401C89EEFC4D /* RNFBDatabase.xcodeproj */,
+				379CE642D0B0422DA574E1E4 /* RNFBApp.xcodeproj */,
+				5AD27B570350455F9E83F55C /* RNFirebase.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1257,9 +1306,28 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BreastFeeding.app/BreastFeeding";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Debug;
@@ -1281,9 +1349,28 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BreastFeeding.app/BreastFeeding";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Release;
@@ -1306,6 +1393,14 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Debug;
@@ -1327,6 +1422,14 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Release;
@@ -1356,9 +1459,28 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Debug;
@@ -1388,9 +1510,28 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Release;
@@ -1419,9 +1560,28 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Debug;
@@ -1450,9 +1610,28 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
+					"$(SRCROOT)\..\node_modules\react-native-gesture-handler\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-localize\ios",
+					"$(SRCROOT)\..\node_modules\react-native-quick-actions\RNQuickAction\RNQuickAction",
+					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\database\ios\RNFBDatabase",
+					"$(SRCROOT)\..\node_modules\@react-native-firebase\app\ios\RNFBApp",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 			};
 			name = Release;

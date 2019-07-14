@@ -10,7 +10,8 @@
     "android": "react-native run-android",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:shake": "adb shell input keyevent 82",
-    "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android"
+    "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android",
+    "postinstall": "jetify"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.5.1",
@@ -41,6 +42,7 @@
     "@babel/runtime": "^7.5.4",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
+    "jetifier": "^1.6.3",
     "metro-react-native-babel-preset": "^0.55.0",
     "prettier": "1.18.2",
     "react-test-renderer": "^16.8.6"
