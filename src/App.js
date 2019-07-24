@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import { Provider } from 'mobx-react'
@@ -15,17 +15,18 @@ import HomeScreen from './screen/HomeScreen'
 import LoadingScreen from './screen/LoadingScreen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
+import Menu from './Menu'
 
 const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
 
-const Stack = createStackNavigator(
+const RootStack = createStackNavigator(
   {
     Loading: { screen: LoadingScreen, path: '/' },
     Home: { screen: HomeScreen, path: '/home' },
     AddEntry: { screen: AddEntryScreen, path: '/chrono' }
   },
   {
-    initialRouteName: 'Loading',
+    initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerTintColor: '#ffffff',
       headerTitleStyle: {
@@ -35,7 +36,21 @@ const Stack = createStackNavigator(
   }
 )
 
-const AppContainer = createAppContainer(Stack)
+const DrawerNavigator = createDrawerNavigator(
+  {
+    RootStack: RootStack
+  },
+  {
+    contentComponent: Menu,
+    contentOptions: {
+      style: {
+        backgroundColor: 'green'
+      }
+    }
+  }
+)
+
+const AppContainer = createAppContainer(DrawerNavigator)
 
 const getTheme = (key, dataStore) => {
   if (key === 'day') {

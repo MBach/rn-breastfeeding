@@ -57,6 +57,13 @@ export const darkTheme = {
 }
 
 const styles = StyleSheet.create({
+  // drawer
+  drawerItems: {
+    marginLeft: -4,
+    paddingLeft: 4,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20
+  },
   // home
   cardLastEntry: {
     margin: 8

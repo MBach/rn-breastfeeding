@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Dimensions, Easing, FlatList, PermissionsAndroid, Platform, ScrollView, Text, View } from 'react-native'
-import RNAndroidLocationEnabler from 'react-native-android-location-enabler'
+import { Animated, AppState, Dimensions, Easing, FlatList, ScrollView, Text, View } from 'react-native'
 import {
   withTheme,
   ActivityIndicator,
@@ -9,9 +8,9 @@ import {
   Chip,
   Dialog,
   FAB,
+  IconButton,
   List,
   Portal,
-  RadioButton,
   TouchableRipple
 } from 'react-native-paper'
 import { inject, observer } from 'mobx-react'
@@ -36,7 +35,8 @@ class HomeScreen extends Component {
     return {
       title: i18n.t('navigation.home'),
       headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <Button icon="more-vert" color="white" onPress={() => params.handleMore && params.handleMore()} />
+      headerLeft: <IconButton icon="menu" color="white" onPress={() => navigation.toggleDrawer()} />,
+      headerRight: <IconButton icon="account-circle" color="white" onPress={() => params.handleMore && params.handleMore()} />
     }
   }
 
@@ -45,7 +45,7 @@ class HomeScreen extends Component {
     this.state = {
       appState: AppState.currentState,
       currentGroup: null,
-      editThemeDialog: false,
+      showLoginDialog: false,
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1),
@@ -55,7 +55,7 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.setState({ editThemeDialog: true }) })
+    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.setState({ showLoginDialog: true }) })
 
     AppState.addEventListener('change', this.refreshLastEntry)
     if (!isNotRunning(dataStore.timers)) {
@@ -174,84 +174,6 @@ class HomeScreen extends Component {
 
   /// Dialogs
 
-  changeTheme = theme => {
-    dataStore.theme = theme
-    this.props.screenProps.updateTheme(theme)
-  }
-
-  askLocation = async () => {
-    if (Platform.OS !== 'android') {
-      return
-    }
-    const res = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-    if (res === 'granted' || res === true) {
-      try {
-        const res2 = await RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({ interval: 10000, fastInterval: 5000 })
-        if (res2 === 'already-enabled' || res2 === 'enabled') {
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              dataStore.coords = { latitude: position.coords.latitude, longitude: position.coords.longitude }
-              this.changeTheme('auto')
-            },
-            error => console.log('error', error),
-            { enableHighAccuracy: false, timeout: 5000, maximumAge: 1000 }
-          )
-        }
-      } catch (error) {
-        console.log('error', error)
-      }
-    } else {
-      // res === never_ask_again
-    }
-  }
-
-  editThemeDialog = () => {
-    const { colors } = this.props.theme
-    const items = [
-      {
-        title: i18n.t('home.mode.day'),
-        theme: 'day',
-        icon: 'wb-sunny'
-      },
-      {
-        title: i18n.t('home.mode.night'),
-        theme: 'night',
-        icon: 'brightness-3'
-      },
-      {
-        title: i18n.t('home.mode.auto'),
-        theme: 'auto',
-        icon: 'autorenew',
-        callback: this.askLocation
-      }
-    ]
-    return (
-      <Portal>
-        <Dialog visible={this.state.editThemeDialog} onDismiss={this.hideDialog('editThemeDialog')}>
-          <Dialog.Title>{i18n.t('home.mode.title')}</Dialog.Title>
-          <RadioButton.Group onValueChange={theme => this.changeTheme(theme)} value={dataStore.theme}>
-            <List.Section>
-              {items.map(({ title, theme, icon, callback }, index) => (
-                <List.Item
-                  key={index}
-                  title={title}
-                  style={styles.settingsItem}
-                  onPress={() => (callback ? callback() : this.changeTheme(theme))}
-                  left={() => (
-                    <View style={{ justifyContent: 'center' }}>
-                      <RadioButton value={theme} />
-                    </View>
-                  )}
-                  right={() => <List.Icon color={colors.text} icon={icon} />}
-                />
-              ))}
-            </List.Section>
-          </RadioButton.Group>
-        </Dialog>
-      </Portal>
-    )
-  }
-
   editGroupDialog = () => {
     const { colors, palette } = this.props.theme
     let { currentGroup } = this.state
@@ -369,7 +291,6 @@ class HomeScreen extends Component {
           <ActivityIndicator size="large" color={colors.primary} />
         )}
         {this.renderFab(isNotRunning(dataStore.timers))}
-        {this.editThemeDialog()}
         {this.editGroupDialog()}
       </View>
     )

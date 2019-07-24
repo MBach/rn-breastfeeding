@@ -33,7 +33,7 @@ export default class LoadingScreen extends Component {
       this.goTo('AddEntry')
     } else {
       const data = await QuickActions.popInitialAction()
-      data && data.userInfo.url === 'AddEntry' ? this.goTo('AddEntry') : this.goTo('Home')
+      //data && data.userInfo.url === 'AddEntry' ? this.goTo('AddEntry') : this.goTo('Home')
     }
   }
 

@@ -23,11 +23,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    packagingOptions {
-        pickFirst '**/libjsc.so'
-        pickFirst '**/libc++_shared.so'
-    }
-
     defaultConfig {
         applicationId "io.matierenoire.breastfeeding"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -73,14 +68,20 @@ android {
             }
         }
     }
+
+    packagingOptions {
+        pickFirst '**/armeabi-v7a/libc++_shared.so'
+        pickFirst '**/x86/libc++_shared.so'
+        pickFirst '**/arm64-v8a/libc++_shared.so'
+        pickFirst '**/x86_64/libc++_shared.so'
+        pickFirst '**/x86/libjsc.so'
+        pickFirst '**/armeabi-v7a/libjsc.so'
+    }
 }
 
 dependencies {
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    //implementation "com.google.android.gms:play-services-base:17.0.0"
-    //implementation "com.google.firebase:firebase-core:17.0.1"
-    //implementation 'com.google.firebase:firebase-database:18.0.0'
     implementation "com.facebook.react:react-native:+"  // From node_modules
     // JSC from node_modules
     if (useIntlJsc) {
@@ -97,5 +98,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-//apply plugin: 'com.google.gms.google-services'
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
