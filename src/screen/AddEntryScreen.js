@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { DeviceEventEmitter, Dimensions, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
-import { withTheme, Button, Chip, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
@@ -36,7 +36,7 @@ class AddEntryScreen extends Component {
     return {
       title: i18n.t('navigation.addEntry'),
       headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <Button icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
+      headerRight: <IconButton icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
     }
   }
 

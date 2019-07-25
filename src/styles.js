@@ -60,9 +60,10 @@ const styles = StyleSheet.create({
   // drawer
   drawerItems: {
     marginLeft: -4,
-    paddingLeft: 4,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20
+    paddingLeft: 16,
+    paddingVertical: 2,
+    borderTopRightRadius: 24,
+    borderBottomRightRadius: 24
   },
   // home
   cardLastEntry: {

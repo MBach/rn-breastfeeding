@@ -4,6 +4,13 @@
     "home": "Inicio",
     "addEntry": "Añadir una entrada"
   },
+  "menu": {
+    "share": "Compartir",
+    "selectContact": "Seleccione un contacto",
+    "title": "Preferencias de pantalla",
+    "day": "Modo diurno",
+    "night": "Modo nocturno"
+  },
   "vitaminD": "Vitamina D",
   "cancel": "Cancelar",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "No hay última alimentación",
     "add": "Toque el botón + para comenzar.",
-    "mode": {
-      "title": "Preferencias de pantalla",
-      "day": "Modo diurno",
-      "night": "Modo nocturno",
-      "auto": "Modo automático"
-    },
     "groupedEntries": {
       "noData": "Sin convulsiones"
     }

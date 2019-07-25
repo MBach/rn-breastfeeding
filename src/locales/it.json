@@ -4,6 +4,13 @@
     "home": "Casa",
     "addEntry": "Aggiungi una voce"
   },
+  "menu": {
+    "share": "Condividere",
+    "selectContact": "Seleziona un contatto",
+    "title": "Preferenze di visualizzazione",
+    "day": "Modalità giorno",
+    "night": "Modalità notte"
+  },
   "vitaminD": "Vitamina D",
   "cancel": "Annulla",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "Non ancora un ultimo feed",
     "add": "Tocca il pulsante + per iniziare",
-    "mode": {
-      "title": "Preferenze di visualizzazione",
-      "day": "Modalità giorno",
-      "night": "Modalità notte",
-      "auto": "Modalità auto"
-    },
     "groupedEntries": {
       "noData": "Nessuna voce"
     }

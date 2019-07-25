@@ -6,8 +6,6 @@ import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
-import moment from 'moment'
-import SunCalc from 'suncalc'
 import i18n, { loadLocale } from './locales/i18n'
 
 import AddEntryScreen from './screen/AddEntryScreen'
@@ -55,16 +53,8 @@ const AppContainer = createAppContainer(DrawerNavigator)
 const getTheme = (key, dataStore) => {
   if (key === 'day') {
     return lightTheme
-  } else if (key === 'night') {
-    return darkTheme
   } else {
-    const m = moment()
-    const times = SunCalc.getTimes(m.toDate(), dataStore.coords.latitude, dataStore.coords.longitude)
-    if (m.isAfter(times.dawn) && m.isBefore(times.dusk)) {
-      return lightTheme
-    } else {
-      return darkTheme
-    }
+    return darkTheme
   }
 }
 

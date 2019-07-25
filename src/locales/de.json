@@ -4,6 +4,13 @@
     "home": "Startseite",
     "addEntry": "Einen neuen Eintrag hinzufügen"
   },
+  "menu": {
+    "share": "Aktie",
+    "selectContact": "Wählen Sie einen Kontakt aus",
+    "title": "Bildschirmeinstellungen",
+    "day": "Tages-Modus",
+    "night": "Nacht-Modus"
+  },
   "vitaminD": "Vitamin-D",
   "cancel": "Stornieren",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "Es wurde noch nicht gestillt",
     "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
-    "mode": {
-      "title": "Bildschirmeinstellungen",
-      "day": "Tages-Modus",
-      "night": "Nacht-Modus",
-      "auto": "Automatik"
-    },
     "groupedEntries": {
       "noData": "Keine Daten"
     }

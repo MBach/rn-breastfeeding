@@ -4,6 +4,13 @@
     "home": "家",
     "addEntry": "エントリを追加する"
   },
+  "menu": {
+    "share": "シェア",
+    "selectContact": "連絡先を選択",
+    "title": "ディスプレイの設定",
+    "day": "日モード",
+    "night": "夜モード"
+  },
   "vitaminD": "ビタミンD",
   "cancel": "キャンセル",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "母乳育児はまだ行われていません",
     "add": "開始するには+ボタンをタップしてください",
-    "mode": {
-      "title": "ディスプレイの設定",
-      "day": "日モード",
-      "night": "夜モード",
-      "auto": "自動"
-    },
     "groupedEntries": {
       "noData": "データなし"
     }

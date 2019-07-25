@@ -4,6 +4,13 @@
     "home": "Home",
     "addEntry": "Add a new entry"
   },
+  "menu": {
+    "share": "Share",
+    "selectContact": "Select a contact",
+    "title": "Display settings",
+    "day": "Day mode",
+    "night": "Night mode"
+  },
   "vitaminD": "Vitamin D",
   "cancel": "Cancel",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "No breastfeeds has been done yet",
     "add": "Tap the + button to start",
-    "mode": {
-      "title": "Display settings",
-      "day": "Day mode",
-      "night": "Night mode",
-      "auto": "Automatic"
-    },
     "groupedEntries": {
       "noData": "No data"
     }

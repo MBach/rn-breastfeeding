@@ -13,8 +13,10 @@ import {
   Portal,
   TouchableRipple
 } from 'react-native-paper'
+import { GoogleSignin, statusCodes } from 'react-native-google-signin'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
+
 import i18n from '../locales/i18n'
 import { getMin, getMinAndSeconds, isNotRunning } from '../config'
 import styles from '../styles'
@@ -45,7 +47,7 @@ class HomeScreen extends Component {
     this.state = {
       appState: AppState.currentState,
       currentGroup: null,
-      showLoginDialog: false,
+      userInfo: null,
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1),
@@ -55,7 +57,8 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.setState({ showLoginDialog: true }) })
+    GoogleSignin.configure()
+    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.signIn() })
 
     AppState.addEventListener('change', this.refreshLastEntry)
     if (!isNotRunning(dataStore.timers)) {
@@ -70,6 +73,30 @@ class HomeScreen extends Component {
   componentWillUnmount() {
     AppState.removeEventListener('change', this.refreshLastEntry)
     clearInterval(this.autoRefresh)
+  }
+
+  // Somewhere in your code
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      console.log(userInfo)
+      this.setState({ userInfo })
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log('statusCodes.SIGN_IN_CANCELLED')
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+        console.log('statusCodes.IN_PROGRESS')
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log('statusCodes.PLAY_SERVICES_NOT_AVAILABLE')
+      } else {
+        // some other error happened
+        console.log(error)
+      }
+    }
   }
 
   createAnimation = () =>

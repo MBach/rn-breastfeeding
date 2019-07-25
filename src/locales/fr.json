@@ -4,6 +4,13 @@
     "home": "Accueil",
     "addEntry": "Ajouter une saisie"
   },
+  "menu": {
+    "share": "Partage",
+    "selectContact": "Envoyer à un contact",
+    "title": "Préférences d'affichage",
+    "day": "Mode jour",
+    "night": "Mode nuit"
+  },
   "vitaminD": "Vitamine D",
   "cancel": "Annuler",
   "ok": "OK",
@@ -13,12 +20,6 @@
   "home": {
     "noEntry": "Pas encore de dernière tétée",
     "add": "Toucher le bouton + pour commencer",
-    "mode": {
-      "title": "Préférences d'affichage",
-      "day": "Mode jour",
-      "night": "Mode nuit",
-      "auto": "Mode auto"
-    },
     "groupedEntries": {
       "noData": "Aucune saisie"
     }
