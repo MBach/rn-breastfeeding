@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Dimensions, Easing, FlatList, ScrollView, Text, View } from 'react-native'
+import { Animated, AppState, Dimensions, Easing, FlatList, Image, ScrollView, Text, View } from 'react-native'
 import {
   withTheme,
   ActivityIndicator,
@@ -11,9 +11,11 @@ import {
   IconButton,
   List,
   Portal,
+  Snackbar,
   TouchableRipple
 } from 'react-native-paper'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
+import { firebase } from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
@@ -34,11 +36,27 @@ import styles from '../styles'
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => {
     const { params } = navigation.state
+    let icon = null
+    if (params && params.userPhoto) {
+      icon = (
+        <IconButton
+          icon={() => (
+            <Image
+              style={{ width: 32, height: 32, backgroundColor: screenProps.primaryDarkColor, borderRadius: 16 }}
+              source={{ uri: params.userPhoto }}
+            />
+          )}
+          onPress={() => params.handleMore && params.handleMore()}
+        />
+      )
+    } else {
+      icon = <IconButton icon="account-circle" color="white" onPress={() => params.handleMore && params.handleMore()} />
+    }
     return {
       title: i18n.t('navigation.home'),
       headerStyle: { backgroundColor: screenProps.primary },
       headerLeft: <IconButton icon="menu" color="white" onPress={() => navigation.toggleDrawer()} />,
-      headerRight: <IconButton icon="account-circle" color="white" onPress={() => params.handleMore && params.handleMore()} />
+      headerRight: icon
     }
   }
 
@@ -51,13 +69,14 @@ class HomeScreen extends Component {
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1),
+      showSnackbar: false,
+      snackBarMessage: '',
       isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.autoRefresh = null
   }
 
   componentDidMount() {
-    GoogleSignin.configure()
     this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.signIn() })
 
     AppState.addEventListener('change', this.refreshLastEntry)
@@ -75,25 +94,26 @@ class HomeScreen extends Component {
     clearInterval(this.autoRefresh)
   }
 
-  // Somewhere in your code
   signIn = async () => {
     try {
-      await GoogleSignin.hasPlayServices()
-      const userInfo = await GoogleSignin.signIn()
-      console.log(userInfo)
-      this.setState({ userInfo })
+      // debug mode
+      await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
+      const { accessToken, idToken } = await GoogleSignin.signIn()
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken)
+      const res = await firebase.auth().signInWithCredential(credential)
+      if (res && res.additionalUserInfo) {
+        const { profile } = res.additionalUserInfo
+        this.props.navigation.setParams({ userPhoto: profile.picture })
+        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name: profile.name }) })
+      }
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
         console.log('statusCodes.SIGN_IN_CANCELLED')
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (f.e. sign in) is in progress already
         console.log('statusCodes.IN_PROGRESS')
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
         console.log('statusCodes.PLAY_SERVICES_NOT_AVAILABLE')
       } else {
-        // some other error happened
         console.log(error)
       }
     }
@@ -261,6 +281,14 @@ class HomeScreen extends Component {
     )
   }
 
+  renderSnackBar = () => {
+    return (
+      <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+        {this.state.snackBarMessage}
+      </Snackbar>
+    )
+  }
+
   renderFab = isStopped => {
     const { colors } = this.props.theme
     if (isStopped) {
@@ -319,6 +347,7 @@ class HomeScreen extends Component {
         )}
         {this.renderFab(isNotRunning(dataStore.timers))}
         {this.editGroupDialog()}
+        {this.renderSnackBar()}
       </View>
     )
   }

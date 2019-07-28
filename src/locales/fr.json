@@ -22,7 +22,8 @@
     "add": "Toucher le bouton + pour commencer",
     "groupedEntries": {
       "noData": "Aucune saisie"
-    }
+    },
+    "greeting": "Bonjour %{name} !"
   },
   "add": {
     "date": "Date",

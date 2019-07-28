@@ -22,7 +22,8 @@
     "add": "Tocca il pulsante + per iniziare",
     "groupedEntries": {
       "noData": "Nessuna voce"
-    }
+    },
+    "greeting": "Ciao %{name}!"
   },
   "add": {
     "date": "Data",

@@ -22,7 +22,8 @@
     "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
     "groupedEntries": {
       "noData": "Keine Daten"
-    }
+    },
+    "greeting": "Hallo %{name}!"
   },
   "add": {
     "date": "Datum",

@@ -10,7 +10,6 @@ import i18n, { loadLocale } from './locales/i18n'
 
 import AddEntryScreen from './screen/AddEntryScreen'
 import HomeScreen from './screen/HomeScreen'
-import LoadingScreen from './screen/LoadingScreen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
@@ -19,7 +18,6 @@ const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
 
 const RootStack = createStackNavigator(
   {
-    Loading: { screen: LoadingScreen, path: '/' },
     Home: { screen: HomeScreen, path: '/home' },
     AddEntry: { screen: AddEntryScreen, path: '/chrono' }
   },
@@ -50,7 +48,7 @@ const DrawerNavigator = createDrawerNavigator(
 
 const AppContainer = createAppContainer(DrawerNavigator)
 
-const getTheme = (key, dataStore) => {
+const getTheme = key => {
   if (key === 'day') {
     return lightTheme
   } else {
@@ -67,7 +65,7 @@ export default class App extends Component {
   }
 
   updateTheme = key => {
-    const theme = getTheme(key, stores.dataStore)
+    const theme = getTheme(key)
     this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
   }
 

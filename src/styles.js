@@ -39,7 +39,8 @@ export const lightTheme = {
     ...DefaultTheme.colors,
     primary: lightPalette.primaryColor,
     secondary: lightPalette.secondaryColor,
-    accent: lightPalette.primaryColor
+    accent: lightPalette.primaryColor,
+    primaryDarkColor: lightPalette.primaryDarkColor
   },
   palette: lightPalette
 }
@@ -51,7 +52,8 @@ export const darkTheme = {
     ...DarkTheme.colors,
     primary: darkPalette.primaryColor,
     secondary: darkPalette.secondaryColor,
-    accent: darkPalette.primaryColor
+    accent: darkPalette.primaryColor,
+    primaryDarkColor: darkPalette.primaryDarkColor
   },
   palette: darkPalette
 }

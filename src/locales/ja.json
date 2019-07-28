@@ -22,7 +22,8 @@
     "add": "開始するには+ボタンをタップしてください",
     "groupedEntries": {
       "noData": "データなし"
-    }
+    },
+    "greeting": "こんにちは%{name}！"
   },
   "add": {
     "date": "日付",

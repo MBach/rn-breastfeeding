@@ -22,7 +22,8 @@
     "add": "Toque el botón + para comenzar.",
     "groupedEntries": {
       "noData": "Sin convulsiones"
-    }
+    },
+    "greeting": "¡Hola %{name}!"
   },
   "add": {
     "date": "Fecha",

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { Linking, View } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
+import QuickActions from 'react-native-quick-actions'
 import { withTheme, Drawer, Title } from 'react-native-paper'
 import { inject, observer } from 'mobx-react'
 import styles from './styles'
@@ -8,6 +10,25 @@ import i18n from './locales/i18n'
 @inject('dataStore')
 @observer
 class Menu extends Component {
+  async componentDidMount() {
+    const url = await Linking.getInitialURL()
+    if (url === 'rnbreastfeeding://rnbreastfeeding/chrono') {
+      this.goTo('AddEntry')
+    } else {
+      const data = await QuickActions.popInitialAction()
+      //data && data.userInfo.url === 'AddEntry' ? this.goTo('AddEntry') : this.goTo('Home')
+    }
+  }
+
+  goTo = routeName => {
+    this.props.navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName })]
+      })
+    )
+  }
+
   changeTheme = theme => {
     dataStore.theme = theme
     this.props.screenProps.updateTheme(theme)
@@ -23,7 +44,6 @@ class Menu extends Component {
       currentRoute = route[route.length - 1].routeName
     }
     const { colors } = this.props.theme
-
     return (
       <View style={{ flex: 1, backgroundColor: colors.background, color: colors.primaryTextColor }}>
         <Drawer.Section>

@@ -22,7 +22,8 @@
     "add": "Tap the + button to start",
     "groupedEntries": {
       "noData": "No data"
-    }
+    },
+    "greeting": "Hello %{name}!"
   },
   "add": {
     "date": "Date",
