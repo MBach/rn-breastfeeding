@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
+
 import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
 import i18n, { loadLocale } from './locales/i18n'
@@ -56,6 +57,11 @@ const getTheme = key => {
   }
 }
 
+/**
+ * @author Matthieu BACHELIER
+ * @since 2019-02
+ * @version 2.0
+ */
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -71,6 +77,7 @@ export default class App extends Component {
 
   async componentDidMount() {
     await loadLocale()
+
     // Add an App shortcut with a long press
     QuickActions.setShortcutItems([
       {

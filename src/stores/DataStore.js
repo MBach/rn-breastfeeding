@@ -2,6 +2,11 @@ import { observable, action, computed, toJS } from 'mobx'
 import { persist } from 'mobx-persist'
 import _ from 'lodash'
 
+/**
+ * @author Matthieu BACHELIER
+ * @since 2019-02
+ * @version 2.0
+ */
 class DataStore {
   @observable hydrated = false
   @observable updating = false
@@ -22,16 +27,28 @@ class DataStore {
 
   ///
 
-  @persist('object')
   @observable
-  _coords = { latitude: 46.227638, longitude: 2.213749 }
+  _user = null
 
   @computed
-  get coords() {
-    return this._coords
+  get user() {
+    return this._user
   }
-  set coords(c) {
-    this._coords = c
+  set user(u) {
+    this._user = u
+  }
+
+  ///
+
+  @observable
+  _migrated = false
+
+  @computed
+  get migrated() {
+    return this._migrated
+  }
+  set migrated(m) {
+    this._migrated = m
   }
 
   ///
@@ -180,4 +197,4 @@ class DataStore {
   }
 }
 
-export default (dataStore = new DataStore())
+export default dataStore = new DataStore()

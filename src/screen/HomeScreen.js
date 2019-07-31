@@ -3,19 +3,20 @@ import { Animated, AppState, Dimensions, Easing, FlatList, Image, ScrollView, Te
 import {
   withTheme,
   ActivityIndicator,
+  Appbar,
   Button,
   Card,
   Chip,
   Dialog,
   FAB,
-  IconButton,
   List,
   Portal,
   Snackbar,
   TouchableRipple
 } from 'react-native-paper'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
-import { firebase } from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
@@ -29,35 +30,13 @@ import styles from '../styles'
  *
  * @author Matthieu BACHELIER
  * @since 2019-02
- * @version 1.0
+ * @version 2.0
  */
 @inject('dataStore')
 @observer
 class HomeScreen extends Component {
-  static navigationOptions = ({ navigation, screenProps }) => {
-    const { params } = navigation.state
-    let icon = null
-    if (params && params.userPhoto) {
-      icon = (
-        <IconButton
-          icon={() => (
-            <Image
-              style={{ width: 32, height: 32, backgroundColor: screenProps.primaryDarkColor, borderRadius: 16 }}
-              source={{ uri: params.userPhoto }}
-            />
-          )}
-          onPress={() => params.handleMore && params.handleMore()}
-        />
-      )
-    } else {
-      icon = <IconButton icon="account-circle" color="white" onPress={() => params.handleMore && params.handleMore()} />
-    }
-    return {
-      title: i18n.t('navigation.home'),
-      headerStyle: { backgroundColor: screenProps.primary },
-      headerLeft: <IconButton icon="menu" color="white" onPress={() => navigation.toggleDrawer()} />,
-      headerRight: icon
-    }
+  static navigationOptions = {
+    header: null
   }
 
   constructor(props) {
@@ -65,7 +44,6 @@ class HomeScreen extends Component {
     this.state = {
       appState: AppState.currentState,
       currentGroup: null,
-      userInfo: null,
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1),
@@ -77,8 +55,6 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleReload: () => this.forceUpdate(), handleMore: () => this.signIn() })
-
     AppState.addEventListener('change', this.refreshLastEntry)
     if (!isNotRunning(dataStore.timers)) {
       this.createAnimation()
@@ -87,6 +63,10 @@ class HomeScreen extends Component {
     this.autoRefresh = setInterval(() => {
       this.forceUpdate()
     }, 1000 * 60)
+
+    if (dataStore.user && dataStore.user.id) {
+      this.props.navigation.setParams({ userPhoto: dataStore.user.photo })
+    }
   }
 
   componentWillUnmount() {
@@ -95,6 +75,10 @@ class HomeScreen extends Component {
   }
 
   signIn = async () => {
+    if (dataStore.user && dataStore.user.id) {
+      console.warn('already signed in 1', dataStore.user.id)
+      return
+    }
     try {
       // debug mode
       await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
@@ -102,9 +86,12 @@ class HomeScreen extends Component {
       const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken)
       const res = await firebase.auth().signInWithCredential(credential)
       if (res && res.additionalUserInfo) {
-        const { profile } = res.additionalUserInfo
-        this.props.navigation.setParams({ userPhoto: profile.picture })
-        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name: profile.name }) })
+        const { picture, email, sub } = res.additionalUserInfo.profile
+        dataStore.user = { photo: picture, email, id: sub }
+        this.setState(
+          { showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name: res.additionalUserInfo.profile.name }) },
+          this.migrateDataToFirebase
+        )
       }
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -116,6 +103,17 @@ class HomeScreen extends Component {
       } else {
         console.log(error)
       }
+    }
+  }
+
+  migrateDataToFirebase = async () => {
+    if (!dataStore.migrated) {
+      const uid = auth().currentUser.uid
+      for (const r of dataStore.records) {
+        const ref = database().ref(`/users/${uid}/inputs/${r.date}`)
+        await ref.set({ ...r })
+      }
+      dataStore.migrated = true
     }
   }
 
@@ -323,6 +321,25 @@ class HomeScreen extends Component {
     }
   }
 
+  renderProfileIcon = () => {
+    if (dataStore.user && dataStore.user.id) {
+      console.log('dataStore.user.photo', dataStore.user.photo)
+      return (
+        <Appbar.Action
+          icon={() => (
+            <Image
+              style={{ width: 32, height: 32, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 16 }}
+              source={{ uri: dataStore.user.photo }}
+            />
+          )}
+          onPress={() => console.warn('already signed in 2')}
+        />
+      )
+    } else {
+      return <Appbar.Action icon="account-circle" onPress={this.signIn} />
+    }
+  }
+
   render = () => {
     const { colors } = this.props.theme
     const groupedRecords = dataStore.groupedRecords
@@ -334,6 +351,11 @@ class HomeScreen extends Component {
           this.state.isLandscape ? { flexDirection: 'row' } : false
         ]}
       >
+        <Appbar.Header>
+          <Appbar.Action icon="menu" onPress={() => this.props.navigation.toggleDrawer()} />
+          <Appbar.Content title={i18n.t('navigation.home')} />
+          {this.renderProfileIcon()}
+        </Appbar.Header>
         {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
         {dataStore.hydrated && !dataStore.updating ? (
           <FlatList

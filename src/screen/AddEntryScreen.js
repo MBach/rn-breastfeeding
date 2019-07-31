@@ -3,6 +3,8 @@ import { DeviceEventEmitter, Dimensions, Text, TouchableOpacity, View } from 're
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
+import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
@@ -25,7 +27,7 @@ function ThemedText({ style, palette, children }) {
  *
  * @author Matthieu BACHELIER
  * @since 2019-02
- * @version 1.0
+ * @version 2.0
  */
 @inject('dataStore')
 @observer
@@ -133,11 +135,27 @@ class AddEntryScreen extends Component {
         timers: { ...dataStore.timers },
         vitaminD: dataStore.vitaminD
       }
+      // todo
       dataStore.addEntry(data)
       RNBreastFeeding.stopTimers()
       this.props.navigation.dispatch(resetAction)
+      this.saveToFirebase(data)
     } else {
       this.setState({ showErrorDialog: true })
+    }
+  }
+
+  saveToFirebase = data => {
+    //
+    if (dataStore.user && dataStore.user.id) {
+      // Get the users ID
+      const uid = auth().currentUser.uid
+
+      // Create a reference
+      const ref = database().ref(`/users/${uid}/inputs/${data.date}`)
+      ref.set({
+        ...data
+      })
     }
   }
 
