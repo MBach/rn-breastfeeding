@@ -2,7 +2,8 @@
   "navigation": {
     "title": "Allattamento al seno",
     "home": "Casa",
-    "addEntry": "Aggiungi una voce"
+    "addEntry": "Aggiungi una voce",
+    "contact": "Contatto"
   },
   "menu": {
     "share": "Condividere",
@@ -34,5 +35,8 @@
     "manualEntry": "Inserimento manuale",
     "durationPlaceholder": "Durata in minuti",
     "noDuration": "La tua voce non ha durata"
+  },
+  "share": {
+    "placeholder": ""
   }
 }

@@ -2,7 +2,8 @@
   "navigation": {
     "title": "BreastFeeding",
     "home": "Home",
-    "addEntry": "Add a new entry"
+    "addEntry": "Add a new entry",
+    "contact": "Contact"
   },
   "menu": {
     "share": "Share",
@@ -34,5 +35,8 @@
     "manualEntry": "Manual entry",
     "durationPlaceholder": "Duration in minutes",
     "noDuration": "Your entry has no duration"
+  },
+  "share": {
+    "placeholder": "Name or e-mail address for sharing"
   }
 }

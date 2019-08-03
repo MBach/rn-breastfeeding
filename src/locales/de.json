@@ -2,7 +2,8 @@
   "navigation": {
     "title": "Stillen",
     "home": "Startseite",
-    "addEntry": "Einen neuen Eintrag hinzufügen"
+    "addEntry": "Einen neuen Eintrag hinzufügen",
+    "contact": "Kontakt"
   },
   "menu": {
     "share": "Aktie",
@@ -34,5 +35,8 @@
     "manualEntry": "Manueller Eintrag",
     "durationPlaceholder": "Dauer in Minuten",
     "noDuration": "Ihr Eintrag hat keine Dauer"
+  },
+  "share": {
+    "placeholder": ""
   }
 }

@@ -2,7 +2,8 @@
   "navigation": {
     "title": "Amamantamiento",
     "home": "Inicio",
-    "addEntry": "Añadir una entrada"
+    "addEntry": "Añadir una entrada",
+    "contact": "Contacto"
   },
   "menu": {
     "share": "Compartir",
@@ -34,5 +35,8 @@
     "manualEntry": "Entrada manual",
     "durationPlaceholder": "Duración en minutos",
     "noDuration": "Tu entrada no tiene duración"
+  },
+  "share": {
+    "placeholder": ""
   }
 }

@@ -2,7 +2,8 @@
   "navigation": {
     "title": "乳房授乳",
     "home": "家",
-    "addEntry": "エントリを追加する"
+    "addEntry": "エントリを追加する",
+    "contact": "連絡"
   },
   "menu": {
     "share": "シェア",
@@ -34,5 +35,8 @@
     "manualEntry": "手動入力",
     "durationPlaceholder": "期間（分）",
     "noDuration": "あなたのエントリーは期間がありません"
+  },
+  "share": {
+    "placeholder": ""
   }
 }

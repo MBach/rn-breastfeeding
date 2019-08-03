@@ -2,7 +2,8 @@
   "navigation": {
     "title": "Allaitement",
     "home": "Accueil",
-    "addEntry": "Ajouter une saisie"
+    "addEntry": "Ajouter une saisie",
+    "contact": "Contact"
   },
   "menu": {
     "share": "Partage",
@@ -34,5 +35,8 @@
     "manualEntry": "Saisie manuelle",
     "durationPlaceholder": "Durée en minutes",
     "noDuration": "Votre saisie n’a pas de durée"
+  },
+  "share": {
+    "placeholder": "Nom ou adresse e-mail pour le partage"
   }
 }

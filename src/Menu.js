@@ -51,6 +51,11 @@ class Menu extends Component {
     this.props.navigation.closeDrawer()
   }
 
+  navigate = route => () => {
+    this.props.navigation.navigate(route)
+    this.props.navigation.closeDrawer()
+  }
+
   render() {
     const { navigation } = this.props
     const { routes } = navigation.state
@@ -71,24 +76,24 @@ class Menu extends Component {
             label={i18n.t('navigation.home')}
             active={currentRoute === 'Home'}
             style={styles.drawerItems}
-            onPress={() => {
-              navigation.navigate('Home')
-              navigation.closeDrawer()
-            }}
+            onPress={this.navigate('Home')}
           />
           <Drawer.Item
             icon="add"
             label={i18n.t('navigation.addEntry')}
             active={currentRoute === 'AddEntry'}
             style={styles.drawerItems}
-            onPress={() => {
-              navigation.navigate('AddEntry')
-              navigation.closeDrawer()
-            }}
+            onPress={this.navigate('AddEntry')}
           />
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.share')}>
-          <Drawer.Item icon="share" label={i18n.t('menu.selectContact')} style={styles.drawerItems} onPress={() => {}} />
+          <Drawer.Item
+            icon="share"
+            label={i18n.t('menu.selectContact')}
+            style={styles.drawerItems}
+            active={currentRoute === 'Share'}
+            onPress={this.navigate('Share')}
+          />
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.title')}>
           <Drawer.Item

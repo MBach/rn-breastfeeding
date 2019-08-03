@@ -11,6 +11,7 @@ import i18n, { loadLocale } from './locales/i18n'
 
 import AddEntryScreen from './screen/AddEntryScreen'
 import HomeScreen from './screen/HomeScreen'
+import ShareScreen from './screen/ShareScreen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
@@ -20,7 +21,8 @@ const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
 const RootStack = createStackNavigator(
   {
     Home: { screen: HomeScreen, path: '/home' },
-    AddEntry: { screen: AddEntryScreen, path: '/chrono' }
+    AddEntry: { screen: AddEntryScreen, path: '/chrono' },
+    Share: { screen: ShareScreen, path: '/share' }
   },
   {
     initialRouteName: 'Home',
