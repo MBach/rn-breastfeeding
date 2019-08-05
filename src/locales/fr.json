@@ -37,6 +37,13 @@
     "noDuration": "Votre saisie n’a pas de durée"
   },
   "share": {
-    "placeholder": "Nom ou adresse e-mail pour le partage"
+    "placeholder": "Nom ou adresse e-mail pour le partage",
+    "contactAlreadyAdded": "Vous avez déjà ajouté ce contact",
+    "mail": {
+      "subject": "%{name} a partagé des saisies avec vous",
+      "body": "%{name} (%{email}) a partagé des saisies avec vous.",
+      "button": "Ouvrir dans Allaitement : %{shareLink}",
+      "download": "Pour obtenir l’App, visitez ce lien : %{url}"
+    }
   }
 }

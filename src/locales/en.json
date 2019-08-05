@@ -37,6 +37,13 @@
     "noDuration": "Your entry has no duration"
   },
   "share": {
-    "placeholder": "Name or e-mail address for sharing"
+    "placeholder": "Name or e-mail address for sharing",
+    "contactAlreadyAdded": "You've already added this contact",
+    "mail": {
+      "subject": "%{name} has shared inputs with you",
+      "body": "%{name} (%{email}) has shared inputs with you",
+      "button": "Open in BreastFeeding App: %{shareLink}",
+      "download": "To get the App, check out this link: %{url}"
+    }
   }
 }

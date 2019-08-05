@@ -37,6 +37,13 @@
     "noDuration": "La tua voce non ha durata"
   },
   "share": {
-    "placeholder": ""
+    "placeholder": "",
+    "contactAlreadyAdded": "",
+    "mail": {
+      "subject": "%{name} ",
+      "body": "%{name} (%{email}) ",
+      "button": ": %{shareLink}",
+      "download": " : %{url}"
+    }
   }
 }

@@ -20,8 +20,8 @@ class Menu extends Component {
     await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
     GoogleSignin.signInSilently().then(res => {
       if (res) {
-        const { photo, email, id } = res.user
-        dataStore.user = { photo, email, id }
+        const { photo, email, name, id } = res.user
+        dataStore.user = { photo, email, name, id }
       }
     })
 

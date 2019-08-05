@@ -1,0 +1,49 @@
+{
+  "navigation": {
+    "title": "",
+    "home": "",
+    "addEntry": "",
+    "contact": ""
+  },
+  "menu": {
+    "share": "",
+    "selectContact": "",
+    "title": "",
+    "day": "",
+    "night": ""
+  },
+  "vitaminD": "",
+  "cancel": "",
+  "ok": "OK",
+  "left": "",
+  "right": "",
+  "bottle": "",
+  "home": {
+    "noEntry": "",
+    "add": "",
+    "groupedEntries": {
+      "noData": ""
+    },
+    "greeting": " %{name}!"
+  },
+  "add": {
+    "date": "",
+    "timeSpent": "",
+    "remove1min": "-1min",
+    "add1min": "+1min",
+    "breast": "",
+    "manualEntry": "",
+    "durationPlaceholder": "",
+    "noDuration": ""
+  },
+  "share": {
+    "placeholder": "",
+    "contactAlreadyAdded": "",
+    "mail": {
+      "subject": "%{name} ",
+      "body": "%{name} (%{email}) ",
+      "button": ": %{shareLink}",
+      "download": ": %{url}"
+    }
+  }
+}

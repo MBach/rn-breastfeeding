@@ -279,13 +279,11 @@ class HomeScreen extends Component {
     )
   }
 
-  renderSnackBar = () => {
-    return (
-      <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
-        {this.state.snackBarMessage}
-      </Snackbar>
-    )
-  }
+  renderSnackBar = () => (
+    <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+      {this.state.snackBarMessage}
+    </Snackbar>
+  )
 
   renderFab = isStopped => {
     const { colors } = this.props.theme

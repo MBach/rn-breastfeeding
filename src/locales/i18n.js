@@ -67,6 +67,15 @@ export const loadLocale = async () => {
             import('moment/locale/ja').then(() => moment.locale('ja'))
           })
           break
+        case 'pt':
+          import('./pt.json').then(pt => {
+            i18n.translations = { pt }
+            i18n.leftButton = require('../assets/pt/left.png')
+            i18n.rightButton = require('../assets/pt/right.png')
+            i18n.bottleButton = require('../assets/pt/bottle.png')
+            import('moment/locale/pt').then(() => moment.locale('pt'))
+          })
+          break
         case 'ru':
           import('./ru.json').then(ru => {
             i18n.translations = { ru }
@@ -98,6 +107,8 @@ i18n.formatLastEntry = date => {
       return `Ultima poppata alle ${moment.unix(date).format(f)}`
     case 'ja':
       return `${moment.unix(date).format(f)}の最後の母乳`
+    case 'pt':
+      return `${moment.unix(date).format(f)}`
     case 'ru':
       return `Последнее кормление грудью в ${moment.unix(date).format(f)}`
   }
@@ -145,6 +156,12 @@ i18n.formatItem = n => {
     case 'ja':
       item = `${n}母乳`
       break
+    case 'pt':
+      if (n == 1) {
+        item = '1 '
+      } else {
+        item = `${n} `
+      }
     case 'ru':
       if (n == 1) {
         item = '1 кормление грудью'
@@ -197,6 +214,11 @@ i18n.humanize = date => {
         conjunction: '',
         ...defaultOptions
       })}前`
+    case 'pt':
+      return `${humanizeDuration(duration, {
+        conjunction: ' e ',
+        ...defaultOptions
+      })}`
     case 'ru':
       return `${humanizeDuration(duration, {
         conjunction: ' и ',
@@ -214,6 +236,7 @@ i18n.formatLongDay = date => {
     case 'es':
     case 'fr':
     case 'it':
+    case 'pt':
     case 'ru':
       return moment.unix(date).format('dddd Do MMMM YYYY')
     case 'ja':
@@ -230,6 +253,7 @@ i18n.formatDay = date => {
     case 'es':
     case 'fr':
     case 'it':
+    case 'pt':
     case 'ru':
       return date.format('DD/MM/YY')
     case 'ja':

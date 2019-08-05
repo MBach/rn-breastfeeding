@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { FlatList, Image, PermissionsAndroid, ScrollView, View } from 'react-native'
+import { withTheme, Avatar, IconButton, List, Snackbar, TextInput } from 'react-native-paper'
 import Contacts from 'react-native-contacts'
-import { withTheme, Avatar, IconButton, List, TextInput } from 'react-native-paper'
+import Mailer from 'react-native-mail'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
 import auth, { firebase } from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 import i18n from '../locales/i18n'
-import styles from '../styles'
 
 /**
  *
@@ -19,11 +19,12 @@ import styles from '../styles'
 @observer
 class ShareScreen extends Component {
   /// Add action in header
-  static navigationOptions = ({ screenProps }) => {
+  static navigationOptions = ({ navigation, screenProps }) => {
+    const { params } = navigation.state
     return {
       title: i18n.t('navigation.contact'),
       headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <IconButton icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
+      headerRight: <IconButton icon="check" color="white" onPress={() => params.handleSend && params.handleSend()} />
     }
   }
 
@@ -31,9 +32,15 @@ class ShareScreen extends Component {
     super(props)
     this.state = {
       newContact: '',
-      contacts: [{ ...dataStore.user }],
-      suggestions: []
+      contacts: [],
+      suggestions: [],
+      showSnackbar: false,
+      snackBarMessage: ''
     }
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ handleSend: () => this.sendTo() })
   }
 
   addContactFromTextInput = () => {
@@ -42,11 +49,21 @@ class ShareScreen extends Component {
   }
 
   addContactFromSuggestions = item => () => {
-    let contacts = [
-      ...this.state.contacts,
-      { displayName: item.displayName, email: item.emailAddresses[0].email, photo: item.thumbnailPath, removable: true }
-    ]
-    this.setState({ contacts, email: '', suggestions: [] })
+    const { contacts } = this.state
+    if (contacts.some(c => c.email === item.emailAddresses[0].email)) {
+      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('share.contactAlreadyAdded') })
+    } else {
+      let c = [
+        ...contacts,
+        { displayName: item.displayName, email: item.emailAddresses[0].email, photo: item.thumbnailPath, removable: true }
+      ]
+      this.setState({ contacts: c, email: '', suggestions: [] })
+    }
+  }
+
+  removeContact = email => {
+    const contacts = this.state.contacts.filter(c => c.email !== email)
+    this.setState({ contacts })
   }
 
   onChangeText = email => {
@@ -71,6 +88,31 @@ class ShareScreen extends Component {
       }
     })
   }
+
+  sendTo = async () => {
+    if (this.state.contacts.length < 1) {
+      this.props.navigation.pop()
+      return
+    }
+    const { name, email } = dataStore.user
+    let shareLink = 'rnbreastfeeding://rnbreastfeeding/home?shareLink=1234'
+    let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
+      ${i18n.t('share.mail.button', { shareLink })}<br><br>
+      ${i18n.t('share.mail.download', { url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding' })}`
+    Mailer.mail(
+      {
+        subject: i18n.t('share.mail.subject', { name }),
+        recipients: this.state.contacts.map(c => c.email),
+        body,
+        isHTML: true
+      },
+      (error, event) => {
+        console.warn('error mail', error, event)
+      }
+    )
+  }
+
+  /// render functions
 
   renderSuggestions = () =>
     this.state.suggestions.map((s, index) => (
@@ -126,16 +168,23 @@ class ShareScreen extends Component {
     />
   )
 
-  render = () => {
-    const { colors } = this.props.theme
-    return (
-      <ScrollView style={{ backgroundColor: colors.background }}>
+  renderSnackBar = () => (
+    <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+      {this.state.snackBarMessage}
+    </Snackbar>
+  )
+
+  render = () => (
+    <>
+      <ScrollView style={{ backgroundColor: this.props.theme.colors.background }}>
+        <List.Item title={dataStore.user.email} left={() => this.renderAvatar(dataStore.user)} />
         {this.state.contacts.map((c, index) => (
           <List.Item
             key={index}
             title={c.displayName ? c.displayName : c.email}
             description={c.displayName ? c.email : false}
             left={() => this.renderAvatar(c)}
+            right={() => <IconButton color={this.props.theme.colors.text} icon="close" onPress={() => this.removeContact(c.email)} />}
           />
         ))}
         {this.renderNewContactForm()}
@@ -146,8 +195,9 @@ class ShareScreen extends Component {
           renderItem={this.renderSuggestion}
         />
       </ScrollView>
-    )
-  }
+      {this.renderSnackBar()}
+    </>
+  )
 }
 
 export default withTheme(ShareScreen)

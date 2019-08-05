@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BreastFeeding</string>
+    <string name="channel">Cronômetro</string>
+    <string name="description">Quanto tempo desde o início do cronômetro</string>
+    <string name="pause">Pausa</string>
+    <string name="resume">Reatar</string>
+    <string name="on_hold">Em espera</string>
+</resources>

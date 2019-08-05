@@ -37,6 +37,13 @@
     "noDuration": "Ваша запись не имеет длительности"
   },
   "share": {
-    "placeholder": ""
+    "placeholder": "",
+    "contactAlreadyAdded": "",
+    "mail": {
+      "subject": "%{name} ",
+      "body": "%{name} (%{email}) ",
+      "button": ": %{shareLink}",
+      "download": " : %{url}"
+    }
   }
 }

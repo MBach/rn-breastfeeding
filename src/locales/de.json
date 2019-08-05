@@ -37,6 +37,13 @@
     "noDuration": "Ihr Eintrag hat keine Dauer"
   },
   "share": {
-    "placeholder": ""
+    "placeholder": "",
+    "contactAlreadyAdded": "",
+    "mail": {
+      "subject": "%{name} ",
+      "body": "%{name} (%{email}) ",
+      "button": ": %{shareLink}",
+      "download": " : %{url}"
+    }
   }
 }
