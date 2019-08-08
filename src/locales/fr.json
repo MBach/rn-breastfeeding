@@ -20,6 +20,7 @@
   "bottle": "Biberon",
   "home": {
     "noEntry": "Pas encore de dernière tétée",
+    "lastEntry": "Dernière tétée à %{date}",
     "add": "Toucher le bouton + pour commencer",
     "groupedEntries": {
       "noData": "Aucune saisie"

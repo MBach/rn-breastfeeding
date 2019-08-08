@@ -20,6 +20,7 @@
   "bottle": "Biberón",
   "home": {
     "noEntry": "No hay última alimentación",
+    "lastEntry": "Última amamantamiento a las %{date}",
     "add": "Toque el botón + para comenzar.",
     "groupedEntries": {
       "noData": "Sin convulsiones"

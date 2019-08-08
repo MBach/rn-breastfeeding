@@ -20,6 +20,7 @@
   "bottle": "Bottiglia",
   "home": {
     "noEntry": "Non ancora un ultimo feed",
+    "lastEntry": "Ultima poppata alle %{date}",
     "add": "Tocca il pulsante + per iniziare",
     "groupedEntries": {
       "noData": "Nessuna voce"

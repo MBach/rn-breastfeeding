@@ -91,29 +91,6 @@ export const loadLocale = async () => {
   }
 }
 
-i18n.formatLastEntry = date => {
-  const f = i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A'
-  switch (i18n.locale) {
-    case 'de':
-      return `Letzte Fütterung vor ${moment.unix(date).format(f)}`
-    default:
-    case 'en':
-      return `Last breastfeed at ${moment.unix(date).format(f)}`
-    case 'es':
-      return `Última amamantamiento a las ${moment.unix(date).format(f)}`
-    case 'fr':
-      return `Dernière tétée à ${moment.unix(date).format(f)}`
-    case 'it':
-      return `Ultima poppata alle ${moment.unix(date).format(f)}`
-    case 'ja':
-      return `${moment.unix(date).format(f)}の最後の母乳`
-    case 'pt':
-      return `${moment.unix(date).format(f)}`
-    case 'ru':
-      return `Последнее кормление грудью в ${moment.unix(date).format(f)}`
-  }
-}
-
 i18n.formatItem = n => {
   let item = ''
   switch (i18n.locale) {

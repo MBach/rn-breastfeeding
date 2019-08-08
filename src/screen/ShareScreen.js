@@ -51,7 +51,7 @@ class ShareScreen extends Component {
   addContactFromSuggestions = item => () => {
     const { contacts } = this.state
     if (contacts.some(c => c.email === item.emailAddresses[0].email)) {
-      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('share.contactAlreadyAdded') })
+      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('share.contactAlreadyAdded'), email: item.emailAddresses[0].email })
     } else {
       let c = [
         ...contacts,
@@ -176,7 +176,7 @@ class ShareScreen extends Component {
 
   render = () => (
     <>
-      <ScrollView style={{ backgroundColor: this.props.theme.colors.background }}>
+      <ScrollView keyboardShouldPersistTaps={'always'} style={{ backgroundColor: this.props.theme.colors.background }}>
         <List.Item title={dataStore.user.email} left={() => this.renderAvatar(dataStore.user)} />
         {this.state.contacts.map((c, index) => (
           <List.Item
@@ -189,6 +189,7 @@ class ShareScreen extends Component {
         ))}
         {this.renderNewContactForm()}
         <FlatList
+          keyboardShouldPersistTaps={'always'}
           data={this.state.suggestions}
           extractData={this.state.suggestions.length}
           keyExtractor={(item, index) => `s-${index}`}

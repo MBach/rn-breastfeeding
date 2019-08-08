@@ -20,6 +20,7 @@
   "bottle": "哺乳瓶",
   "home": {
     "noEntry": "母乳育児はまだ行われていません",
+    "lastEntry": "%{date}の最後の母乳",
     "add": "開始するには+ボタンをタップしてください",
     "groupedEntries": {
       "noData": "データなし"

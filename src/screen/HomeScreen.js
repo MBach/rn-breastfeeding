@@ -171,12 +171,13 @@ class HomeScreen extends Component {
     if (groupedRecords.length > 0) {
       const lastGroup = groupedRecords[0]
       const lastEntry = lastGroup.group[0]
+      const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
       return (
         <Card
           style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}
           onPress={() => this.setState({ editLastEntry: true })}
         >
-          <Card.Title title={i18n.formatLastEntry(lastEntry.date)} subtitle={i18n.humanize(lastEntry.date)} />
+          <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(date)} />
           <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}

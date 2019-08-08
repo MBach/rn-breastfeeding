@@ -20,6 +20,7 @@
   "bottle": "Flasche",
   "home": {
     "noEntry": "Es wurde noch nicht gestillt",
+    "lastEntry": "Letzte Fütterung vor %{date}",
     "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
     "groupedEntries": {
       "noData": "Keine Daten"
