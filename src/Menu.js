@@ -1,12 +1,23 @@
 import React, { Component } from 'react'
-import { Linking, View } from 'react-native'
+import { Linking, StyleSheet, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { withTheme, Drawer, Title } from 'react-native-paper'
 import { GoogleSignin } from 'react-native-google-signin'
+import auth from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
-import styles from './styles'
 import i18n from './locales/i18n'
+import { signIn } from './hooks/SignIn'
+
+const styles = StyleSheet.create({
+  drawerItems: {
+    marginLeft: -4,
+    paddingLeft: 16,
+    paddingVertical: 2,
+    borderTopRightRadius: 24,
+    borderBottomRightRadius: 24
+  }
+})
 
 /**
  * @author Matthieu BACHELIER
@@ -18,12 +29,29 @@ import i18n from './locales/i18n'
 class Menu extends Component {
   async componentDidMount() {
     await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
-    GoogleSignin.signInSilently().then(res => {
-      if (res) {
-        const { photo, email, name, id } = res.user
-        dataStore.user = { photo, email, name, id }
-      }
-    })
+    /*GoogleSignin.signInSilently()
+      .then(res => {
+        if (res) {
+          console.warn('signInSilently', res.idToken)
+          auth()
+            .signInWithCustomToken(res.idToken)
+            .then(res2 => {
+              console.warn('res2', res2)
+            })
+          console.warn('signInSilently', auth().currentUser)
+        }
+      })
+      .catch(err => {
+        // No previous attempt found, about to sign in anonymously
+        if (err.userInfo === null) {
+          auth()
+            .signInAnonymously()
+            .then(res => {
+              console.warn('signInAnonymously', res)
+            })
+        }
+      })*/
+    console.warn('Menu', auth().currentUser)
 
     const url = await Linking.getInitialURL()
     // Open the App from the notification area
@@ -45,15 +73,24 @@ class Menu extends Component {
     )
   }
 
-  changeTheme = theme => {
+  changeTheme = theme => () => {
     dataStore.theme = theme
     this.props.screenProps.updateTheme(theme)
     this.props.navigation.closeDrawer()
   }
 
   navigate = route => () => {
-    this.props.navigation.navigate(route)
     this.props.navigation.closeDrawer()
+    this.props.navigation.navigate(route)
+  }
+
+  checkIfUserIsConnected = () => {
+    if (auth().currentUser.isAnonymous) {
+      this.props.navigation.closeDrawer()
+      setTimeout(signIn, 700)
+    } else {
+      this.navigate('Share')
+    }
   }
 
   render() {
@@ -92,7 +129,14 @@ class Menu extends Component {
             label={i18n.t('menu.selectContact')}
             style={styles.drawerItems}
             active={currentRoute === 'Share'}
-            onPress={this.navigate('Share')}
+            onPress={this.checkIfUserIsConnected}
+          />
+          <Drawer.Item
+            icon="feedback"
+            label={i18n.t('menu.feedback')}
+            style={styles.drawerItems}
+            active={currentRoute === 'Feedback'}
+            onPress={this.navigate('Feedback')}
           />
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.title')}>
@@ -101,14 +145,14 @@ class Menu extends Component {
             label={i18n.t('menu.day')}
             active={dataStore.theme === 'day'}
             style={styles.drawerItems}
-            onPress={() => this.changeTheme('day')}
+            onPress={this.changeTheme('day')}
           />
           <Drawer.Item
             icon="brightness-3"
             label={i18n.t('menu.night')}
             active={dataStore.theme === 'night'}
             style={styles.drawerItems}
-            onPress={() => this.changeTheme('night')}
+            onPress={this.changeTheme('night')}
           />
         </Drawer.Section>
       </View>

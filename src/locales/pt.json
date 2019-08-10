@@ -3,14 +3,16 @@
     "title": "",
     "home": "",
     "addEntry": "",
-    "contact": ""
+    "contact": "",
+    "feedback": ""
   },
   "menu": {
     "share": "",
     "selectContact": "",
     "title": "",
     "day": "",
-    "night": ""
+    "night": "",
+    "feedback": ""
   },
   "vitaminD": "",
   "cancel": "",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": ": %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

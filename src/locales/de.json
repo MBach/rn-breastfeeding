@@ -3,14 +3,16 @@
     "title": "Stillen",
     "home": "Startseite",
     "addEntry": "Einen neuen Eintrag hinzufügen",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "feedback": ""
   },
   "menu": {
     "share": "Aktie",
     "selectContact": "Wählen Sie einen Kontakt aus",
     "title": "Bildschirmeinstellungen",
     "day": "Tages-Modus",
-    "night": "Nacht-Modus"
+    "night": "Nacht-Modus",
+    "feedback": ""
   },
   "vitaminD": "Vitamin-D",
   "cancel": "Stornieren",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

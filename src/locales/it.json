@@ -3,14 +3,16 @@
     "title": "Allattamento al seno",
     "home": "Casa",
     "addEntry": "Aggiungi una voce",
-    "contact": "Contatto"
+    "contact": "Contatto",
+    "feedback": ""
   },
   "menu": {
     "share": "Condividere",
     "selectContact": "Seleziona un contatto",
     "title": "Preferenze di visualizzazione",
     "day": "Modalità giorno",
-    "night": "Modalità notte"
+    "night": "Modalità notte",
+    "feedback": ""
   },
   "vitaminD": "Vitamina D",
   "cancel": "Annulla",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

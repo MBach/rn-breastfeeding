@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Dimensions, Easing, FlatList, Image, ScrollView, Text, View } from 'react-native'
+import { Animated, AppState, Dimensions, Easing, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
   withTheme,
   ActivityIndicator,
@@ -22,7 +22,45 @@ import moment from 'moment'
 
 import i18n from '../locales/i18n'
 import { getMin, getMinAndSeconds, isNotRunning } from '../config'
-import styles from '../styles'
+import { signIn } from '../hooks/SignIn'
+
+const styles = StyleSheet.create({
+  cardLastEntry: {
+    margin: 8
+  },
+  fab: {
+    margin: 16,
+    alignSelf: 'center'
+  },
+  absFab: {
+    position: 'absolute',
+    bottom: 20
+  },
+  list: {
+    flex: 1,
+    borderBottomWidth: 1
+  },
+  rowWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  chipMargins: {
+    marginRight: 8,
+    marginTop: 8
+  },
+  chipText: {
+    fontSize: 13
+  },
+  containerDialog: {
+    maxHeight: '75%'
+  },
+  popupButtonsContainer: {
+    flexDirection: 'row',
+    minHeight: 30,
+    justifyContent: 'space-between',
+    marginHorizontal: 20
+  }
+})
 
 /**
  * This class is the Home Screen.
@@ -64,8 +102,8 @@ class HomeScreen extends Component {
       this.forceUpdate()
     }, 1000 * 60)
 
-    if (dataStore.user && dataStore.user.id) {
-      this.props.navigation.setParams({ userPhoto: dataStore.user.photo })
+    if (auth().currentUser && auth().currentUser.photoURL) {
+      this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
   }
 
@@ -74,43 +112,10 @@ class HomeScreen extends Component {
     clearInterval(this.autoRefresh)
   }
 
-  signIn = async () => {
-    if (dataStore.user && dataStore.user.id) {
-      console.warn('already signed in 1', dataStore.user.id)
-      return
-    }
-    try {
-      // debug mode
-      await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
-      const { accessToken, idToken } = await GoogleSignin.signIn()
-      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken)
-      const res = await firebase.auth().signInWithCredential(credential)
-      if (res && res.additionalUserInfo) {
-        const { picture, email, sub } = res.additionalUserInfo.profile
-        dataStore.user = { photo: picture, email, id: sub }
-        this.setState(
-          { showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name: res.additionalUserInfo.profile.name }) },
-          this.migrateDataToFirebase
-        )
-      }
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('statusCodes.SIGN_IN_CANCELLED')
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('statusCodes.IN_PROGRESS')
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('statusCodes.PLAY_SERVICES_NOT_AVAILABLE')
-      } else {
-        console.log(error)
-      }
-    }
-  }
-
   migrateDataToFirebase = async () => {
     if (!dataStore.migrated) {
-      const uid = auth().currentUser.uid
       for (const r of dataStore.records) {
-        const ref = database().ref(`/users/${uid}/inputs/${r.date}`)
+        const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${r.date}`)
         await ref.set({ ...r })
       }
       dataStore.migrated = true
@@ -321,21 +326,30 @@ class HomeScreen extends Component {
   }
 
   renderProfileIcon = () => {
-    if (dataStore.user && dataStore.user.id) {
-      console.log('dataStore.user.photo', dataStore.user.photo)
+    if (auth().currentUser.isAnonymous) {
+      return (
+        <Appbar.Action
+          icon="account-circle"
+          onPress={() =>
+            signIn(name => {
+              this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }, this.migrateDataToFirebase)
+            })
+          }
+        />
+      )
+    } else {
+      console.warn('auth().currentUser', auth().currentUser)
       return (
         <Appbar.Action
           icon={() => (
             <Image
               style={{ width: 32, height: 32, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 16 }}
-              source={{ uri: dataStore.user.photo }}
+              source={{ uri: auth().currentUser.photoURL }}
             />
           )}
           onPress={() => console.warn('already signed in 2')}
         />
       )
-    } else {
-      return <Appbar.Action icon="account-circle" onPress={this.signIn} />
     }
   }
 

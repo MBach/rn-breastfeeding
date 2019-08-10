@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
@@ -9,9 +9,7 @@ import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
 import i18n, { loadLocale } from './locales/i18n'
 
-import AddEntryScreen from './screen/AddEntryScreen'
-import HomeScreen from './screen/HomeScreen'
-import ShareScreen from './screen/ShareScreen'
+import { AddEntryScreen, FeedbackScreen, HomeScreen, ShareScreen } from './screen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
@@ -22,7 +20,8 @@ const RootStack = createStackNavigator(
   {
     Home: { screen: HomeScreen, path: '/home' },
     AddEntry: { screen: AddEntryScreen, path: '/chrono' },
-    Share: { screen: ShareScreen, path: '/share' }
+    Share: { screen: ShareScreen, path: '/share' },
+    Feedback: { screen: FeedbackScreen, path: '/feedback' }
   },
   {
     initialRouteName: 'Home',
@@ -51,33 +50,33 @@ const DrawerNavigator = createDrawerNavigator(
 
 const AppContainer = createAppContainer(DrawerNavigator)
 
-const getTheme = key => {
-  if (key === 'day') {
-    return lightTheme
-  } else {
-    return darkTheme
-  }
-}
-
 /**
  * @author Matthieu BACHELIER
  * @since 2019-02
  * @version 2.0
  */
-export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      theme: null
+export default function App() {
+  const [theme, setTheme] = useState(null)
+
+  useEffect(() => {
+    init()
+  }, [theme])
+
+  const getTheme = key => {
+    if (key === 'day') {
+      return lightTheme
+    } else {
+      return darkTheme
     }
   }
 
-  updateTheme = key => {
+  const updateTheme = key => {
     const theme = getTheme(key)
-    this.setState({ theme }, () => Platform.OS === 'android' && StatusBar.setBackgroundColor(theme.palette.primaryDarkColor))
+    if (Platform.OS === 'android') StatusBar.setBackgroundColor(theme.palette.primaryDarkColor)
+    setTheme(theme)
   }
 
-  async componentDidMount() {
+  const init = async () => {
     await loadLocale()
 
     // Add an App shortcut with a long press
@@ -95,25 +94,22 @@ export default class App extends Component {
     const res = await hydrate('dataStore', dataStore)
     if (res) {
       dataStore.hydrateComplete()
-      this.updateTheme(res.theme)
+      updateTheme(res.theme)
       StatusBar.setBarStyle('light-content')
     }
   }
 
-  render = () => {
-    const { theme } = this.state
-    if (theme) {
-      return (
-        <Provider {...stores}>
-          <PaperProvider theme={theme}>
-            <Portal.Host>
-              <AppContainer uriPrefix={uriPrefix} screenProps={{ ...theme.colors, updateTheme: this.updateTheme }} />
-            </Portal.Host>
-          </PaperProvider>
-        </Provider>
-      )
-    } else {
-      return false
-    }
+  if (theme) {
+    return (
+      <Provider {...stores}>
+        <PaperProvider theme={theme}>
+          <Portal.Host>
+            <AppContainer uriPrefix={uriPrefix} screenProps={{ ...theme.colors, updateTheme: updateTheme }} />
+          </Portal.Host>
+        </PaperProvider>
+      </Provider>
+    )
+  } else {
+    return false
   }
 }

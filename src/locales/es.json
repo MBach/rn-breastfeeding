@@ -3,14 +3,16 @@
     "title": "Amamantamiento",
     "home": "Inicio",
     "addEntry": "Añadir una entrada",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "feedback": ""
   },
   "menu": {
     "share": "Compartir",
     "selectContact": "Seleccione un contacto",
     "title": "Preferencias de pantalla",
     "day": "Modo diurno",
-    "night": "Modo nocturno"
+    "night": "Modo nocturno",
+    "feedback": ""
   },
   "vitaminD": "Vitamina D",
   "cancel": "Cancelar",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

@@ -28,19 +28,6 @@ class DataStore {
   ///
 
   @observable
-  _user = null
-
-  @computed
-  get user() {
-    return this._user
-  }
-  set user(u) {
-    this._user = u
-  }
-
-  ///
-
-  @observable
   _migrated = false
 
   @computed

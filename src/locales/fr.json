@@ -3,14 +3,16 @@
     "title": "Allaitement",
     "home": "Accueil",
     "addEntry": "Ajouter une saisie",
-    "contact": "Contact"
+    "contact": "Contact",
+    "feedback": ""
   },
   "menu": {
     "share": "Partage",
     "selectContact": "Envoyer à un contact",
     "title": "Préférences d'affichage",
     "day": "Mode jour",
-    "night": "Mode nuit"
+    "night": "Mode nuit",
+    "feedback": ""
   },
   "vitaminD": "Vitamine D",
   "cancel": "Annuler",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) a partagé des saisies avec vous.",
       "button": "Ouvrir dans Allaitement : %{shareLink}",
       "download": "Pour obtenir l’App, visitez ce lien : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "Sélectionner une option",
+    "comment": "Commentaire",
+    "suggestion": "Suggestion",
+    "bug": "Problème",
+    "desc": "Description",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

@@ -3,14 +3,16 @@
     "title": "BreastFeeding",
     "home": "Home",
     "addEntry": "Add a new entry",
-    "contact": "Contact"
+    "contact": "Contact",
+    "feedback": "Feedback"
   },
   "menu": {
     "share": "Share",
     "selectContact": "Select a contact",
     "title": "Display settings",
     "day": "Day mode",
-    "night": "Night mode"
+    "night": "Night mode",
+    "feedback": "Feedback"
   },
   "vitaminD": "Vitamin D",
   "cancel": "Cancel",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) has shared inputs with you",
       "button": "Open in BreastFeeding App: %{shareLink}",
       "download": "To get the App, check out this link: %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "Select an option",
+    "comment": "Comment",
+    "suggestion": "Suggestion",
+    "bug": "Bug",
+    "desc": "Add some details",
+    "errors": {
+      "radio": "You must select an option",
+      "desc": "Please write at least 20 characters"
     }
   }
 }

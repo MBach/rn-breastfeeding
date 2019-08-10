@@ -3,14 +3,16 @@
     "title": "Грудное вскармливание",
     "home": "дом",
     "addEntry": "Добавить новую запись",
-    "contact": "контакт"
+    "contact": "контакт",
+    "feedback": ""
   },
   "menu": {
     "share": "Поделиться",
     "selectContact": "Выберите контакт",
     "title": "Настройки отображения",
     "day": "Дневной режим",
-    "night": "ночной режим"
+    "night": "ночной режим",
+    "feedback": ""
   },
   "vitaminD": "Витамин D",
   "cancel": "отмена",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

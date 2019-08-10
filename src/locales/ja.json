@@ -3,14 +3,16 @@
     "title": "乳房授乳",
     "home": "家",
     "addEntry": "エントリを追加する",
-    "contact": "連絡"
+    "contact": "連絡",
+    "feedback": ""
   },
   "menu": {
     "share": "シェア",
     "selectContact": "連絡先を選択",
     "title": "ディスプレイの設定",
     "day": "日モード",
-    "night": "夜モード"
+    "night": "夜モード",
+    "feedback": ""
   },
   "vitaminD": "ビタミンD",
   "cancel": "キャンセル",
@@ -45,6 +47,17 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    }
+  },
+  "feedback": {
+    "caption": "",
+    "comment": "",
+    "suggestion": "",
+    "bug": "",
+    "desc": "",
+    "errors": {
+      "radio": "",
+      "desc": ""
     }
   }
 }

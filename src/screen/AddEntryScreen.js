@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DeviceEventEmitter, Dimensions, Text, TouchableOpacity, View } from 'react-native'
+import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
@@ -11,7 +11,61 @@ import RNBreastFeeding from '../RNBreastFeeding'
 import i18n from '../locales/i18n'
 
 import { getMinAndSeconds, isNotRunning } from '../config'
-import styles from '../styles'
+
+const styles = StyleSheet.create({
+  fab: {
+    margin: 16,
+    alignSelf: 'center'
+  },
+  mainContainer: {
+    flex: 1,
+    padding: 16,
+    flexWrap: 'wrap',
+    width: '100%',
+    flexDirection: 'row'
+  },
+  subContainerLandscape: {
+    flex: 1,
+    width: '50%',
+    flexDirection: 'column'
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16
+  },
+  date: {
+    marginTop: 8,
+    fontSize: 20,
+    fontWeight: 'bold',
+    borderBottomWidth: 3
+  },
+  timerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16
+  },
+  timer: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    borderBottomWidth: 3
+  },
+  smallTimer: {
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16
+  },
+  chipTimer: {
+    flexGrow: 1,
+    marginHorizontal: 4,
+    marginTop: 16,
+    textAlign: 'center'
+  }
+})
 
 const resetAction = StackActions.reset({
   index: 0,
@@ -146,16 +200,9 @@ class AddEntryScreen extends Component {
   }
 
   saveToFirebase = data => {
-    //
-    if (dataStore.user && dataStore.user.id) {
-      // Get the users ID
-      const uid = auth().currentUser.uid
-
-      // Create a reference
-      const ref = database().ref(`/users/${uid}/inputs/${data.date}`)
-      ref.set({
-        ...data
-      })
+    if (auth().currentUser) {
+      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
+      ref.set({ ...data })
     }
   }
 
@@ -200,7 +247,7 @@ class AddEntryScreen extends Component {
           <Dialog.Content>
             <TextInput
               label={i18n.t('add.durationPlaceholder')}
-              mode="flat"
+              mode={'outlined'}
               value={this.state.manualTimer}
               keyboardType="numeric"
               onChangeText={manualTimer => this.setState({ manualTimer })}

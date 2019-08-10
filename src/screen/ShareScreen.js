@@ -6,6 +6,7 @@ import Mailer from 'react-native-mail'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
 import auth, { firebase } from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
+import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { inject, observer } from 'mobx-react'
 import i18n from '../locales/i18n'
 
@@ -94,8 +95,32 @@ class ShareScreen extends Component {
       this.props.navigation.pop()
       return
     }
-    const { name, email } = dataStore.user
-    let shareLink = 'rnbreastfeeding://rnbreastfeeding/home?shareLink=1234'
+    const shareLink2 = await dynamicLinks().buildLink({
+      link: 'https://invertase.io',
+      domainUriPrefix: 'https://xyz.page.link',
+      navigation: {
+        forcedRedirectEnabled: true
+      },
+      android: {
+        packageName: 'io.matierenoire.breastfeeding',
+        minimumVersion: '3'
+      }
+    })
+
+    const shareLink = await dynamicLinks().buildShortLink({
+      link: 'https://invertase.io',
+      domainUriPrefix: 'https://xyz.page.link',
+      navigation: {
+        forcedRedirectEnabled: true
+      },
+      android: {
+        packageName: 'io.matierenoire.breastfeeding',
+        minimumVersion: '3'
+      }
+    })
+
+    const { displayName: name, email } = auth().currentUser
+    //let shareLink = 'rnbreastfeeding://rnbreastfeeding/home?shareLink=1234'
     let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
       ${i18n.t('share.mail.button', { shareLink })}<br><br>
       ${i18n.t('share.mail.download', { url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding' })}`
@@ -143,13 +168,13 @@ class ShareScreen extends Component {
   }
 
   renderAvatar = contact => {
-    if (contact.photo) {
+    if (contact.photoURL) {
       return (
         <List.Icon
           icon={() => (
             <Image
               style={{ width: 48, height: 48, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 24 }}
-              source={{ uri: contact.photo }}
+              source={{ uri: contact.photoURL }}
             />
           )}
         />
@@ -159,14 +184,17 @@ class ShareScreen extends Component {
     }
   }
 
-  renderSuggestion = ({ item }) => (
-    <List.Item
-      title={item.displayName}
-      description={item.emailAddresses[0].email}
-      left={() => this.renderAvatar(item)}
-      onPress={this.addContactFromSuggestions(item)}
-    />
-  )
+  renderSuggestion = ({ item }) => {
+    console.log('item', item)
+    return (
+      <List.Item
+        title={item.displayName}
+        description={item.emailAddresses[0].email}
+        left={() => this.renderAvatar(item)}
+        onPress={this.addContactFromSuggestions(item)}
+      />
+    )
+  }
 
   renderSnackBar = () => (
     <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
@@ -177,7 +205,7 @@ class ShareScreen extends Component {
   render = () => (
     <>
       <ScrollView keyboardShouldPersistTaps={'always'} style={{ backgroundColor: this.props.theme.colors.background }}>
-        <List.Item title={dataStore.user.email} left={() => this.renderAvatar(dataStore.user)} />
+        <List.Item title={auth().currentUser.email} left={() => this.renderAvatar(auth().currentUser)} />
         {this.state.contacts.map((c, index) => (
           <List.Item
             key={index}
