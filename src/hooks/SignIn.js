@@ -8,9 +8,7 @@ const signIn = async callback => {
     return
   }
   try {
-    // debug mode
-    await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
-    const { accessToken, idToken } = await GoogleSignin.signIn()
+    const { idToken, accessToken } = await GoogleSignin.signIn()
     const credential = auth().GoogleAuthProvider.credential(idToken, accessToken)
     const res = await auth().signInWithCredential(credential)
     if (res && res.additionalUserInfo) {

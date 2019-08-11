@@ -326,19 +326,8 @@ class HomeScreen extends Component {
   }
 
   renderProfileIcon = () => {
-    if (auth().currentUser.isAnonymous) {
-      return (
-        <Appbar.Action
-          icon="account-circle"
-          onPress={() =>
-            signIn(name => {
-              this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }, this.migrateDataToFirebase)
-            })
-          }
-        />
-      )
-    } else {
-      console.warn('auth().currentUser', auth().currentUser)
+    if (auth().currentUser && !auth().currentUser.isAnonymous) {
+      //console.warn('auth().currentUser 1', auth().currentUser)
       return (
         <Appbar.Action
           icon={() => (
@@ -348,6 +337,18 @@ class HomeScreen extends Component {
             />
           )}
           onPress={() => console.warn('already signed in 2')}
+        />
+      )
+    } else {
+      //console.warn('auth().currentUser 2', auth().currentUser)
+      return (
+        <Appbar.Action
+          icon="account-circle"
+          onPress={() =>
+            signIn(name => {
+              this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }, this.migrateDataToFirebase)
+            })
+          }
         />
       )
     }

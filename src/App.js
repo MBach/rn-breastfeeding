@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
+import auth from '@react-native-firebase/auth'
+import { GoogleSignin } from 'react-native-google-signin'
 
 import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
@@ -56,11 +58,51 @@ const AppContainer = createAppContainer(DrawerNavigator)
  * @version 2.0
  */
 export default function App() {
+  const [initilizing, setInitilizing] = useState(true)
+  const [user, setUser] = useState()
   const [theme, setTheme] = useState(null)
 
   useEffect(() => {
     init()
   }, [theme])
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
+    GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
+    GoogleSignin.signInSilently()
+      .then(res => {
+        if (res) {
+          const credential = auth().GoogleAuthProvider.credential(res.idToken, res.accessToken)
+          auth()
+            .signInWithCredential(credential)
+            .then(res2 => {
+              console.log('signInSilently', res2)
+            })
+            .catch(err => {
+              console.warn('cannot sign-in with credential', err)
+            })
+        }
+      })
+      .catch(err => {
+        // No previous attempt found, about to sign in anonymously
+        if (err.userInfo === null) {
+          auth()
+            .signInAnonymously()
+            .then(res => {
+              console.log('signInAnonymously', res)
+            })
+            .catch(err => {
+              console.warn('cannot sign-in anonymously', err)
+            })
+        }
+      })
+    return subscriber
+  }, [])
+
+  const onAuthStateChanged = user => {
+    console.warn('user', user)
+    if (initilizing) setInitilizing(false)
+  }
 
   const getTheme = key => {
     if (key === 'day') {

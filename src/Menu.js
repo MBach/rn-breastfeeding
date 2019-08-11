@@ -3,7 +3,6 @@ import { Linking, StyleSheet, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { withTheme, Drawer, Title } from 'react-native-paper'
-import { GoogleSignin } from 'react-native-google-signin'
 import auth from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
 import i18n from './locales/i18n'
@@ -28,31 +27,6 @@ const styles = StyleSheet.create({
 @observer
 class Menu extends Component {
   async componentDidMount() {
-    await GoogleSignin.configure({ webClientId: '954958868925-kdbiotink1d0un16n5j0c81pj5ksbbo0.apps.googleusercontent.com' })
-    /*GoogleSignin.signInSilently()
-      .then(res => {
-        if (res) {
-          console.warn('signInSilently', res.idToken)
-          auth()
-            .signInWithCustomToken(res.idToken)
-            .then(res2 => {
-              console.warn('res2', res2)
-            })
-          console.warn('signInSilently', auth().currentUser)
-        }
-      })
-      .catch(err => {
-        // No previous attempt found, about to sign in anonymously
-        if (err.userInfo === null) {
-          auth()
-            .signInAnonymously()
-            .then(res => {
-              console.warn('signInAnonymously', res)
-            })
-        }
-      })*/
-    console.warn('Menu', auth().currentUser)
-
     const url = await Linking.getInitialURL()
     // Open the App from the notification area
     if (url === 'rnbreastfeeding://rnbreastfeeding/chrono') {
@@ -85,11 +59,11 @@ class Menu extends Component {
   }
 
   checkIfUserIsConnected = () => {
-    if (auth().currentUser.isAnonymous) {
+    if (auth().currentUser && !auth().currentUser.isAnonymous) {
+      this.navigate('Share')
+    } else {
       this.props.navigation.closeDrawer()
       setTimeout(signIn, 700)
-    } else {
-      this.navigate('Share')
     }
   }
 

@@ -48,7 +48,7 @@ class FeedbackScreen extends Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ handleSend: () => this.sendFeedback() })
-    console.log('auth().currentUser', auth().currentUser.isAnonymous)
+    // console.log('auth().currentUser', auth().currentUser.isAnonymous)
   }
 
   sendFeedback = async () => {
