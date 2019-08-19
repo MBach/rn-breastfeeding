@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
-import auth from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
 import { GoogleSignin } from 'react-native-google-signin'
 
 import { Provider } from 'mobx-react'
@@ -59,7 +59,6 @@ const AppContainer = createAppContainer(DrawerNavigator)
  */
 export default function App() {
   const [initilizing, setInitilizing] = useState(true)
-  const [user, setUser] = useState()
   const [theme, setTheme] = useState(null)
 
   useEffect(() => {
@@ -72,7 +71,7 @@ export default function App() {
     GoogleSignin.signInSilently()
       .then(res => {
         if (res) {
-          const credential = auth().GoogleAuthProvider.credential(res.idToken, res.accessToken)
+          const credential = firebase.auth.GoogleAuthProvider.credential(res.idToken, res.accessToken)
           auth()
             .signInWithCredential(credential)
             .then(res2 => {

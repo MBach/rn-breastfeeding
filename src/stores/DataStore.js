@@ -1,6 +1,8 @@
 import { observable, action, computed, toJS } from 'mobx'
 import { persist } from 'mobx-persist'
 import _ from 'lodash'
+import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database'
 
 /**
  * @author Matthieu BACHELIER
@@ -27,6 +29,7 @@ class DataStore {
 
   ///
 
+  @persist
   @observable
   _migrated = false
 
@@ -158,15 +161,31 @@ class DataStore {
   @action
   hydrateComplete = async () => {
     this.hydrated = true
+    if (dataStore.migrated && auth().currentUser) {
+      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+      ref.once('value').then(snapshot => {
+        const values = Object.values(snapshot)
+        let r = []
+        for (const entry of Object.values(values[0].value)) {
+          r.push(entry)
+        }
+        this.records = r
+      })
+    }
   }
 
   @action
   addEntry = data => {
-    this.updating = true
-    let r = [...this.records]
-    r.push(data)
-    this.records = r
-    this.updating = false
+    if (auth().currentUser) {
+      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
+      ref.set({ ...data })
+    } else {
+      this.updating = true
+      let r = [...this.records]
+      r.push(data)
+      this.records = r
+      this.updating = false
+    }
     this.isRunning = { left: false, right: false, bottle: false }
     this.toggles = { left: false, right: false, bottle: false }
     this.timers = { left: 0, right: 0, bottle: 0 }

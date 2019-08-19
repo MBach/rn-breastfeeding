@@ -14,8 +14,7 @@ import {
   Snackbar,
   TouchableRipple
 } from 'react-native-paper'
-import { GoogleSignin, statusCodes } from 'react-native-google-signin'
-import auth, { firebase } from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
@@ -172,9 +171,9 @@ class HomeScreen extends Component {
       </Chip>
     )
 
-  renderLastEntry(groupedRecords) {
-    if (groupedRecords.length > 0) {
-      const lastGroup = groupedRecords[0]
+  renderLastEntry(groups) {
+    if (groups.length > 0) {
+      const lastGroup = groups[0]
       const lastEntry = lastGroup.group[0]
       const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
       return (
@@ -356,7 +355,7 @@ class HomeScreen extends Component {
 
   render = () => {
     const { colors } = this.props.theme
-    const groupedRecords = dataStore.groupedRecords
+    const groups = dataStore.groupedRecords
     return (
       <View
         onLayout={this.onLayout}
@@ -370,14 +369,9 @@ class HomeScreen extends Component {
           <Appbar.Content title={i18n.t('navigation.home')} />
           {this.renderProfileIcon()}
         </Appbar.Header>
-        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
+        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groups)}
         {dataStore.hydrated && !dataStore.updating ? (
-          <FlatList
-            data={groupedRecords}
-            extractData={groupedRecords.length}
-            keyExtractor={item => `${item.key}`}
-            renderItem={this.renderItem}
-          />
+          <FlatList data={groups} extractData={groups.length} keyExtractor={item => `${item.key}`} renderItem={this.renderItem} />
         ) : (
           <ActivityIndicator size="large" color={colors.primary} />
         )}

@@ -3,8 +3,6 @@ import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, Vie
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import DateTimePicker from 'react-native-modal-datetime-picker'
-import auth from '@react-native-firebase/auth'
-import database from '@react-native-firebase/database'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
@@ -189,20 +187,11 @@ class AddEntryScreen extends Component {
         timers: { ...dataStore.timers },
         vitaminD: dataStore.vitaminD
       }
-      // todo
       dataStore.addEntry(data)
       RNBreastFeeding.stopTimers()
       this.props.navigation.dispatch(resetAction)
-      this.saveToFirebase(data)
     } else {
       this.setState({ showErrorDialog: true })
-    }
-  }
-
-  saveToFirebase = data => {
-    if (auth().currentUser) {
-      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
-      ref.set({ ...data })
     }
   }
 

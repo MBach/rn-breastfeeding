@@ -1,6 +1,10 @@
 import React from 'react'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
-import auth from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
+
+const migrateFromAnonToAuthed = (anonUid, res) => {
+  console.warn('migrateFromAnonToAuthed', anonUid, res)
+}
 
 const signIn = async callback => {
   if (auth().currentUser && !auth().currentUser.isAnonymous) {
@@ -8,10 +12,18 @@ const signIn = async callback => {
     return
   }
   try {
+    let anonUid = null
+    if (auth().currentUser && auth().currentUser.isAnonymous) {
+      anonUid = auth().currentUser.uid
+      console.warn('anonUid', anonUid)
+    }
     const { idToken, accessToken } = await GoogleSignin.signIn()
-    const credential = auth().GoogleAuthProvider.credential(idToken, accessToken)
+    const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken)
     const res = await auth().signInWithCredential(credential)
     if (res && res.additionalUserInfo) {
+      if (anonUid) {
+        migrateFromAnonToAuthed(anonUid, res)
+      }
       if (callback) {
         callback(res.additionalUserInfo.profile.name)
       }
@@ -29,4 +41,4 @@ const signIn = async callback => {
   }
 }
 
-export { signIn }
+export { signIn, migrateFromAnonToAuthed }
