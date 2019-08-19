@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { withTheme, Caption, IconButton, RadioButton, Text, TextInput, Snackbar, Subheading } from 'react-native-paper'
+import { withTheme, ActivityIndicator, Appbar, Caption, RadioButton, Text, TextInput, Snackbar, Subheading } from 'react-native-paper'
 import { inject, observer } from 'mobx-react'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
@@ -27,13 +27,8 @@ const styles = StyleSheet.create({
 @inject('dataStore')
 @observer
 class FeedbackScreen extends Component {
-  static navigationOptions = ({ navigation, screenProps }) => {
-    const { params } = navigation.state
-    return {
-      title: i18n.t('navigation.feedback'),
-      headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <IconButton icon="send" color="white" onPress={() => params.handleSend && params.handleSend()} />
-    }
+  static navigationOptions = {
+    header: null
   }
 
   constructor(props) {
@@ -42,13 +37,9 @@ class FeedbackScreen extends Component {
       radio: '',
       description: '',
       showSnackbar: false,
-      snackBarMessage: ''
+      snackBarMessage: '',
+      sending: false
     }
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ handleSend: () => this.sendFeedback() })
-    // console.log('auth().currentUser', auth().currentUser.isAnonymous)
   }
 
   sendFeedback = async () => {
@@ -58,8 +49,10 @@ class FeedbackScreen extends Component {
     } else if (description.length < 20) {
       this.setState({ showSnackbar: true, snackBarMessage: i18n.t('feedback.errors.desc') })
     } else {
+      this.setState({ sending: true })
       const ref = database().ref(`/feedback/${moment().unix()}`)
-      ref.set({ user: auth().currentUser.uid, type: radio, description })
+      await ref.set({ user: auth().currentUser.uid, type: radio, description })
+      this.setState({ sending: false, showSnackbar: true, snackBarMessage: i18n.t('feedback.sent') })
     }
   }
 
@@ -77,23 +70,33 @@ class FeedbackScreen extends Component {
   )
 
   render = () => (
-    <View style={{ backgroundColor: this.props.theme.colors.background, flex: 1, padding: 8 }}>
-      <Subheading>Thank you for using BreastFeeding App</Subheading>
-      <Text>Please share your comments, suggestions or bug report below</Text>
-      <RadioButton.Group onValueChange={radio => this.setState({ radio })} value={this.state.radio}>
-        <Caption style={styles.mt}>{`${i18n.t('feedback.caption')} *`}</Caption>
-        {this.renderRadio('comment', 'feedback.comment')}
-        {this.renderRadio('suggestion', 'feedback.suggestion')}
-        {this.renderRadio('bug', 'feedback.bug')}
-      </RadioButton.Group>
-      <TextInput
-        style={styles.mt}
-        mode={'outlined'}
-        label={`${i18n.t('feedback.desc')} *`}
-        value={this.state.description}
-        multiline
-        onChangeText={description => this.setState({ description })}
-      />
+    <View style={{ backgroundColor: this.props.theme.colors.background, flex: 1 }}>
+      <Appbar.Header>
+        <Appbar.Content title={i18n.t('navigation.feedback')} />
+        {this.state.sending ? <Appbar.Action
+          icon={() => (<ActivityIndicator size="small" color="white" />)} /> : <Appbar.Action
+            icon='send'
+            onPress={() => this.sendFeedback()}
+          />}
+      </Appbar.Header>
+      <View style={{ padding: 8 }}>
+        <Subheading>Thank you for using BreastFeeding App</Subheading>
+        <Text>Please share your comments, suggestions or bug report below</Text>
+        <RadioButton.Group onValueChange={radio => this.setState({ radio })} value={this.state.radio}>
+          <Caption style={styles.mt}>{`${i18n.t('feedback.caption')} *`}</Caption>
+          {this.renderRadio('comment', 'feedback.comment')}
+          {this.renderRadio('suggestion', 'feedback.suggestion')}
+          {this.renderRadio('bug', 'feedback.bug')}
+        </RadioButton.Group>
+        <TextInput
+          style={styles.mt}
+          mode={'outlined'}
+          label={`${i18n.t('feedback.desc')} *`}
+          value={this.state.description}
+          multiline
+          onChangeText={description => this.setState({ description })}
+        />
+      </View>
       {this.renderSnackBar()}
     </View>
   )

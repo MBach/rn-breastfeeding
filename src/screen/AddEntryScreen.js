@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import Slider from '@react-native-community/slider'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
@@ -340,8 +341,14 @@ class AddEntryScreen extends Component {
           <View style={styles.buttonsContainer}>
             {this.renderButton('left')}
             {this.renderButton('right')}
-            {this.renderButton('bottle')}
           </View>
+          <ThemedText palette={palette}>{i18n.t('bottle')}</ThemedText>
+          <Slider minimumValue={0}
+            maximumValue={240}
+            step={10}
+            minimumTrackTintColor={colors.primary}
+            thumbTintColor={colors.primary}
+            maximumTrackTintColor="#000000" />
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker

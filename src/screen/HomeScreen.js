@@ -373,8 +373,8 @@ class HomeScreen extends Component {
         {dataStore.hydrated && !dataStore.updating ? (
           <FlatList data={groups} extractData={groups.length} keyExtractor={item => `${item.key}`} renderItem={this.renderItem} />
         ) : (
-          <ActivityIndicator size="large" color={colors.primary} />
-        )}
+            <ActivityIndicator size="large" color={colors.primary} />
+          )}
         {this.renderFab(isNotRunning(dataStore.timers))}
         {this.editGroupDialog()}
         {this.renderSnackBar()}

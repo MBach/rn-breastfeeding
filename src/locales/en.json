@@ -55,6 +55,7 @@
     "suggestion": "Suggestion",
     "bug": "Bug",
     "desc": "Add some details",
+    "sent": "Your feeback has been sent. Thank you!",
     "errors": {
       "radio": "You must select an option",
       "desc": "Please write at least 20 characters"

@@ -837,6 +837,11 @@
     shell-quote "1.6.1"
     ws "^1.1.0"
 
+"@react-native-community/slider@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-2.0.0.tgz#3d68f68db185fb44d812f66d05d2d7842adfd3db"
+  integrity sha512-ORokHwQnwXzas+PYQO+G8IxArRVtw2xZdx2C0wV+oQiKbhDl8DBcM6gGT6dNB3VGxVNesWX/3K0IIfVjp4zH0A==
+
 "@react-native-firebase/app-types@0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app-types/-/app-types-0.2.3.tgz#2a81681a2cbe6ca80d818e653f1ad50c32753578"

@@ -55,9 +55,10 @@
     "suggestion": "Suggestion",
     "bug": "Problème",
     "desc": "Description",
+    "sent": "Votre retour a été transmis. Merci !",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "Vous devez sélectionner une option",
+      "desc": "Veuillez écrire au moins 20 caractères"
     }
   }
 }
