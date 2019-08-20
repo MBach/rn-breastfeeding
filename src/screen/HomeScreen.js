@@ -186,6 +186,11 @@ class HomeScreen extends Component {
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}
             {this.renderChip('bottle', lastEntry.timers['bottle'])}
+            {lastEntry.bottle && (
+              <Chip style={styles.chipMargins}>
+                <Text style={styles.chipText}>{`${i18n.t('bottle')} ${lastEntry.bottle}mL`}</Text>
+              </Chip>
+            )}
             {lastEntry.vitaminD && (
               <Chip style={styles.chipMargins} icon="brightness-5">
                 <Text style={styles.chipText}>{i18n.t('vitaminD')}</Text>
@@ -373,8 +378,8 @@ class HomeScreen extends Component {
         {dataStore.hydrated && !dataStore.updating ? (
           <FlatList data={groups} extractData={groups.length} keyExtractor={item => `${item.key}`} renderItem={this.renderItem} />
         ) : (
-            <ActivityIndicator size="large" color={colors.primary} />
-          )}
+          <ActivityIndicator size="large" color={colors.primary} />
+        )}
         {this.renderFab(isNotRunning(dataStore.timers))}
         {this.editGroupDialog()}
         {this.renderSnackBar()}

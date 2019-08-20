@@ -22,6 +22,6 @@ const getMinAndSeconds = time => {
   }
 }
 
-const isNotRunning = timers => timers['left'] === 0 && timers['right'] === 0 && timers['bottle'] === 0
+const isNotRunning = timers => timers['left'] === 0 && timers['right'] === 0
 
 export { getMin, getMinAndSeconds, isNotRunning }

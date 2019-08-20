@@ -59,7 +59,10 @@ class DataStore {
 
   @persist('object')
   @observable
-  _isRunning = { left: false, right: false, bottle: false }
+  _isRunning = {
+    left: false,
+    right: false
+  }
 
   @computed
   get isRunning() {
@@ -67,6 +70,20 @@ class DataStore {
   }
   set isRunning(r) {
     this._isRunning = r
+  }
+
+  ///
+
+  @persist
+  @observable
+  _bottle = 0
+
+  @computed
+  get bottle() {
+    return this._bottle
+  }
+  set bottle(b) {
+    this._bottle = b
   }
 
   ///
@@ -100,7 +117,7 @@ class DataStore {
 
   @persist('object')
   @observable
-  _timers = { left: 0, right: 0, bottle: 0 }
+  _timers = { left: 0, right: 0 }
 
   @computed
   get timers() {
@@ -114,7 +131,7 @@ class DataStore {
 
   @persist('object')
   @observable
-  _toggles = { left: false, right: false, bottle: false }
+  _toggles = { left: false, right: false }
 
   @computed
   get toggles() {
@@ -186,9 +203,10 @@ class DataStore {
       this.records = r
       this.updating = false
     }
-    this.isRunning = { left: false, right: false, bottle: false }
-    this.toggles = { left: false, right: false, bottle: false }
-    this.timers = { left: 0, right: 0, bottle: 0 }
+    this.isRunning = { left: false, right: false }
+    this.toggles = { left: false, right: false }
+    this.timers = { left: 0, right: 0 }
+    this.bottle = 0
     this.vitaminD = false
     this.day = null
     this.currentTimerId = null

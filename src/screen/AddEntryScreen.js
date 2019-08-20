@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-  buttonsContainer: {
+  fabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16
@@ -180,14 +180,15 @@ class AddEntryScreen extends Component {
 
   validateEntry = () => {
     const { day } = this.state
-    if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || dataStore.timers['bottle'] > 0) {
+    if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || dataStore.bottle > 0) {
       /// Save data
-      const data = {
+      let data = {
         date: day.unix(),
         day: day.startOf('day').unix(),
         timers: { ...dataStore.timers },
         vitaminD: dataStore.vitaminD
       }
+      if (dataStore.bottle > 0) data.bottle = dataStore.bottle
       dataStore.addEntry(data)
       RNBreastFeeding.stopTimers()
       this.props.navigation.dispatch(resetAction)
@@ -221,6 +222,49 @@ class AddEntryScreen extends Component {
         <ThemedText palette={palette} style={styles.smallTimer}>
           {this.formatTime(timerId)}
         </ThemedText>
+      </View>
+    )
+  }
+
+  renderBottle = () => {
+    const { colors, palette } = this.props.theme
+    return (
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <Button
+          color={palette.buttonColor}
+          style={{ alignContent: 'center', justifyContent: 'center' }}
+          mode="text"
+          onPress={() => {
+            if (dataStore.bottle >= 10) {
+              dataStore.bottle -= 10
+            }
+          }}
+        >
+          -10mL
+        </Button>
+        <Slider
+          value={dataStore.bottle}
+          style={{ flex: 1 }}
+          minimumValue={0}
+          maximumValue={240}
+          step={10}
+          minimumTrackTintColor={colors.primary}
+          thumbTintColor={colors.primary}
+          maximumTrackTintColor="#000000"
+          onValueChange={value => (dataStore.bottle = value)}
+        />
+        <Button
+          color={palette.buttonColor}
+          style={{ alignContent: 'center', justifyContent: 'center' }}
+          mode="text"
+          onPress={() => {
+            if (dataStore.bottle < 240) {
+              dataStore.bottle += 10
+            }
+          }}
+        >
+          +10mL
+        </Button>
       </View>
     )
   }
@@ -338,17 +382,12 @@ class AddEntryScreen extends Component {
         </View>
         <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
           <ThemedText palette={palette}>{i18n.t('add.breast')}</ThemedText>
-          <View style={styles.buttonsContainer}>
+          <View style={styles.fabContainer}>
             {this.renderButton('left')}
             {this.renderButton('right')}
           </View>
           <ThemedText palette={palette}>{i18n.t('bottle')}</ThemedText>
-          <Slider minimumValue={0}
-            maximumValue={240}
-            step={10}
-            minimumTrackTintColor={colors.primary}
-            thumbTintColor={colors.primary}
-            maximumTrackTintColor="#000000" />
+          {this.renderBottle()}
         </View>
         <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
         <DateTimePicker

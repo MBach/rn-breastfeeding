@@ -63,6 +63,9 @@ public class ChronoService extends Service {
             }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_STOP)) {
             Log.d(TAG, "request ACTION_STOP");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification(timerId));
+            }
             for (Map.Entry<String, RNTimer> entry : timers.entrySet()) {
                 RNTimer t = entry.getValue();
                 t.cancel();
