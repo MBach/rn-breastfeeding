@@ -175,10 +175,8 @@ class DataStore {
 
   ///
 
-  @action
-  hydrateComplete = async () => {
-    this.hydrated = true
-    if (dataStore.migrated && auth().currentUser) {
+  _fetchCloudData = () => {
+    if (/*dataStore.migrated &&*/ auth().currentUser) {
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
       ref.once('value').then(snapshot => {
         const values = Object.values(snapshot)
@@ -187,15 +185,24 @@ class DataStore {
           r.push(entry)
         }
         this.records = r
+        console.warn('fetchCloudData')
       })
     }
   }
 
   @action
-  addEntry = data => {
+  hydrateComplete = () => {
+    this.hydrated = true
+    //this._fetchCloudData()
+  }
+
+  @action
+  addEntry = async data => {
     if (auth().currentUser) {
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
-      ref.set({ ...data })
+      await ref.set({ ...data })
+      console.warn('inserted')
+      this._fetchCloudData()
     } else {
       this.updating = true
       let r = [...this.records]

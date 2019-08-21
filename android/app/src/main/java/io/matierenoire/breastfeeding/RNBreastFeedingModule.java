@@ -102,6 +102,18 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     *
+     */
+    void clearNotification() {
+        NotificationManager notificationManager = (NotificationManager) reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancelAll();
+        } else {
+            Log.d(TAG, "notificationManager is null :(");
+        }
+    }
+
+    /**
      * @param isRunning check if running
      */
     void updateNotificationButton(final String timerId, boolean isRunning) {

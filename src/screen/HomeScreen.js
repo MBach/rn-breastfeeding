@@ -186,7 +186,7 @@ class HomeScreen extends Component {
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}
             {this.renderChip('bottle', lastEntry.timers['bottle'])}
-            {lastEntry.bottle && (
+            {lastEntry.bottle > 0 && (
               <Chip style={styles.chipMargins}>
                 <Text style={styles.chipText}>{`${i18n.t('bottle')} ${lastEntry.bottle}mL`}</Text>
               </Chip>
@@ -249,6 +249,9 @@ class HomeScreen extends Component {
         }
         if (entry.timers['bottle'] > 0) {
           description.push(i18n.t('bottle') + `: ${getMin(entry.timers['bottle'])}`)
+        }
+        if (entry.bottle > 0) {
+          description.push(i18n.t('bottle') + `: ${entry.bottle}mL`)
         }
         return (
           <List.Item

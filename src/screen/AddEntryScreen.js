@@ -178,7 +178,7 @@ class AddEntryScreen extends Component {
 
   /// Validation
 
-  validateEntry = () => {
+  validateEntry = async () => {
     const { day } = this.state
     if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || dataStore.bottle > 0) {
       /// Save data
@@ -186,10 +186,10 @@ class AddEntryScreen extends Component {
         date: day.unix(),
         day: day.startOf('day').unix(),
         timers: { ...dataStore.timers },
+        bottle: dataStore.bottle,
         vitaminD: dataStore.vitaminD
       }
-      if (dataStore.bottle > 0) data.bottle = dataStore.bottle
-      dataStore.addEntry(data)
+      await dataStore.addEntry(data)
       RNBreastFeeding.stopTimers()
       this.props.navigation.dispatch(resetAction)
     } else {

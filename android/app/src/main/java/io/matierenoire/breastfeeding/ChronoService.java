@@ -71,6 +71,9 @@ public class ChronoService extends Service {
                 t.cancel();
             }
             stopSelf();
+            if (RNBreastFeedingModule.INSTANCE != null) {
+                RNBreastFeedingModule.INSTANCE.clearNotification();
+            }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_ADD_TIME)) {
             Log.d(TAG, "request ACTION_ADD_TIME");
             if (timer != null) {
