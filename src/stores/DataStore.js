@@ -177,6 +177,8 @@ class DataStore {
 
   _fetchCloudData = () => {
     if (/*dataStore.migrated &&*/ auth().currentUser) {
+      console.warn('_fetchCloudData')
+      this.updating = true
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
       ref.once('value').then(snapshot => {
         const values = Object.values(snapshot)
@@ -185,15 +187,15 @@ class DataStore {
           r.push(entry)
         }
         this.records = r
-        console.warn('fetchCloudData')
       })
+      this.updating = false
     }
   }
 
   @action
   hydrateComplete = () => {
     this.hydrated = true
-    //this._fetchCloudData()
+    database().setPersistenceEnabled(true)
   }
 
   @action
@@ -202,7 +204,7 @@ class DataStore {
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
       await ref.set({ ...data })
       console.warn('inserted')
-      this._fetchCloudData()
+      await this._fetchCloudData()
     } else {
       this.updating = true
       let r = [...this.records]
@@ -220,11 +222,26 @@ class DataStore {
   }
 
   @action
-  updateGroup = newGroup => {
+  updateGroup = async newGroup => {
     let groups = this.groupedRecords
-    groups = groups.filter(g => g.day !== newGroup.day)
-    groups.push(newGroup)
-    this.records = _.flatten(groups.map(g => g.group))
+    if (auth().currentUser) {
+      let toDelete = groups.find(g => g.day === newGroup.day)
+      if (toDelete) {
+        const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+        for (const entry of toDelete.group) {
+          await ref.child(`${entry.date}`).remove()
+        }
+        for (const entry of newGroup.group) {
+          const ref2 = database().ref(`/users/${auth().currentUser.uid}/inputs/${entry.date}`)
+          await ref2.set({ ...entry })
+        }
+      }
+      this._fetchCloudData()
+    } else {
+      groups = groups.filter(g => g.day !== newGroup.day)
+      groups.push(newGroup)
+      this.records = _.flatten(groups.map(g => g.group))
+    }
   }
 }
 

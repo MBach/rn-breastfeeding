@@ -98,6 +98,7 @@ class AddEntryScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      bottle: 0,
       isDatePickerVisible: false,
       isTimePickerVisible: false,
       day: dataStore.day ? moment.unix(dataStore.day) : moment(),
@@ -180,13 +181,13 @@ class AddEntryScreen extends Component {
 
   validateEntry = async () => {
     const { day } = this.state
-    if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || dataStore.bottle > 0) {
+    if (dataStore.timers['left'] > 0 || dataStore.timers['right'] > 0 || this.state.bottle > 0) {
       /// Save data
       let data = {
         date: day.unix(),
         day: day.startOf('day').unix(),
         timers: { ...dataStore.timers },
-        bottle: dataStore.bottle,
+        bottle: this.state.bottle,
         vitaminD: dataStore.vitaminD
       }
       await dataStore.addEntry(data)
@@ -231,35 +232,41 @@ class AddEntryScreen extends Component {
     return (
       <View style={{ display: 'flex', flexDirection: 'row' }}>
         <Button
+          disabled={this.state.bottle === 0}
           color={palette.buttonColor}
           style={{ alignContent: 'center', justifyContent: 'center' }}
           mode="text"
           onPress={() => {
-            if (dataStore.bottle >= 10) {
-              dataStore.bottle -= 10
+            if (this.state.bottle >= 10) {
+              this.setState({ bottle: this.state.bottle - 10 }, () => (dataStore.bottle = this.state.bottle))
             }
           }}
         >
           -10mL
         </Button>
-        <Slider
-          value={dataStore.bottle}
-          style={{ flex: 1 }}
-          minimumValue={0}
-          maximumValue={240}
-          step={10}
-          minimumTrackTintColor={colors.primary}
-          thumbTintColor={colors.primary}
-          maximumTrackTintColor="#000000"
-          onValueChange={value => (dataStore.bottle = value)}
-        />
+        <View style={{ flex: 1 }}>
+          <Slider
+            value={dataStore.bottle}
+            minimumValue={0}
+            maximumValue={240}
+            step={10}
+            minimumTrackTintColor={colors.primary}
+            thumbTintColor={colors.primary}
+            maximumTrackTintColor="#000000"
+            onValueChange={bottle => this.setState({ bottle })}
+          />
+          <ThemedText palette={palette} style={styles.smallTimer}>
+            {`${this.state.bottle}mL`}
+          </ThemedText>
+        </View>
         <Button
+          disabled={this.state.bottle === 240}
           color={palette.buttonColor}
           style={{ alignContent: 'center', justifyContent: 'center' }}
           mode="text"
           onPress={() => {
-            if (dataStore.bottle < 240) {
-              dataStore.bottle += 10
+            if (this.state.bottle < 240) {
+              this.setState({ bottle: this.state.bottle + 10 }, () => (dataStore.bottle = this.state.bottle))
             }
           }}
         >
