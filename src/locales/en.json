@@ -50,6 +50,8 @@
     }
   },
   "feedback": {
+    "title": "Thank you for using BreastFeeding App",
+    "subtitle": "Please share your comments, suggestions or bug report below",
     "caption": "Select an option",
     "comment": "Comment",
     "suggestion": "Suggestion",

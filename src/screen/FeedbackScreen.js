@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { withTheme, ActivityIndicator, Appbar, Caption, RadioButton, Text, TextInput, Snackbar, Subheading } from 'react-native-paper'
 import { inject, observer } from 'mobx-react'
 import auth from '@react-native-firebase/auth'
@@ -72,16 +72,17 @@ class FeedbackScreen extends Component {
   render = () => (
     <View style={{ backgroundColor: this.props.theme.colors.background, flex: 1 }}>
       <Appbar.Header>
+        <Appbar.BackAction onPress={() => this.props.navigation.navigate('Home')} />
         <Appbar.Content title={i18n.t('navigation.feedback')} />
-        {this.state.sending ? <Appbar.Action
-          icon={() => (<ActivityIndicator size="small" color="white" />)} /> : <Appbar.Action
-            icon='send'
-            onPress={() => this.sendFeedback()}
-          />}
+        {this.state.sending ? (
+          <Appbar.Action icon={() => <ActivityIndicator size="small" color="white" />} />
+        ) : (
+          <Appbar.Action icon="send" onPress={() => this.sendFeedback()} />
+        )}
       </Appbar.Header>
-      <View style={{ padding: 8 }}>
-        <Subheading>Thank you for using BreastFeeding App</Subheading>
-        <Text>Please share your comments, suggestions or bug report below</Text>
+      <ScrollView keyboardShouldPersistTaps={'always'} style={{ margin: 8 }}>
+        <Subheading>{i18n.t('feedback.title')}</Subheading>
+        <Text>{i18n.t('feedback.subtitle')}</Text>
         <RadioButton.Group onValueChange={radio => this.setState({ radio })} value={this.state.radio}>
           <Caption style={styles.mt}>{`${i18n.t('feedback.caption')} *`}</Caption>
           {this.renderRadio('comment', 'feedback.comment')}
@@ -96,7 +97,7 @@ class FeedbackScreen extends Component {
           multiline
           onChangeText={description => this.setState({ description })}
         />
-      </View>
+      </ScrollView>
       {this.renderSnackBar()}
     </View>
   )

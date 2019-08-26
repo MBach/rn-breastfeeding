@@ -50,6 +50,8 @@
     }
   },
   "feedback": {
+    "title": "",
+    "subtitle": "",
     "caption": "",
     "comment": "",
     "suggestion": "",

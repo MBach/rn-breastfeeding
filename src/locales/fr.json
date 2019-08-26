@@ -4,7 +4,7 @@
     "home": "Accueil",
     "addEntry": "Ajouter une saisie",
     "contact": "Contact",
-    "feedback": ""
+    "feedback": "Commentaires"
   },
   "menu": {
     "share": "Partage",
@@ -12,7 +12,7 @@
     "title": "Préférences d'affichage",
     "day": "Mode jour",
     "night": "Mode nuit",
-    "feedback": ""
+    "feedback": "Commentaires"
   },
   "vitaminD": "Vitamine D",
   "cancel": "Annuler",
@@ -50,6 +50,8 @@
     }
   },
   "feedback": {
+    "title": "Merci d’utiliser cette App d’Allaitement",
+    "subtitle": "Vous pouvez partagez vos commantaires, suggestions ou remonter un bug ci-dessous",
     "caption": "Sélectionner une option",
     "comment": "Commentaire",
     "suggestion": "Suggestion",
