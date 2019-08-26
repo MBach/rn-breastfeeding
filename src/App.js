@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, StatusBar } from 'react-native'
+import { Dimensions, Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
@@ -16,6 +16,7 @@ import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
 
+const { width, height } = Dimensions.get('screen')
 const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
 
 const RootStack = createStackNavigator(
@@ -41,12 +42,9 @@ const DrawerNavigator = createDrawerNavigator(
     RootStack: RootStack
   },
   {
-    contentComponent: Menu,
-    contentOptions: {
-      style: {
-        backgroundColor: 'green'
-      }
-    }
+    drawerWidth: Math.min(width, height) * 0.85,
+    overlayColor: 'rgba(0, 0, 0, 0.6)',
+    contentComponent: Menu
   }
 )
 

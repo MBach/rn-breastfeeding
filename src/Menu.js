@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Linking, StyleSheet, View } from 'react-native'
+import { Linking, StyleSheet, ScrollView } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { withTheme, Drawer, Title } from 'react-native-paper'
@@ -53,7 +53,7 @@ class Menu extends Component {
     this.props.navigation.closeDrawer()
   }
 
-  navigate = route => () => {
+  navigate = route => {
     this.props.navigation.closeDrawer()
     this.props.navigation.navigate(route)
   }
@@ -77,7 +77,7 @@ class Menu extends Component {
     }
     const { colors } = this.props.theme
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background, color: colors.primaryTextColor }}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.background, color: colors.primaryTextColor }}>
         <Drawer.Section>
           <Title style={{ paddingLeft: 12, paddingVertical: 16, color: colors.primary }}>{i18n.t('navigation.title')}</Title>
         </Drawer.Section>
@@ -87,14 +87,14 @@ class Menu extends Component {
             label={i18n.t('navigation.home')}
             active={currentRoute === 'Home'}
             style={styles.drawerItems}
-            onPress={this.navigate('Home')}
+            onPress={() => this.navigate('Home')}
           />
           <Drawer.Item
             icon="add"
             label={i18n.t('navigation.addEntry')}
             active={currentRoute === 'AddEntry'}
             style={styles.drawerItems}
-            onPress={this.navigate('AddEntry')}
+            onPress={() => this.navigate('AddEntry')}
           />
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.share')}>
@@ -110,7 +110,7 @@ class Menu extends Component {
             label={i18n.t('menu.feedback')}
             style={styles.drawerItems}
             active={currentRoute === 'Feedback'}
-            onPress={this.navigate('Feedback')}
+            onPress={() => this.navigate('Feedback')}
           />
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.title')}>
@@ -129,7 +129,7 @@ class Menu extends Component {
             onPress={this.changeTheme('night')}
           />
         </Drawer.Section>
-      </View>
+      </ScrollView>
     )
   }
 }

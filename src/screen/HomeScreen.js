@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
   },
   absFab: {
     position: 'absolute',
+    left: 0,
+    right: 0,
     bottom: 20
   },
   list: {
@@ -85,8 +87,7 @@ class HomeScreen extends Component {
       editLastEntry: false,
       opacity: new Animated.Value(1),
       showSnackbar: false,
-      snackBarMessage: '',
-      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
+      snackBarMessage: ''
     }
     this.autoRefresh = null
   }
@@ -139,11 +140,6 @@ class HomeScreen extends Component {
       ])
     ).start()
 
-  onLayout = () =>
-    this.setState({
-      isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
-    })
-
   refreshLastEntry = nextAppState => {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       dataStore.groupedRecords
@@ -177,10 +173,7 @@ class HomeScreen extends Component {
       const lastEntry = lastGroup.group[0]
       const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
       return (
-        <Card
-          style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}
-          onPress={() => this.setState({ editLastEntry: true })}
-        >
+        <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(date)} />
           <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
@@ -201,7 +194,7 @@ class HomeScreen extends Component {
       )
     } else {
       return (
-        <Card style={[styles.cardLastEntry, this.state.isLandscape ? { flex: 1, minWidth: '50%', maxWidth: '50%' } : false]}>
+        <Card style={styles.cardLastEntry}>
           <Card.Title title={i18n.t('home.noEntry')} subtitle={i18n.t('home.add')} />
         </Card>
       )
@@ -301,9 +294,8 @@ class HomeScreen extends Component {
   renderFab = isStopped => {
     const { colors } = this.props.theme
     if (isStopped) {
-      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
       return (
-        <View style={[styles.absFab, extraFab]}>
+        <View style={styles.absFab}>
           <FAB
             style={[styles.fab, { backgroundColor: colors.primary }]}
             icon={'add'}
@@ -319,9 +311,8 @@ class HomeScreen extends Component {
         </View>
       )
     } else {
-      const extraFab = this.state.isLandscape ? { left: '20%' } : { left: 0, right: 0 }
       return (
-        <Animated.View style={[styles.absFab, extraFab]}>
+        <Animated.View style={styles.absFab}>
           <FAB
             style={[styles.fab, { opacity: this.state.opacity, backgroundColor: colors.primary }]}
             icon={'timer'}
@@ -365,13 +356,7 @@ class HomeScreen extends Component {
     const { colors } = this.props.theme
     const groups = dataStore.groupedRecords
     return (
-      <View
-        onLayout={this.onLayout}
-        style={[
-          { backgroundColor: colors.background, flex: 1, justifyContent: 'center' },
-          this.state.isLandscape ? { flexDirection: 'row' } : false
-        ]}
-      >
+      <View style={{ backgroundColor: colors.background, flex: 1, justifyContent: 'center' }}>
         <Appbar.Header>
           <Appbar.Action icon="menu" onPress={() => this.props.navigation.toggleDrawer()} />
           <Appbar.Content title={i18n.t('navigation.home')} />

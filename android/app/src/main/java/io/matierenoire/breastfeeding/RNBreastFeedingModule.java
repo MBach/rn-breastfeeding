@@ -140,7 +140,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         Intent intent = new Intent(Intent.ACTION_VIEW, IntentUri);
         intent.setPackage("io.matierenoire.breastfeeding");
 
-        PendingIntent pending = PendingIntent.getActivity(reactContext, 666, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pending = PendingIntent.getActivity(reactContext, 42, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pending);
         if (isRunning) {
             builder = builder.addAction(0, reactContext.getString(R.string.pause), pendingIntent);

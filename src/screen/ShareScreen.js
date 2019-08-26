@@ -155,6 +155,7 @@ class ShareScreen extends Component {
       <View style={{ display: 'flex', flexDirection: 'row', margin: 12 }}>
         <Avatar.Icon style={{ marginRight: 12 }} size={48} icon="person-add" />
         <TextInput
+          autoCapitalize="none"
           keyboardType="email-address"
           style={{ flexGrow: 1, backgroundColor: colors.background }}
           value={this.state.email}
