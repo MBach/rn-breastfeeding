@@ -9,17 +9,16 @@
     "android": "react-native run-android",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:shake": "adb shell input keyevent 82",
-    "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android",
-    "postinstall": "jetify"
+    "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/slider": "^2.0.0",
-    "@react-native-firebase/app": "0.2.3",
-    "@react-native-firebase/auth": "0.2.3",
-    "@react-native-firebase/crashlytics": "0.2.3",
-    "@react-native-firebase/database": "0.2.3",
-    "@react-native-firebase/dynamic-links": "0.2.3",
+    "@react-native-firebase/app": "0.3.0",
+    "@react-native-firebase/auth": "0.3.0",
+    "@react-native-firebase/crashlytics": "0.3.0",
+    "@react-native-firebase/database": "0.3.0",
+    "@react-native-firebase/dynamic-links": "0.3.0",
     "humanize-duration": "^3.20.1",
     "i18n-js": "^3.3.0",
     "jsc-android": "^241213.1.0",
@@ -28,6 +27,7 @@
     "mobx-persist": "^0.4.1",
     "mobx-react": "5.4.4",
     "moment": "^2.24.0",
+    "query-string": "^6.8.2",
     "react": "^16.9.0",
     "react-native": "^0.60.5",
     "react-native-contacts": "^5.0.2",
@@ -39,14 +39,13 @@
     "react-native-paper": "^2.16.0",
     "react-native-quick-actions": "^0.3.12",
     "react-native-vector-icons": "^6.6.0",
-    "react-navigation": "^3.12.0"
+    "react-navigation": "^3.12.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/runtime": "^7.5.5",
-    "jetifier": "^1.6.3",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "1.18.2"
   },

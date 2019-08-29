@@ -108,7 +108,6 @@ class AddEntryScreen extends Component {
       isLandscape: Dimensions.get('window').width > Dimensions.get('window').height
     }
     this.timerUpdated = null
-    this.inBackground = null
   }
 
   componentDidMount() {
@@ -125,6 +124,15 @@ class AddEntryScreen extends Component {
     this.props.navigation.setParams({ handleSave: () => this.validateEntry() })
     if (!isNotRunning(dataStore.timers)) {
       dataStore.day = this.state.day.unix()
+    }
+    const { params } = this.props.navigation.state
+    if (params) {
+      const { timerId, timer } = params
+      console.warn('timerId', timerId)
+      console.warn('timer', timer)
+      let timers = { ...dataStore.timers }
+      timers[timerId] = timer
+      dataStore.timers = timers
     }
   }
 

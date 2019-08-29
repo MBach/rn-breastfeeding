@@ -59,7 +59,7 @@ public class ChronoService extends Service {
                 }
             }
             if (RNBreastFeedingModule.INSTANCE != null) {
-                RNBreastFeedingModule.INSTANCE.updateNotificationButton(timerId, timer.isRunning());
+                RNBreastFeedingModule.INSTANCE.updateNotificationButton(timerId, timer.duration(), timer.isRunning());
             }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_STOP)) {
             Log.d(TAG, "request ACTION_STOP");

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, AppState, Dimensions, Easing, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Animated, AppState, Easing, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
   withTheme,
   ActivityIndicator,

@@ -107,9 +107,9 @@ class ShareScreen extends Component {
       }
     })
 
-    const shareLink = await dynamicLinks().buildShortLink({
-      link: 'https://invertase.io',
-      domainUriPrefix: 'https://xyz.page.link',
+    const shareLink = await dynamicLinks().buildLink({
+      link: 'https://breastfeeding.page.link/invites',
+      domainUriPrefix: 'https://breastfeeding.page.link',
       navigation: {
         forcedRedirectEnabled: true
       },

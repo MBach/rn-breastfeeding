@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Linking, StyleSheet, ScrollView } from 'react-native'
-import { NavigationActions, StackActions } from 'react-navigation'
-import QuickActions from 'react-native-quick-actions'
+import { StyleSheet, ScrollView } from 'react-native'
 import { withTheme, Drawer, Title } from 'react-native-paper'
 import auth from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
@@ -26,27 +24,6 @@ const styles = StyleSheet.create({
 @inject('dataStore')
 @observer
 class Menu extends Component {
-  async componentDidMount() {
-    const url = await Linking.getInitialURL()
-    // Open the App from the notification area
-    if (url === 'rnbreastfeeding://rnbreastfeeding/chrono') {
-      this.goTo('AddEntry')
-    } else {
-      // Open the App from the QuickAction
-      const data = await QuickActions.popInitialAction()
-      data && data.userInfo.url === 'AddEntry' ? this.goTo('AddEntry') : this.goTo('Home')
-    }
-  }
-
-  goTo = routeName => {
-    this.props.navigation.dispatch(
-      StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName })]
-      })
-    )
-  }
-
   changeTheme = theme => () => {
     dataStore.theme = theme
     this.props.screenProps.updateTheme(theme)

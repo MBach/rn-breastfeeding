@@ -87,12 +87,16 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Update the right timer in the JavaScript Screen by emitting an event.
+     *
+     * @param timerId timer to update
      * @param millis time to display
+     * @param isRunning indicates if current timerId is running
      */
     void updateTimer(final String timerId, final Long millis, boolean isRunning) {
         if (isRunning) {
             this.millis = millis;
-            updateNotificationButton(timerId,true);
+            updateNotificationButton(timerId, millis, true);
         }
         WritableMap payload = Arguments.createMap();
         payload.putString("timerId", timerId);
@@ -116,7 +120,7 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
     /**
      * @param isRunning check if running
      */
-    void updateNotificationButton(final String timerId, boolean isRunning) {
+    void updateNotificationButton(final String timerId, final Long millis, boolean isRunning) {
         Intent resultIntent = new Intent(reactContext, ChronoService.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -136,8 +140,8 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
                 .setColorized(true)
                 .setColor(statusBarColor);
 
-        Uri IntentUri = Uri.parse("rnbreastfeeding://rnbreastfeeding/chrono");
-        Intent intent = new Intent(Intent.ACTION_VIEW, IntentUri);
+        Uri intentUri = Uri.parse("rnbreastfeeding://rnbreastfeeding/chrono?timerId=" + timerId + "&timer=" + millis);
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         intent.setPackage("io.matierenoire.breastfeeding");
 
         PendingIntent pending = PendingIntent.getActivity(reactContext, 42, intent, PendingIntent.FLAG_UPDATE_CURRENT);

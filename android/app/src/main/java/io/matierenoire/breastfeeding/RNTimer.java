@@ -115,4 +115,8 @@ public class RNTimer extends Timer {
     boolean isRunning() {
         return !chrono.isPaused();
     }
+
+    long duration() {
+        return chrono._duration;
+    }
 }

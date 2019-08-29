@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
-import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
+import { createAppContainer, createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import auth, { firebase } from '@react-native-firebase/auth'
@@ -11,7 +11,7 @@ import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
 import i18n, { loadLocale } from './locales/i18n'
 
-import { AddEntryScreen, FeedbackScreen, HomeScreen, ShareScreen } from './screen'
+import { AddEntryScreen, FeedbackScreen, HomeScreen, LoadingScreen, ShareScreen } from './screen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
@@ -27,7 +27,6 @@ const RootStack = createStackNavigator(
     Feedback: { screen: FeedbackScreen, path: '/feedback' }
   },
   {
-    initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerTintColor: '#ffffff',
       headerTitleStyle: {
@@ -48,7 +47,17 @@ const DrawerNavigator = createDrawerNavigator(
   }
 )
 
-const AppContainer = createAppContainer(DrawerNavigator)
+const SwitchNavigator = createSwitchNavigator(
+  {
+    Loading: LoadingScreen,
+    Drawer: DrawerNavigator
+  },
+  {
+    initialRouteName: 'Loading'
+  }
+)
+
+const AppContainer = createAppContainer(SwitchNavigator)
 
 /**
  * @author Matthieu BACHELIER
@@ -97,7 +106,7 @@ export default function App() {
   }, [])
 
   const onAuthStateChanged = user => {
-    console.warn('user', user)
+    //console.warn('user', user)
     if (initilizing) setInitilizing(false)
   }
 
