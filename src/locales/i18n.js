@@ -27,7 +27,6 @@ export const loadLocale = async () => {
             i18n.translations = { de }
             i18n.leftButton = require('../assets/de/left.png')
             i18n.rightButton = require('../assets/de/right.png')
-            i18n.bottleButton = require('../assets/de/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -41,7 +40,6 @@ export const loadLocale = async () => {
             i18n.translations = { en }
             i18n.leftButton = require('../assets/en/left.png')
             i18n.rightButton = require('../assets/en/right.png')
-            i18n.bottleButton = require('../assets/en/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -53,7 +51,6 @@ export const loadLocale = async () => {
             i18n.translations = { es }
             i18n.leftButton = require('../assets/es/left.png')
             i18n.rightButton = require('../assets/es/right.png')
-            i18n.bottleButton = require('../assets/es/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -66,7 +63,6 @@ export const loadLocale = async () => {
             i18n.translations = { fr }
             i18n.leftButton = require('../assets/fr/left.png')
             i18n.rightButton = require('../assets/fr/right.png')
-            i18n.bottleButton = require('../assets/fr/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -79,7 +75,6 @@ export const loadLocale = async () => {
             i18n.translations = { it }
             i18n.leftButton = require('../assets/it/left.png')
             i18n.rightButton = require('../assets/it/right.png')
-            i18n.bottleButton = require('../assets/it/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -92,7 +87,6 @@ export const loadLocale = async () => {
             i18n.translations = { ja }
             i18n.leftButton = require('../assets/ja/left.png')
             i18n.rightButton = require('../assets/ja/right.png')
-            i18n.bottleButton = require('../assets/ja/bottle.png')
             shortHumanizer.languages.short = {
               m: () => '分',
               s: () => '秒'
@@ -105,7 +99,6 @@ export const loadLocale = async () => {
             i18n.translations = { pt }
             i18n.leftButton = require('../assets/pt/left.png')
             i18n.rightButton = require('../assets/pt/right.png')
-            i18n.bottleButton = require('../assets/pt/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'min',
               s: () => 's'
@@ -118,7 +111,6 @@ export const loadLocale = async () => {
             i18n.translations = { ru }
             i18n.leftButton = require('../assets/ru/left.png')
             i18n.rightButton = require('../assets/ru/right.png')
-            i18n.bottleButton = require('../assets/ru/bottle.png')
             shortHumanizer.languages.short = {
               m: () => 'мин',
               s: () => 's'
@@ -294,8 +286,6 @@ i18n.getLocalizedButton = timerId => {
       return i18n.leftButton
     case 'right':
       return i18n.rightButton
-    case 'bottle':
-      return i18n.bottleButton
   }
 }
 
