@@ -9,19 +9,6 @@ const getMin = time => {
   }
 }
 
-const getMinAndSeconds = time => {
-  const d = moment.duration(time)
-  if (d.minutes() < 1) {
-    return d.seconds() + 's'
-  } else {
-    if (d.seconds() < 10) {
-      return d.minutes() + 'min 0' + d.seconds() + 's'
-    } else {
-      return d.minutes() + 'min ' + d.seconds() + 's'
-    }
-  }
-}
-
 const isNotRunning = timers => timers['left'] === 0 && timers['right'] === 0
 
-export { getMin, getMinAndSeconds, isNotRunning }
+export { getMin, isNotRunning }

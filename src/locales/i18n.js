@@ -7,6 +7,15 @@ i18n.defaultLocale = 'en'
 i18n.locale = 'en'
 i18n.fallbacks = true
 
+const shortHumanizer = humanizeDuration.humanizer({
+  language: 'short',
+  units: ['m', 's'],
+  round: true,
+  spacer: '',
+  conjunction: ' ',
+  serialComma: false
+})
+
 export const loadLocale = async () => {
   for (const locale of RNLocalize.getLocales()) {
     if (i18n.translations[locale.languageCode] !== null) {
@@ -19,6 +28,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/de/left.png')
             i18n.rightButton = require('../assets/de/right.png')
             i18n.bottleButton = require('../assets/de/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
             import('moment/locale/de').then(() => moment.locale('de'))
           })
           break
@@ -29,6 +42,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/en/left.png')
             i18n.rightButton = require('../assets/en/right.png')
             i18n.bottleButton = require('../assets/en/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
           })
           break
         case 'es':
@@ -37,6 +54,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/es/left.png')
             i18n.rightButton = require('../assets/es/right.png')
             i18n.bottleButton = require('../assets/es/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
             import('moment/locale/es').then(() => moment.locale('es'))
           })
           break
@@ -46,6 +67,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/fr/left.png')
             i18n.rightButton = require('../assets/fr/right.png')
             i18n.bottleButton = require('../assets/fr/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
             import('moment/locale/fr').then(() => moment.locale('fr'))
           })
           break
@@ -55,6 +80,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/it/left.png')
             i18n.rightButton = require('../assets/it/right.png')
             i18n.bottleButton = require('../assets/it/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
             import('moment/locale/it').then(() => moment.locale('it'))
           })
           break
@@ -64,6 +93,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/ja/left.png')
             i18n.rightButton = require('../assets/ja/right.png')
             i18n.bottleButton = require('../assets/ja/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => '分',
+              s: () => '秒'
+            }
             import('moment/locale/ja').then(() => moment.locale('ja'))
           })
           break
@@ -73,6 +106,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/pt/left.png')
             i18n.rightButton = require('../assets/pt/right.png')
             i18n.bottleButton = require('../assets/pt/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
             import('moment/locale/pt').then(() => moment.locale('pt'))
           })
           break
@@ -82,6 +119,10 @@ export const loadLocale = async () => {
             i18n.leftButton = require('../assets/ru/left.png')
             i18n.rightButton = require('../assets/ru/right.png')
             i18n.bottleButton = require('../assets/ru/bottle.png')
+            shortHumanizer.languages.short = {
+              m: () => 'мин',
+              s: () => 's'
+            }
             import('moment/locale/ru').then(() => moment.locale('ru'))
           })
           break
@@ -234,7 +275,7 @@ i18n.formatDay = date => {
     case 'ru':
       return date.format('DD/MM/YY')
     case 'ja':
-      return date.format('YY/MM/DD')
+      return date.format('YYYY年MM月DD日')
   }
 }
 
@@ -256,6 +297,11 @@ i18n.getLocalizedButton = timerId => {
     case 'bottle':
       return i18n.bottleButton
   }
+}
+
+i18n.getMinAndSeconds = time => {
+  const d = moment.duration(time)
+  return shortHumanizer(d)
 }
 
 export default i18n

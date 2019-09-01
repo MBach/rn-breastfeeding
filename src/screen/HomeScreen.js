@@ -20,7 +20,7 @@ import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
 import i18n from '../locales/i18n'
-import { getMin, getMinAndSeconds, isNotRunning } from '../config'
+import { getMin, isNotRunning } from '../config'
 import { signIn } from '../hooks/SignIn'
 
 const styles = StyleSheet.create({
@@ -163,7 +163,7 @@ class HomeScreen extends Component {
   renderChip = (timerId, time) =>
     time > 0 && (
       <Chip style={styles.chipMargins}>
-        <Text style={styles.chipText}>{i18n.t(timerId) + ' ' + getMinAndSeconds(time)}</Text>
+        <Text style={styles.chipText}>{i18n.t(timerId) + ' ' + i18n.getMinAndSeconds(time)}</Text>
       </Chip>
     )
 
@@ -171,10 +171,12 @@ class HomeScreen extends Component {
     if (groups.length > 0) {
       const lastGroup = groups[0]
       const lastEntry = lastGroup.group[0]
+      console.warn('lastEntry', lastEntry)
       const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
+      console.warn('date', date)
       return (
         <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
-          <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(date)} />
+          <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(lastEntry.date)} />
           <Card.Content style={styles.rowWrap}>
             {this.renderChip('left', lastEntry.timers['left'])}
             {this.renderChip('right', lastEntry.timers['right'])}

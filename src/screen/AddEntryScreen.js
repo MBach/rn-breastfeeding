@@ -9,7 +9,7 @@ import moment from 'moment'
 import RNBreastFeeding from '../RNBreastFeeding'
 import i18n from '../locales/i18n'
 
-import { getMinAndSeconds, isNotRunning } from '../config'
+import { isNotRunning } from '../config'
 
 const styles = StyleSheet.create({
   fab: {
@@ -125,15 +125,6 @@ class AddEntryScreen extends Component {
     if (!isNotRunning(dataStore.timers)) {
       dataStore.day = this.state.day.unix()
     }
-    const { params } = this.props.navigation.state
-    if (params) {
-      const { timerId, timer } = params
-      console.warn('timerId', timerId)
-      console.warn('timer', timer)
-      let timers = { ...dataStore.timers }
-      timers[timerId] = timer
-      dataStore.timers = timers
-    }
   }
 
   componentWillUnmount() {
@@ -206,7 +197,7 @@ class AddEntryScreen extends Component {
     }
   }
 
-  formatTime = timerId => getMinAndSeconds(dataStore.timers[timerId])
+  formatTime = timerId => i18n.getMinAndSeconds(dataStore.timers[timerId])
 
   forceTimer = () => {
     RNBreastFeeding.changeTo(dataStore.currentTimerId, this.state.manualTimer * 60 * 1000)

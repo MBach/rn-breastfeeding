@@ -27,7 +27,7 @@
     "mobx-persist": "^0.4.1",
     "mobx-react": "5.4.4",
     "moment": "^2.24.0",
-    "query-string": "^6.8.2",
+    "query-string": "^6.8.3",
     "react": "^16.9.0",
     "react-native": "^0.60.5",
     "react-native-contacts": "^5.0.2",
