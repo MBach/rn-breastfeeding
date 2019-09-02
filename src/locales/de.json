@@ -20,6 +20,7 @@
   "left": "Links",
   "right": "Recht",
   "bottle": "Flasche",
+  "minutes": "min",
   "home": {
     "noEntry": "Es wurde noch nicht gestillt",
     "lastEntry": "Letzte Fütterung vor %{date}",

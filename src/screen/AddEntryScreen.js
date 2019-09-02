@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
-import { withTheme, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import { withTheme, Appbar, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import Slider from '@react-native-community/slider'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react'
@@ -85,19 +85,14 @@ function ThemedText({ style, palette, children }) {
 @inject('dataStore')
 @observer
 class AddEntryScreen extends Component {
-  /// Add action in header
-  static navigationOptions = ({ navigation, screenProps }) => {
-    const { params } = navigation.state
-    return {
-      title: i18n.t('navigation.addEntry'),
-      headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <IconButton icon="check" color="white" onPress={() => params.handleSave && params.handleSave()} />
-    }
+  static navigationOptions = {
+    header: null
   }
 
   constructor(props) {
     super(props)
     this.state = {
+      sending: false,
       bottle: 0,
       isDatePickerVisible: false,
       isTimePickerVisible: false,
@@ -121,7 +116,6 @@ class AddEntryScreen extends Component {
       dataStore.isRunning[timerId] = isRunning
     })
 
-    this.props.navigation.setParams({ handleSave: () => this.validateEntry() })
     if (!isNotRunning(dataStore.timers)) {
       dataStore.day = this.state.day.unix()
     }
@@ -333,78 +327,89 @@ class AddEntryScreen extends Component {
     const { colors, palette } = this.props.theme
     const { day, isDatePickerVisible, isTimePickerVisible } = this.state
     return (
-      <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
-        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
-          <View>
-            <ThemedText palette={palette}>{i18n.t('add.date')}</ThemedText>
-            <View style={styles.dateContainer}>
-              <TouchableOpacity onPress={this.showDatePicker}>
-                <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-                  {i18n.formatDay(day)}
+      <View style={{ backgroundColor: colors.background, flex: 1 }}>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => this.props.navigation.navigate('Home')} />
+          <Appbar.Content title={i18n.t('navigation.addEntry')} />
+          {this.state.sending ? (
+            <Appbar.Action icon={() => <ActivityIndicator size="small" color="white" />} />
+          ) : (
+            <Appbar.Action icon="check" onPress={() => this.validateEntry()} />
+          )}
+        </Appbar.Header>
+        <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
+          <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
+            <View>
+              <ThemedText palette={palette}>{i18n.t('add.date')}</ThemedText>
+              <View style={styles.dateContainer}>
+                <TouchableOpacity onPress={this.showDatePicker}>
+                  <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+                    {i18n.formatDay(day)}
+                  </ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.showTimePicker}>
+                  <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
+                    {i18n.formatTime(day)}
+                  </ThemedText>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ marginBottom: 16 }}>
+              <ThemedText palette={palette}>{i18n.t('vitaminD')}</ThemedText>
+              <Switch
+                value={dataStore.vitaminD}
+                onValueChange={() => {
+                  dataStore.vitaminD = !dataStore.vitaminD
+                }}
+              />
+            </View>
+            <ThemedText palette={palette}>{i18n.t('add.timeSpent')}</ThemedText>
+            <View style={styles.timerContainer}>
+              <Button
+                disabled={isNotRunning(dataStore.timers)}
+                color={palette.buttonColor}
+                style={{ alignContent: 'center', justifyContent: 'center' }}
+                mode="text"
+                onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, -60000)}
+              >
+                {i18n.t('add.remove1min')}
+              </Button>
+              <TouchableOpacity onPress={() => dataStore.currentTimerId && this.setState({ showEditDurationDialog: true })}>
+                <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: palette.separator }}>
+                  {this.formatTime(dataStore.currentTimerId)}
                 </ThemedText>
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.showTimePicker}>
-                <ThemedText palette={palette} style={{ ...styles.date, borderBottomColor: this.props.theme.palette.separator }}>
-                  {i18n.formatTime(day)}
-                </ThemedText>
-              </TouchableOpacity>
+              <Button
+                disabled={isNotRunning(dataStore.timers)}
+                color={palette.buttonColor}
+                style={{ alignContent: 'center', justifyContent: 'center' }}
+                mode="text"
+                onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, 60000)}
+              >
+                {i18n.t('add.add1min')}
+              </Button>
             </View>
           </View>
-          <View style={{ marginBottom: 16 }}>
-            <ThemedText palette={palette}>{i18n.t('vitaminD')}</ThemedText>
-            <Switch
-              value={dataStore.vitaminD}
-              onValueChange={() => {
-                dataStore.vitaminD = !dataStore.vitaminD
-              }}
-            />
+          <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
+            <ThemedText palette={palette}>{i18n.t('add.breast')}</ThemedText>
+            <View style={styles.fabContainer}>
+              {this.renderButton('left')}
+              {this.renderButton('right')}
+            </View>
+            <ThemedText palette={palette}>{i18n.t('bottle')}</ThemedText>
+            {this.renderBottle()}
           </View>
-          <ThemedText palette={palette}>{i18n.t('add.timeSpent')}</ThemedText>
-          <View style={styles.timerContainer}>
-            <Button
-              disabled={isNotRunning(dataStore.timers)}
-              color={palette.buttonColor}
-              style={{ alignContent: 'center', justifyContent: 'center' }}
-              mode="text"
-              onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, -60000)}
-            >
-              {i18n.t('add.remove1min')}
-            </Button>
-            <TouchableOpacity onPress={() => dataStore.currentTimerId && this.setState({ showEditDurationDialog: true })}>
-              <ThemedText palette={palette} style={{ ...styles.timer, borderBottomColor: palette.separator }}>
-                {this.formatTime(dataStore.currentTimerId)}
-              </ThemedText>
-            </TouchableOpacity>
-            <Button
-              disabled={isNotRunning(dataStore.timers)}
-              color={palette.buttonColor}
-              style={{ alignContent: 'center', justifyContent: 'center' }}
-              mode="text"
-              onPress={() => RNBreastFeeding.addTime(dataStore.currentTimerId, 60000)}
-            >
-              {i18n.t('add.add1min')}
-            </Button>
-          </View>
+          <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
+          <DateTimePicker
+            isVisible={isTimePickerVisible}
+            onConfirm={this.handleTimePicked}
+            onCancel={this.hideTimePicker}
+            mode="time"
+            is24Hour={i18n.uses24HourClock}
+          />
+          {this.renderEditDurationDialog()}
+          {this.renderErrorDialog()}
         </View>
-        <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%', height: '50%' }}>
-          <ThemedText palette={palette}>{i18n.t('add.breast')}</ThemedText>
-          <View style={styles.fabContainer}>
-            {this.renderButton('left')}
-            {this.renderButton('right')}
-          </View>
-          <ThemedText palette={palette}>{i18n.t('bottle')}</ThemedText>
-          {this.renderBottle()}
-        </View>
-        <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
-        <DateTimePicker
-          isVisible={isTimePickerVisible}
-          onConfirm={this.handleTimePicked}
-          onCancel={this.hideTimePicker}
-          mode="time"
-          is24Hour={i18n.uses24HourClock}
-        />
-        {this.renderEditDurationDialog()}
-        {this.renderErrorDialog()}
       </View>
     )
   }

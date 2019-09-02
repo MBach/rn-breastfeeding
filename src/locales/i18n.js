@@ -294,4 +294,13 @@ i18n.getMinAndSeconds = time => {
   return shortHumanizer(d)
 }
 
+i18n.getMin = time => {
+  const d = moment.duration(time)
+  if (d.minutes() < 1) {
+    return '< 1' + i18n.t('minutes')
+  } else {
+    return d.minutes() + i18n.t('minutes')
+  }
+}
+
 export default i18n

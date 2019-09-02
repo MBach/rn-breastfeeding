@@ -20,6 +20,7 @@
   "left": "Sinistra",
   "right": "Giusto",
   "bottle": "Bottiglia",
+  "minutes": "min",
   "home": {
     "noEntry": "Non ancora un ultimo feed",
     "lastEntry": "Ultima poppata alle %{date}",

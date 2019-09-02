@@ -20,6 +20,7 @@
   "left": "Gauche",
   "right": "Droit",
   "bottle": "Biberon",
+  "minutes": "min",
   "home": {
     "noEntry": "Pas encore de dernière tétée",
     "lastEntry": "Dernière tétée à %{date}",

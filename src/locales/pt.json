@@ -20,6 +20,7 @@
   "left": "",
   "right": "",
   "bottle": "",
+  "minutes": "min",
   "home": {
     "noEntry": "",
     "lastEntry": "%{date}",

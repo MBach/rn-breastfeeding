@@ -20,6 +20,7 @@
   "left": "Izquierda",
   "right": "Derecha",
   "bottle": "Biberón",
+  "minutes": "min",
   "home": {
     "noEntry": "No hay última alimentación",
     "lastEntry": "Última amamantamiento a las %{date}",

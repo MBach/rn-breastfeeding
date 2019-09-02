@@ -20,7 +20,7 @@ import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
 import i18n from '../locales/i18n'
-import { getMin, isNotRunning } from '../config'
+import { isNotRunning } from '../config'
 import { signIn } from '../hooks/SignIn'
 
 const styles = StyleSheet.create({
@@ -171,9 +171,7 @@ class HomeScreen extends Component {
     if (groups.length > 0) {
       const lastGroup = groups[0]
       const lastEntry = lastGroup.group[0]
-      console.warn('lastEntry', lastEntry)
       const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
-      console.warn('date', date)
       return (
         <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
           <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(lastEntry.date)} />
@@ -237,13 +235,13 @@ class HomeScreen extends Component {
       data = currentGroup.group.map((entry, index) => {
         let description = []
         if (entry.timers['left'] > 0) {
-          description.push(i18n.t('left') + `:  ${getMin(entry.timers['left'])}`)
+          description.push(i18n.t('left') + `:  ${i18n.getMin(entry.timers['left'])}`)
         }
         if (entry.timers['right'] > 0) {
-          description.push(i18n.t('right') + `: ${getMin(entry.timers['right'])}`)
+          description.push(i18n.t('right') + `: ${i18n.getMin(entry.timers['right'])}`)
         }
         if (entry.timers['bottle'] > 0) {
-          description.push(i18n.t('bottle') + `: ${getMin(entry.timers['bottle'])}`)
+          description.push(i18n.t('bottle') + `: ${i18n.getMin(entry.timers['bottle'])}`)
         }
         if (entry.bottle > 0) {
           description.push(i18n.t('bottle') + `: ${entry.bottle}mL`)

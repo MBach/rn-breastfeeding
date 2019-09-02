@@ -20,6 +20,7 @@
   "left": "Left",
   "right": "Right",
   "bottle": "Bottle",
+  "minutes": "min",
   "home": {
     "noEntry": "No breastfeeds has been done yet",
     "lastEntry": "Last breastfeed at %{date}",

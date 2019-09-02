@@ -20,6 +20,7 @@
   "left": "左",
   "right": "右",
   "bottle": "哺乳瓶",
+  "minutes": "分",
   "home": {
     "noEntry": "母乳育児はまだ行われていません",
     "lastEntry": "%{date}の最後の母乳",
