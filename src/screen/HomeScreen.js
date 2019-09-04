@@ -81,6 +81,7 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      groupedRecords: [],
       appState: AppState.currentState,
       currentGroup: null,
       editGroupDialog: false,
@@ -92,7 +93,7 @@ class HomeScreen extends Component {
     this.autoRefresh = null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     AppState.addEventListener('change', this.refreshLastEntry)
     if (!isNotRunning(dataStore.timers)) {
       this.createAnimation()
@@ -105,6 +106,10 @@ class HomeScreen extends Component {
     if (auth().currentUser && auth().currentUser.photoURL) {
       this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
+    if (this.props.navigation.state.params && this.props.navigation.state.params.refresh) {
+      await dataStore.fetchCloudData()
+    }
+    this.setState({ groupedRecords: dataStore.groupedRecords })
   }
 
   componentWillUnmount() {
@@ -151,11 +156,6 @@ class HomeScreen extends Component {
 
   editGroup = item => {
     this.setState({ currentGroup: { ...item }, editGroupDialog: true })
-  }
-
-  update = data => {
-    dataStore.updateGroup(data)
-    this.setState({ editGroupDialog: false })
   }
 
   ///
@@ -276,7 +276,14 @@ class HomeScreen extends Component {
             <Button color={palette.buttonColor} onPress={this.hideDialog('editGroupDialog')}>
               {i18n.t('cancel')}
             </Button>
-            <Button color={palette.buttonColor} onPress={() => this.update(currentGroup)}>
+            <Button
+              mode="contained"
+              style={{ paddingHorizontal: 8 }}
+              onPress={async () => {
+                await dataStore.updateGroup(currentGroup)
+                this.setState({ editGroupDialog: false, groupedRecords: dataStore.groupedRecords })
+              }}
+            >
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
@@ -354,23 +361,31 @@ class HomeScreen extends Component {
 
   render = () => {
     const { colors } = this.props.theme
-    const groups = dataStore.groupedRecords
+    const { groupedRecords } = this.state
     return (
-      <View style={{ backgroundColor: colors.background, flex: 1, justifyContent: 'center' }}>
+      <View style={{ backgroundColor: colors.background, flex: 1 }}>
         <Appbar.Header>
           <Appbar.Action icon="menu" onPress={() => this.props.navigation.toggleDrawer()} />
           <Appbar.Content title={i18n.t('navigation.home')} />
           {this.renderProfileIcon()}
         </Appbar.Header>
-        {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groups)}
-        {dataStore.hydrated && !dataStore.updating ? (
-          <FlatList data={groups} extractData={groups.length} keyExtractor={item => `${item.key}`} renderItem={this.renderItem} />
-        ) : (
-          <ActivityIndicator size="large" color={colors.primary} />
-        )}
-        {this.renderFab(isNotRunning(dataStore.timers))}
-        {this.editGroupDialog()}
-        {this.renderSnackBar()}
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
+          {dataStore.hydrated && !dataStore.updating ? (
+            <FlatList
+              data={groupedRecords}
+              extraData={groupedRecords}
+              extractData={groupedRecords.length}
+              keyExtractor={item => `${item.key}`}
+              renderItem={this.renderItem}
+            />
+          ) : (
+            <ActivityIndicator color={colors.primary} />
+          )}
+          {this.renderFab(isNotRunning(dataStore.timers))}
+          {this.editGroupDialog()}
+          {this.renderSnackBar()}
+        </View>
       </View>
     )
   }

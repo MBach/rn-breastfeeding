@@ -175,19 +175,21 @@ class DataStore {
 
   ///
 
-  _fetchCloudData = () => {
+  fetchCloudData = async () => {
     if (/*dataStore.migrated &&*/ auth().currentUser) {
-      console.warn('_fetchCloudData')
       this.updating = true
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
-      ref.once('value').then(snapshot => {
+      const snapshot = await ref.once('value')
+      if (snapshot.val()) {
         const values = Object.values(snapshot)
         let r = []
         for (const entry of Object.values(values[0].value)) {
           r.push(entry)
         }
-        this.records = r
-      })
+        this._records = r
+      } else {
+        this._records = []
+      }
       this.updating = false
     }
   }
@@ -203,8 +205,7 @@ class DataStore {
     if (auth().currentUser) {
       const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
       await ref.set({ ...data })
-      console.warn('inserted')
-      await this._fetchCloudData()
+      // console.log('new data inserted')
     } else {
       this.updating = true
       let r = [...this.records]
@@ -219,13 +220,16 @@ class DataStore {
     this.vitaminD = false
     this.day = null
     this.currentTimerId = null
+    return true
   }
 
   @action
   updateGroup = async newGroup => {
     let groups = this.groupedRecords
     if (auth().currentUser) {
+      //console.warn('newGroup', newGroup)
       let toDelete = groups.find(g => g.day === newGroup.day)
+      //console.warn('toDelete', toDelete)
       if (toDelete) {
         const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
         for (const entry of toDelete.group) {
@@ -236,7 +240,7 @@ class DataStore {
           await ref2.set({ ...entry })
         }
       }
-      this._fetchCloudData()
+      await this.fetchCloudData()
     } else {
       groups = groups.filter(g => g.day !== newGroup.day)
       groups.push(newGroup)

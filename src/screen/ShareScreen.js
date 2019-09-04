@@ -1,6 +1,19 @@
 import React, { Component } from 'react'
-import { FlatList, Image, PermissionsAndroid, ScrollView, View } from 'react-native'
-import { withTheme, Avatar, IconButton, List, Snackbar, TextInput } from 'react-native-paper'
+import { FlatList, Image, PermissionsAndroid, ScrollView, StyleSheet, View } from 'react-native'
+import {
+  withTheme,
+  Avatar,
+  Button,
+  IconButton,
+  Dialog,
+  List,
+  Paragraph,
+  Portal,
+  Snackbar,
+  Surface,
+  TextInput,
+  Subheading
+} from 'react-native-paper'
 import Contacts from 'react-native-contacts'
 import Mailer from 'react-native-mail'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
@@ -8,7 +21,33 @@ import auth, { firebase } from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { inject, observer } from 'mobx-react'
+
+import { validateEmail } from '../config'
 import i18n from '../locales/i18n'
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 12
+  },
+  suggestions: {
+    elevation: 2,
+    marginTop: -24,
+    marginBottom: 8
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24
+  },
+  popupButtonsContainer: {
+    flexDirection: 'row',
+    minHeight: 30,
+    justifyContent: 'space-between',
+    marginHorizontal: 20
+  }
+})
 
 /**
  *
@@ -32,40 +71,46 @@ class ShareScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      newContact: '',
+      email: '',
       contacts: [],
       suggestions: [],
       showSnackbar: false,
-      snackBarMessage: ''
+      snackBarMessage: '',
+      hasInvalidEmail: false
     }
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleSend: () => this.sendTo() })
+    this.props.navigation.setParams({ handleSend: () => this.aboutToSendInvites() })
   }
 
   addContactFromTextInput = () => {
-    let contacts = [...this.state.contacts, { email: this.state.email }]
-    this.setState({ contacts, email: '' })
+    if (this.state.email === '') {
+      return
+    }
+    const isValid = validateEmail(this.state.email)
+    const contacts = [...this.state.contacts, { email: this.state.email, isValid }]
+    this.setState({ contacts, email: '', suggestions: [] })
   }
 
   addContactFromSuggestions = item => () => {
     const { contacts } = this.state
     if (contacts.some(c => c.email === item.emailAddresses[0].email)) {
-      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('share.contactAlreadyAdded'), email: item.emailAddresses[0].email })
+      this.setState({
+        showSnackbar: true,
+        snackBarMessage: i18n.t('share.contactAlreadyAdded'),
+        email: item.emailAddresses[0].email
+      })
     } else {
       let c = [
         ...contacts,
-        { displayName: item.displayName, email: item.emailAddresses[0].email, photo: item.thumbnailPath, removable: true }
+        { displayName: item.displayName, email: item.emailAddresses[0].email, photo: item.thumbnailPath, removable: true, isValid: true }
       ]
       this.setState({ contacts: c, email: '', suggestions: [] })
     }
   }
 
-  removeContact = email => {
-    const contacts = this.state.contacts.filter(c => c.email !== email)
-    this.setState({ contacts })
-  }
+  removeContact = email => this.setState({ contacts: this.state.contacts.filter(c => c.email !== email) })
 
   onChangeText = email => {
     this.setState({ email })
@@ -90,44 +135,30 @@ class ShareScreen extends Component {
     })
   }
 
-  sendTo = async () => {
-    if (this.state.contacts.length < 1) {
+  aboutToSendInvites = () => {
+    const index = this.state.contacts.findIndex(c => !c.isValid)
+    if (index === -1) {
+      this.sendInvites(this.state.contacts)
+    } else {
+      this.setState({ hasInvalidEmail: true })
+    }
+  }
+
+  sendInvites = async contacts => {
+    if (contacts.length < 1) {
       this.props.navigation.pop()
       return
     }
-    const shareLink2 = await dynamicLinks().buildLink({
-      link: 'https://invertase.io',
-      domainUriPrefix: 'https://xyz.page.link',
-      navigation: {
-        forcedRedirectEnabled: true
-      },
-      android: {
-        packageName: 'io.matierenoire.breastfeeding',
-        minimumVersion: '3'
-      }
-    })
-
-    const shareLink = await dynamicLinks().buildLink({
-      link: 'https://breastfeeding.page.link/invites',
-      domainUriPrefix: 'https://breastfeeding.page.link',
-      navigation: {
-        forcedRedirectEnabled: true
-      },
-      android: {
-        packageName: 'io.matierenoire.breastfeeding',
-        minimumVersion: '3'
-      }
-    })
 
     const { displayName: name, email } = auth().currentUser
-    //let shareLink = 'rnbreastfeeding://rnbreastfeeding/home?shareLink=1234'
     let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
-      ${i18n.t('share.mail.button', { shareLink })}<br><br>
-      ${i18n.t('share.mail.download', { url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding' })}`
+      ${i18n.t('share.mail.download', {
+        url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding&referrer=' + email
+      })}`
     Mailer.mail(
       {
         subject: i18n.t('share.mail.subject', { name }),
-        recipients: this.state.contacts.map(c => c.email),
+        recipients: contacts.map(c => c.email),
         body,
         isHTML: true
       },
@@ -149,10 +180,10 @@ class ShareScreen extends Component {
       />
     ))
 
-  renderNewContactForm = () => {
+  renderInputForm = () => {
     const { colors } = this.props.theme
     return (
-      <View style={{ display: 'flex', flexDirection: 'row', margin: 12 }}>
+      <View style={styles.inputContainer}>
         <Avatar.Icon style={{ marginRight: 12 }} size={48} icon="person-add" />
         <TextInput
           autoCapitalize="none"
@@ -174,7 +205,7 @@ class ShareScreen extends Component {
         <List.Icon
           icon={() => (
             <Image
-              style={{ width: 48, height: 48, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 24 }}
+              style={[styles.avatar, { backgroundColor: this.props.theme.colors.primaryDarkColor }]}
               source={{ uri: contact.photoURL }}
             />
           )}
@@ -185,22 +216,49 @@ class ShareScreen extends Component {
     }
   }
 
-  renderSuggestion = ({ item }) => {
-    console.log('item', item)
-    return (
-      <List.Item
-        title={item.displayName}
-        description={item.emailAddresses[0].email}
-        left={() => this.renderAvatar(item)}
-        onPress={this.addContactFromSuggestions(item)}
-      />
-    )
-  }
+  renderSuggestion = ({ item }) => (
+    <List.Item
+      style={{ elevation: 1 }}
+      title={item.displayName}
+      description={item.emailAddresses[0].email}
+      left={() => this.renderAvatar(item)}
+      onPress={this.addContactFromSuggestions(item)}
+    />
+  )
 
   renderSnackBar = () => (
     <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
       {this.state.snackBarMessage}
     </Snackbar>
+  )
+
+  renderInvalidEmailDialog = () => (
+    <Portal>
+      <Dialog visible={this.state.hasInvalidEmail} onDismiss={() => this.setState({ hasInvalidEmail: false })}>
+        <Dialog.Content>
+          <Subheading style={{ marginBottom: 8 }}>{i18n.t('share.invalidDialog.title')}</Subheading>
+          <Paragraph>{i18n.t('share.invalidDialog.description')}</Paragraph>
+          {this.state.contacts
+            .filter(c => !c.isValid)
+            .map((c, index) => (
+              <Paragraph key={index}>{c.email}</Paragraph>
+            ))}
+        </Dialog.Content>
+        <Dialog.Actions style={styles.popupButtonsContainer}>
+          <Button onPress={() => this.setState({ hasInvalidEmail: false })}>{i18n.t('cancel')}</Button>
+          <Button
+            mode="contained"
+            style={{ paddingHorizontal: 8 }}
+            onPress={() => {
+              this.setState({ hasInvalidEmail: false })
+              this.sendInvites(this.state.contacts.filter(c => c.isValid))
+            }}
+          >
+            {i18n.t('ok')}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   )
 
   render = () => (
@@ -211,20 +269,24 @@ class ShareScreen extends Component {
           <List.Item
             key={index}
             title={c.displayName ? c.displayName : c.email}
-            description={c.displayName ? c.email : false}
+            description={c.displayName ? c.email : c.isValid ? false : i18n.t('share.invalidEmail')}
             left={() => this.renderAvatar(c)}
             right={() => <IconButton color={this.props.theme.colors.text} icon="close" onPress={() => this.removeContact(c.email)} />}
           />
         ))}
-        {this.renderNewContactForm()}
-        <FlatList
-          keyboardShouldPersistTaps={'always'}
-          data={this.state.suggestions}
-          extractData={this.state.suggestions.length}
-          keyExtractor={(item, index) => `s-${index}`}
-          renderItem={this.renderSuggestion}
-        />
+        {this.renderInputForm()}
+        <Surface style={styles.suggestions}>
+          <FlatList
+            keyboardShouldPersistTaps={'always'}
+            data={this.state.suggestions}
+            extraData={this.state.suggestions}
+            extractData={this.state.suggestions.length}
+            keyExtractor={(item, index) => `s-${index}`}
+            renderItem={this.renderSuggestion}
+          />
+        </Surface>
       </ScrollView>
+      {this.renderInvalidEmailDialog()}
       {this.renderSnackBar()}
     </>
   )

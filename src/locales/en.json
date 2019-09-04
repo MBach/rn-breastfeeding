@@ -43,6 +43,11 @@
   "share": {
     "placeholder": "Name or e-mail address for sharing",
     "contactAlreadyAdded": "You've already added this contact",
+    "invalidEmail": "This email isn't valid",
+    "invalidDialog": {
+      "title": "Invalid email address",
+      "description": "Your inputs won't be shared with:"
+    },
     "mail": {
       "subject": "%{name} has shared inputs with you",
       "body": "%{name} (%{email}) has shared inputs with you",

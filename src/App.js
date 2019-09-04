@@ -41,7 +41,8 @@ const DrawerNavigator = createDrawerNavigator(
     RootStack: RootStack
   },
   {
-    drawerWidth: Math.min(width, height) * 0.85,
+    drawerLockMode: 'unlocked',
+    drawerWidth: Math.min(width, height) * 0.8,
     overlayColor: 'rgba(0, 0, 0, 0.6)',
     contentComponent: Menu
   }

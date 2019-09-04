@@ -43,6 +43,11 @@
   "share": {
     "placeholder": "Nom ou adresse e-mail pour le partage",
     "contactAlreadyAdded": "Vous avez déjà ajouté ce contact",
+    "invalidEmail": "Cette adresse e-mail est invalide",
+    "invalidDialog": {
+      "title": "Adresse e-mail invalide",
+      "description": "Vos saisies ne seront pas partagées avec :"
+    },
     "mail": {
       "subject": "%{name} a partagé des saisies avec vous",
       "body": "%{name} (%{email}) a partagé des saisies avec vous.",

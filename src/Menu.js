@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
 import i18n from './locales/i18n'
 import { signIn } from './hooks/SignIn'
+import { lightTheme } from './styles'
 
 const styles = StyleSheet.create({
   drawerItems: {
@@ -54,12 +55,13 @@ class Menu extends Component {
     }
     const { colors } = this.props.theme
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: colors.background, color: colors.primaryTextColor }}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.background }} onPress={() => navigation.closeDrawer()}>
         <Drawer.Section>
-          <Title style={{ paddingLeft: 12, paddingVertical: 16, color: colors.primary }}>{i18n.t('navigation.title')}</Title>
+          <Title style={{ paddingLeft: 12, paddingVertical: 16, color: lightTheme.colors.primary }}>{i18n.t('navigation.title')}</Title>
         </Drawer.Section>
         <Drawer.Section>
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="home"
             label={i18n.t('navigation.home')}
             active={currentRoute === 'Home'}
@@ -67,6 +69,7 @@ class Menu extends Component {
             onPress={() => this.navigate('Home')}
           />
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="add"
             label={i18n.t('navigation.addEntry')}
             active={currentRoute === 'AddEntry'}
@@ -76,6 +79,7 @@ class Menu extends Component {
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.share')}>
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="share"
             label={i18n.t('menu.selectContact')}
             style={styles.drawerItems}
@@ -83,6 +87,7 @@ class Menu extends Component {
             onPress={this.checkIfUserIsConnected}
           />
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="feedback"
             label={i18n.t('menu.feedback')}
             style={styles.drawerItems}
@@ -92,6 +97,7 @@ class Menu extends Component {
         </Drawer.Section>
         <Drawer.Section title={i18n.t('menu.title')}>
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="wb-sunny"
             label={i18n.t('menu.day')}
             active={dataStore.theme === 'day'}
@@ -99,6 +105,7 @@ class Menu extends Component {
             onPress={this.changeTheme('day')}
           />
           <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="brightness-3"
             label={i18n.t('menu.night')}
             active={dataStore.theme === 'night'}

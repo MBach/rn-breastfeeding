@@ -43,6 +43,11 @@
   "share": {
     "placeholder": "",
     "contactAlreadyAdded": "",
+    "invalidEmail": "",
+    "invalidDialog": {
+      "title": "",
+      "description": ""
+    },
     "mail": {
       "subject": "%{name} ",
       "body": "%{name} (%{email}) ",

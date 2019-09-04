@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
-import { withTheme, Appbar, Button, Chip, Dialog, FAB, IconButton, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
+import { withTheme, ActivityIndicator, Appbar, Button, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import Slider from '@react-native-community/slider'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react'
@@ -58,21 +58,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 16
   },
-  chipTimer: {
-    flexGrow: 1,
-    marginHorizontal: 4,
-    marginTop: 16,
-    textAlign: 'center'
+  fabTimer: {
+    elevation: 0
   }
 })
 
 const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Home' })]
+  actions: [NavigationActions.navigate({ routeName: 'Home', params: { refresh: true } })]
 })
 
 function ThemedText({ style, palette, children }) {
-  return <Text style={{ ...style, color: palette.sectionTextColor }}>{children}</Text>
+  return <Text style={{ color: palette.sectionTextColor, ...style }}>{children}</Text>
 }
 
 /**
@@ -124,9 +121,6 @@ class AddEntryScreen extends Component {
   componentWillUnmount() {
     if (this.timerUpdated) {
       this.timerUpdated.remove()
-    }
-    if (this.props.navigation.state.params.autoRefresh) {
-      this.props.navigation.state.params.autoRefresh()
     }
   }
 
@@ -183,9 +177,13 @@ class AddEntryScreen extends Component {
         bottle: this.state.bottle,
         vitaminD: dataStore.vitaminD
       }
-      await dataStore.addEntry(data)
-      RNBreastFeeding.stopTimers()
-      this.props.navigation.dispatch(resetAction)
+      this.setState({ sending: true }, async () => {
+        const res = await dataStore.addEntry(data)
+        if (res) {
+          RNBreastFeeding.stopTimers()
+          this.props.navigation.dispatch(resetAction)
+        }
+      })
     } else {
       this.setState({ showErrorDialog: true })
     }
@@ -237,7 +235,7 @@ class AddEntryScreen extends Component {
         >
           -10mL
         </Button>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop: 23 }}>
           <Slider
             value={dataStore.bottle}
             minimumValue={0}
@@ -272,7 +270,7 @@ class AddEntryScreen extends Component {
   /// Dialogs
 
   renderEditDurationDialog() {
-    const { palette } = this.props.theme
+    const { colors, palette } = this.props.theme
     const { showEditDurationDialog } = this.state
     return (
       <Portal>
@@ -281,21 +279,28 @@ class AddEntryScreen extends Component {
           <Dialog.Content>
             <TextInput
               label={i18n.t('add.durationPlaceholder')}
-              mode={'outlined'}
               value={this.state.manualTimer}
               keyboardType="numeric"
               onChangeText={manualTimer => this.setState({ manualTimer })}
             />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 }}>
               {[5, 10, 15, 20, 25].map((e, key) => (
-                <Chip key={key} style={styles.chipTimer} onPress={this.changeTimer(e.toString())}>
-                  {e}
-                </Chip>
+                <FAB
+                  key={key}
+                  small
+                  style={[styles.fabTimer, { borderColor: colors.primary, borderWidth: 1, backgroundColor: colors.surface }]}
+                  onPress={this.changeTimer(e.toString())}
+                  icon={() => (
+                    <ThemedText palette={palette} style={{ paddingTop: 2, textAlign: 'center' }}>
+                      {e}
+                    </ThemedText>
+                  )}
+                />
               ))}
             </View>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
+            <Button mode="contained" style={{ paddingHorizontal: 8 }} onPress={() => this.forceTimer()}>
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
@@ -314,7 +319,7 @@ class AddEntryScreen extends Component {
             <Paragraph>{i18n.t('add.noDuration')}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
+            <Button mode="contained" style={{ paddingHorizontal: 8 }} onPress={this.hideDialog('showErrorDialog')}>
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
@@ -337,7 +342,7 @@ class AddEntryScreen extends Component {
             <Appbar.Action icon="check" onPress={() => this.validateEntry()} />
           )}
         </Appbar.Header>
-        <View onLayout={this.onLayout} style={{ backgroundColor: colors.background, ...styles.mainContainer }}>
+        <View onLayout={this.onLayout} style={styles.mainContainer}>
           <View style={this.state.isLandscape ? styles.subContainerLandscape : { width: '100%' }}>
             <View>
               <ThemedText palette={palette}>{i18n.t('add.date')}</ThemedText>
