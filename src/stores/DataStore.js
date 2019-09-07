@@ -10,7 +10,6 @@ import database from '@react-native-firebase/database'
  * @version 2.0
  */
 class DataStore {
-  @observable hydrated = false
   @observable updating = false
 
   ///
@@ -143,7 +142,7 @@ class DataStore {
 
   ///
 
-  @persist('object')
+  //@persist('object')
   @observable
   _records = []
 
@@ -175,35 +174,46 @@ class DataStore {
 
   ///
 
+  _refUser = null
+
   fetchCloudData = async () => {
     if (/*dataStore.migrated &&*/ auth().currentUser) {
-      this.updating = true
-      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+      const ref = database().ref(`/users/${auth().currentUser.uid}`)
       const snapshot = await ref.once('value')
       if (snapshot.val()) {
-        const values = Object.values(snapshot)
-        let r = []
-        for (const entry of Object.values(values[0].value)) {
-          r.push(entry)
+        const data = snapshot.val()
+        // Check if current user is the owner or has been invited by someone else
+        if (data.linked) {
+          _refUser = database().ref(`/users/${data.host}/inputs`)
+        } else {
+          _refUser = ref.child('inputs')
         }
-        this._records = r
+        // Get the dataSet
+        const snapshot2 = await _refUser.once('value')
+        if (snapshot2.val()) {
+          const values = Object.values(snapshot2)
+          // Convert back Object to Array
+          let r = []
+          for (const entry of Object.values(values[0].value)) {
+            r.push(entry)
+          }
+          this._records = r
+        }
       } else {
         this._records = []
       }
-      this.updating = false
     }
   }
 
   @action
   hydrateComplete = () => {
-    this.hydrated = true
     database().setPersistenceEnabled(true)
   }
 
   @action
   addEntry = async data => {
     if (auth().currentUser) {
-      const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date}`)
+      const ref = _refUser.child(data.date.toString())
       await ref.set({ ...data })
       // console.log('new data inserted')
     } else {

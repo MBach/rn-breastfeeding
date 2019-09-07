@@ -12,16 +12,18 @@ import {
   List,
   Portal,
   Snackbar,
-  TouchableRipple
+  TouchableRipple,
+  Subheading,
+  Paragraph
 } from 'react-native-paper'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
-import i18n from '../locales/i18n'
 import { isNotRunning } from '../config'
 import { signIn } from '../hooks/SignIn'
+import i18n from '../locales/i18n'
 
 const styles = StyleSheet.create({
   cardLastEntry: {
@@ -81,6 +83,7 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      fetching: true,
       groupedRecords: [],
       appState: AppState.currentState,
       currentGroup: null,
@@ -106,10 +109,20 @@ class HomeScreen extends Component {
     if (auth().currentUser && auth().currentUser.photoURL) {
       this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
-    if (this.props.navigation.state.params && this.props.navigation.state.params.refresh) {
-      await dataStore.fetchCloudData()
+    const { params } = this.props.navigation.state
+    //console.warn('params', params)
+    if (params) {
+      // Used when one has added a new entry
+      /*if (params.refresh) {
+        await dataStore.fetchCloudData()
+      }*/
+      // Used when one has successfully linked his account from another one by using a code
+      if (params.accountLinked) {
+        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
+      }
     }
-    this.setState({ groupedRecords: dataStore.groupedRecords })
+    await dataStore.fetchCloudData()
+    this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords })
   }
 
   componentWillUnmount() {
@@ -168,37 +181,29 @@ class HomeScreen extends Component {
     )
 
   renderLastEntry(groups) {
-    if (groups.length > 0) {
-      const lastGroup = groups[0]
-      const lastEntry = lastGroup.group[0]
-      const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
-      return (
-        <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
-          <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(lastEntry.date)} />
-          <Card.Content style={styles.rowWrap}>
-            {this.renderChip('left', lastEntry.timers['left'])}
-            {this.renderChip('right', lastEntry.timers['right'])}
-            {this.renderChip('bottle', lastEntry.timers['bottle'])}
-            {lastEntry.bottle > 0 && (
-              <Chip style={styles.chipMargins}>
-                <Text style={styles.chipText}>{`${i18n.t('bottle')} ${lastEntry.bottle}mL`}</Text>
-              </Chip>
-            )}
-            {lastEntry.vitaminD && (
-              <Chip style={styles.chipMargins} icon="brightness-5">
-                <Text style={styles.chipText}>{i18n.t('vitaminD')}</Text>
-              </Chip>
-            )}
-          </Card.Content>
-        </Card>
-      )
-    } else {
-      return (
-        <Card style={styles.cardLastEntry}>
-          <Card.Title title={i18n.t('home.noEntry')} subtitle={i18n.t('home.add')} />
-        </Card>
-      )
-    }
+    const lastGroup = groups[0]
+    const lastEntry = lastGroup.group[0]
+    const date = moment.unix(lastEntry.date).format(i18n.uses24HourClock ? 'HH:mm' : 'hh:mm A')
+    return (
+      <Card style={styles.cardLastEntry} onPress={() => this.setState({ editLastEntry: true })}>
+        <Card.Title title={i18n.t('home.lastEntry', { date })} subtitle={i18n.humanize(lastEntry.date)} />
+        <Card.Content style={styles.rowWrap}>
+          {this.renderChip('left', lastEntry.timers['left'])}
+          {this.renderChip('right', lastEntry.timers['right'])}
+          {this.renderChip('bottle', lastEntry.timers['bottle'])}
+          {lastEntry.bottle > 0 && (
+            <Chip style={styles.chipMargins}>
+              <Text style={styles.chipText}>{`${i18n.t('bottle')} ${lastEntry.bottle}mL`}</Text>
+            </Chip>
+          )}
+          {lastEntry.vitaminD && (
+            <Chip style={styles.chipMargins} icon="brightness-5">
+              <Text style={styles.chipText}>{i18n.t('vitaminD')}</Text>
+            </Chip>
+          )}
+        </Card.Content>
+      </Card>
+    )
   }
 
   renderItem = ({ item }) => {
@@ -277,8 +282,7 @@ class HomeScreen extends Component {
               {i18n.t('cancel')}
             </Button>
             <Button
-              mode="contained"
-              style={{ paddingHorizontal: 8 }}
+              color={palette.buttonColor}
               onPress={async () => {
                 await dataStore.updateGroup(currentGroup)
                 this.setState({ editGroupDialog: false, groupedRecords: dataStore.groupedRecords })
@@ -291,12 +295,6 @@ class HomeScreen extends Component {
       </Portal>
     )
   }
-
-  renderSnackBar = () => (
-    <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
-      {this.state.snackBarMessage}
-    </Snackbar>
-  )
 
   renderFab = isStopped => {
     const { colors } = this.props.theme
@@ -359,9 +357,39 @@ class HomeScreen extends Component {
     }
   }
 
+  renderEntries = () => {
+    const { groupedRecords, fetching } = this.state
+    console.warn(dataStore.updating)
+    if (fetching) {
+      return <ActivityIndicator color={this.props.theme.colors.primary} />
+    } else {
+      if (groupedRecords.length > 0) {
+        return (
+          <>
+            {this.renderLastEntry(groupedRecords)}
+            <FlatList
+              data={groupedRecords}
+              extraData={groupedRecords}
+              extractData={groupedRecords.length}
+              keyExtractor={item => `${item.key}`}
+              renderItem={this.renderItem}
+            />
+          </>
+        )
+      } else {
+        return (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Subheading>{i18n.t('home.noEntry')}</Subheading>
+            <Paragraph>{i18n.t('home.add')}</Paragraph>
+          </View>
+        )
+      }
+    }
+  }
+
   render = () => {
     const { colors } = this.props.theme
-    const { groupedRecords } = this.state
+    const { showSnackbar, snackBarMessage } = this.state
     return (
       <View style={{ backgroundColor: colors.background, flex: 1 }}>
         <Appbar.Header>
@@ -370,21 +398,12 @@ class HomeScreen extends Component {
           {this.renderProfileIcon()}
         </Appbar.Header>
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          {dataStore.hydrated && !dataStore.updating && this.renderLastEntry(groupedRecords)}
-          {dataStore.hydrated && !dataStore.updating ? (
-            <FlatList
-              data={groupedRecords}
-              extraData={groupedRecords}
-              extractData={groupedRecords.length}
-              keyExtractor={item => `${item.key}`}
-              renderItem={this.renderItem}
-            />
-          ) : (
-            <ActivityIndicator color={colors.primary} />
-          )}
+          {this.renderEntries()}
           {this.renderFab(isNotRunning(dataStore.timers))}
           {this.editGroupDialog()}
-          {this.renderSnackBar()}
+          <Snackbar visible={showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+            {snackBarMessage}
+          </Snackbar>
         </View>
       </View>
     )

@@ -4,15 +4,17 @@
     "home": "Inicio",
     "addEntry": "Añadir una entrada",
     "contact": "Contacto",
+    "code": "",
     "feedback": ""
   },
   "menu": {
     "share": "Compartir",
     "selectContact": "Seleccione un contacto",
+    "code": "",
+    "feedback": "",
     "title": "Preferencias de pantalla",
     "day": "Modo diurno",
-    "night": "Modo nocturno",
-    "feedback": ""
+    "night": "Modo nocturno"
   },
   "vitaminD": "Vitamina D",
   "cancel": "Cancelar",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "Sin convulsiones"
     },
-    "greeting": "¡Hola %{name}!"
+    "greeting": "¡Hola %{name}!",
+    "accountLinked": ""
   },
   "add": {
     "date": "Fecha",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    },
+    "removeDialog": {
+      "title": "",
+      "description": ""
+    },
+    "inviteStatus": {
+      "active": "",
+      "pending": ""
     }
+  },
+  "code": {
+    "invalidCode": ""
   },
   "feedback": {
     "title": "",

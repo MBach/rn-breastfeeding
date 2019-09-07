@@ -4,15 +4,17 @@
     "home": "",
     "addEntry": "",
     "contact": "",
+    "code": "",
     "feedback": ""
   },
   "menu": {
     "share": "",
     "selectContact": "",
+    "code": "",
+    "feedback": "",
     "title": "",
     "day": "",
-    "night": "",
-    "feedback": ""
+    "night": ""
   },
   "vitaminD": "",
   "cancel": "",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": ""
     },
-    "greeting": " %{name}!"
+    "greeting": " %{name}!",
+    "accountLinked": ""
   },
   "add": {
     "date": "",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": ": %{url}"
+    },
+    "removeDialog": {
+      "title": "",
+      "description": ""
+    },
+    "inviteStatus": {
+      "active": "",
+      "pending": ""
     }
+  },
+  "code": {
+    "invalidCode": ""
   },
   "feedback": {
     "title": "",

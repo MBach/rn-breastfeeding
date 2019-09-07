@@ -4,15 +4,17 @@
     "home": "Home",
     "addEntry": "Add a new entry",
     "contact": "Contact",
+    "code": "Use a code",
     "feedback": "Feedback"
   },
   "menu": {
     "share": "Share",
     "selectContact": "Select a contact",
+    "code": "Use a code",
+    "feedback": "Feedback",
     "title": "Display settings",
     "day": "Day mode",
-    "night": "Night mode",
-    "feedback": "Feedback"
+    "night": "Night mode"
   },
   "vitaminD": "Vitamin D",
   "cancel": "Cancel",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "No data"
     },
-    "greeting": "Hello %{name}!"
+    "greeting": "Hello %{name}!",
+    "accountLinked": "Congratulations, your account has been linked!"
   },
   "add": {
     "date": "Date",
@@ -51,9 +54,20 @@
     "mail": {
       "subject": "%{name} has shared inputs with you",
       "body": "%{name} (%{email}) has shared inputs with you",
-      "button": "Open in BreastFeeding App: %{shareLink}",
+      "code": "To view the inputs, use this code:",
       "download": "To get the App, check out this link: %{url}"
+    },
+    "removeDialog": {
+      "title": "Remove invited contact?",
+      "description": "If you continue, %{email} won't be able to visualize or interact with you anymore."
+    },
+    "inviteStatus": {
+      "active": "Active",
+      "pending": "Pending"
     }
+  },
+  "code": {
+    "invalidCode": "Invalid code"
   },
   "feedback": {
     "title": "Thank you for using BreastFeeding App",

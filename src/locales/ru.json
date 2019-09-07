@@ -4,15 +4,17 @@
     "home": "дом",
     "addEntry": "Добавить новую запись",
     "contact": "контакт",
+    "code": "",
     "feedback": ""
   },
   "menu": {
     "share": "Поделиться",
     "selectContact": "Выберите контакт",
+    "code": "",
+    "feedback": "",
     "title": "Настройки отображения",
     "day": "Дневной режим",
-    "night": "ночной режим",
-    "feedback": ""
+    "night": "ночной режим"
   },
   "vitaminD": "Витамин D",
   "cancel": "отмена",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "Нет данных"
     },
-    "greeting": "Привет %{name}!"
+    "greeting": "Привет %{name}!",
+    "accountLinked": ""
   },
   "add": {
     "date": "дата",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    },
+    "removeDialog": {
+      "title": "",
+      "description": ""
+    },
+    "inviteStatus": {
+      "active": "",
+      "pending": ""
     }
+  },
+  "code": {
+    "invalidCode": ""
   },
   "feedback": {
     "title": "",

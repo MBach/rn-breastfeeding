@@ -6,10 +6,11 @@ import Slider from '@react-native-community/slider'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
-import RNBreastFeeding from '../RNBreastFeeding'
-import i18n from '../locales/i18n'
 
+import RNBreastFeeding from '../RNBreastFeeding'
 import { isNotRunning } from '../config'
+import i18n from '../locales/i18n'
+import { lightTheme } from '../styles'
 
 const styles = StyleSheet.create({
   fab: {
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
 
 const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Home', params: { refresh: true } })]
+  actions: [NavigationActions.navigate({ routeName: 'Home' })]
 })
 
 function ThemedText({ style, palette, children }) {
@@ -288,7 +289,7 @@ class AddEntryScreen extends Component {
                 <FAB
                   key={key}
                   small
-                  style={[styles.fabTimer, { borderColor: colors.primary, borderWidth: 1, backgroundColor: colors.surface }]}
+                  style={[styles.fabTimer, { borderColor: lightTheme.colors.primary, borderWidth: 1, backgroundColor: colors.surface }]}
                   onPress={this.changeTimer(e.toString())}
                   icon={() => (
                     <ThemedText palette={palette} style={{ paddingTop: 2, textAlign: 'center' }}>
@@ -300,7 +301,7 @@ class AddEntryScreen extends Component {
             </View>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button mode="contained" style={{ paddingHorizontal: 8 }} onPress={() => this.forceTimer()}>
+            <Button color={palette.buttonColor} onPress={() => this.forceTimer()}>
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
@@ -319,7 +320,7 @@ class AddEntryScreen extends Component {
             <Paragraph>{i18n.t('add.noDuration')}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button mode="contained" style={{ paddingHorizontal: 8 }} onPress={this.hideDialog('showErrorDialog')}>
+            <Button color={palette.buttonColor} onPress={this.hideDialog('showErrorDialog')}>
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>

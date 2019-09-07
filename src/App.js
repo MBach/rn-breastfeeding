@@ -11,7 +11,7 @@ import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
 import i18n, { loadLocale } from './locales/i18n'
 
-import { AddEntryScreen, FeedbackScreen, HomeScreen, LoadingScreen, ShareScreen } from './screen'
+import { AddEntryScreen, CodeScreen, FeedbackScreen, HomeScreen, LoadingScreen, ShareScreen } from './screen'
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
@@ -24,6 +24,7 @@ const RootStack = createStackNavigator(
     Home: { screen: HomeScreen, path: '/home' },
     AddEntry: { screen: AddEntryScreen, path: '/chrono' },
     Share: { screen: ShareScreen, path: '/share' },
+    Code: { screen: CodeScreen, path: '/code' },
     Feedback: { screen: FeedbackScreen, path: '/feedback' }
   },
   {

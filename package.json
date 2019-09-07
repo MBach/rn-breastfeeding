@@ -30,7 +30,7 @@
     "query-string": "^6.8.3",
     "react": "^16.9.0",
     "react-native": "^0.60.5",
-    "react-native-contacts": "^5.0.2",
+    "react-native-contacts": "^5.0.3",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-google-signin": "^2.0.0",
     "react-native-localize": "^1.1.4",
@@ -42,10 +42,10 @@
     "react-navigation": "^3.12.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.6.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/runtime": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "1.18.2"
   },

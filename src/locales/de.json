@@ -4,15 +4,17 @@
     "home": "Startseite",
     "addEntry": "Einen neuen Eintrag hinzufügen",
     "contact": "Kontakt",
+    "code": "",
     "feedback": ""
   },
   "menu": {
     "share": "Aktie",
     "selectContact": "Wählen Sie einen Kontakt aus",
+    "code": "",
+    "feedback": "",
     "title": "Bildschirmeinstellungen",
     "day": "Tages-Modus",
-    "night": "Nacht-Modus",
-    "feedback": ""
+    "night": "Nacht-Modus"
   },
   "vitaminD": "Vitamin-D",
   "cancel": "Stornieren",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "Keine Daten"
     },
-    "greeting": "Hallo %{name}!"
+    "greeting": "Hallo %{name}!",
+    "accountLinked": ""
   },
   "add": {
     "date": "Datum",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    },
+    "removeDialog": {
+      "title": "",
+      "description": ""
+    },
+    "inviteStatus": {
+      "active": "",
+      "pending": ""
     }
+  },
+  "code": {
+    "invalidCode": ""
   },
   "feedback": {
     "title": "",

@@ -88,6 +88,14 @@ class Menu extends Component {
           />
           <Drawer.Item
             theme={{ colors: { primary: lightTheme.colors.primary } }}
+            icon="lock-open"
+            label={i18n.t('menu.code')}
+            style={styles.drawerItems}
+            active={currentRoute === 'Code'}
+            onPress={() => this.navigate('Code')}
+          />
+          <Drawer.Item
+            theme={{ colors: { primary: lightTheme.colors.primary } }}
             icon="feedback"
             label={i18n.t('menu.feedback')}
             style={styles.drawerItems}

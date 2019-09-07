@@ -4,15 +4,17 @@
     "home": "家",
     "addEntry": "エントリを追加する",
     "contact": "連絡",
+    "code": "",
     "feedback": ""
   },
   "menu": {
     "share": "シェア",
     "selectContact": "連絡先を選択",
+    "code": "",
+    "feedback": "",
     "title": "ディスプレイの設定",
     "day": "日モード",
-    "night": "夜モード",
-    "feedback": ""
+    "night": "夜モード"
   },
   "vitaminD": "ビタミンD",
   "cancel": "キャンセル",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "データなし"
     },
-    "greeting": "こんにちは%{name}！"
+    "greeting": "こんにちは%{name}！",
+    "accountLinked": ""
   },
   "add": {
     "date": "日付",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) ",
       "button": ": %{shareLink}",
       "download": " : %{url}"
+    },
+    "removeDialog": {
+      "title": "",
+      "description": ""
+    },
+    "inviteStatus": {
+      "active": "",
+      "pending": ""
     }
+  },
+  "code": {
+    "invalidCode": ""
   },
   "feedback": {
     "title": "",

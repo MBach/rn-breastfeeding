@@ -16,10 +16,8 @@ import {
 } from 'react-native-paper'
 import Contacts from 'react-native-contacts'
 import Mailer from 'react-native-mail'
-import { GoogleSignin, statusCodes } from 'react-native-google-signin'
-import auth, { firebase } from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { inject, observer } from 'mobx-react'
 
 import { validateEmail } from '../config'
@@ -72,16 +70,29 @@ class ShareScreen extends Component {
     super(props)
     this.state = {
       email: '',
+      invites: [],
       contacts: [],
       suggestions: [],
       showSnackbar: false,
       snackBarMessage: '',
-      hasInvalidEmail: false
+      hasInvalidEmail: false,
+      userToRemove: null
     }
   }
 
   componentDidMount() {
     this.props.navigation.setParams({ handleSend: () => this.aboutToSendInvites() })
+    const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
+    ref.once('value').then(snapshot => {
+      if (snapshot.val()) {
+        let invites = []
+        const data = snapshot.val()
+        for (const invite of data) {
+          invites.push(invite)
+        }
+        this.setState({ invites })
+      }
+    })
   }
 
   addContactFromTextInput = () => {
@@ -121,11 +132,15 @@ class ShareScreen extends Component {
             console.log('permission denied')
           } else {
             // Filter contacts without email addresses
-            const suggestions = contacts
-              .filter(c => c.emailAddresses.length > 0)
-              .map(c => {
-                return { ...c, photo: c.thumbnailPath }
-              })
+            contacts = contacts.filter(c => c.emailAddresses.length > 0).map(c => ({ ...c, photo: c.thumbnailPath }))
+            // Filter contacts already invited
+            const emails = this.state.invites.map(i => i.email)
+            let suggestions = []
+            for (const contact of contacts) {
+              if (!emails.includes(contact.emailAddresses[0].email)) {
+                suggestions.push(contact)
+              }
+            }
             this.setState({ suggestions })
           }
         })
@@ -150,8 +165,26 @@ class ShareScreen extends Component {
       return
     }
 
+    const code = Math.floor(Math.random() * 9999) + 1
+
+    // Create shares on firebase
+    const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
+    const c = contacts.map(contact => {
+      return { email: contact.email, status: 'pending', code }
+    })
+    ref.set(c)
+
+    const ref2 = database().ref(`/invites/${code}`)
+    const c2 = contacts.map(contact => {
+      return { dest: contact.email, sender: auth().currentUser.uid }
+    })
+    ref2.set(c2)
+
+    // Send email
     const { displayName: name, email } = auth().currentUser
     let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
+      ${i18n.t('share.mail.code')}<br><br>
+      ${code}<br><br>
       ${i18n.t('share.mail.download', {
         url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding&referrer=' + email
       })}`
@@ -226,45 +259,79 @@ class ShareScreen extends Component {
     />
   )
 
-  renderSnackBar = () => (
-    <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
-      {this.state.snackBarMessage}
-    </Snackbar>
-  )
+  renderInvalidEmailDialog = () => {
+    const { palette } = this.props.theme
+    return (
+      <Portal>
+        <Dialog visible={this.state.hasInvalidEmail} onDismiss={() => this.setState({ hasInvalidEmail: false })}>
+          <Dialog.Content>
+            <Subheading style={{ marginBottom: 8 }}>{i18n.t('share.invalidDialog.title')}</Subheading>
+            <Paragraph>{i18n.t('share.invalidDialog.description')}</Paragraph>
+            {this.state.contacts
+              .filter(c => !c.isValid)
+              .map((c, index) => (
+                <Paragraph key={index}>{c.email}</Paragraph>
+              ))}
+          </Dialog.Content>
+          <Dialog.Actions style={styles.popupButtonsContainer}>
+            <Button color={palette.buttonColor} onPress={() => this.setState({ hasInvalidEmail: false })}>
+              {i18n.t('cancel')}
+            </Button>
+            <Button
+              color={palette.buttonColor}
+              onPress={() => {
+                this.setState({ hasInvalidEmail: false })
+                this.sendInvites(this.state.contacts.filter(c => c.isValid))
+              }}
+            >
+              {i18n.t('ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
 
-  renderInvalidEmailDialog = () => (
-    <Portal>
-      <Dialog visible={this.state.hasInvalidEmail} onDismiss={() => this.setState({ hasInvalidEmail: false })}>
-        <Dialog.Content>
-          <Subheading style={{ marginBottom: 8 }}>{i18n.t('share.invalidDialog.title')}</Subheading>
-          <Paragraph>{i18n.t('share.invalidDialog.description')}</Paragraph>
-          {this.state.contacts
-            .filter(c => !c.isValid)
-            .map((c, index) => (
-              <Paragraph key={index}>{c.email}</Paragraph>
-            ))}
-        </Dialog.Content>
-        <Dialog.Actions style={styles.popupButtonsContainer}>
-          <Button onPress={() => this.setState({ hasInvalidEmail: false })}>{i18n.t('cancel')}</Button>
-          <Button
-            mode="contained"
-            style={{ paddingHorizontal: 8 }}
-            onPress={() => {
-              this.setState({ hasInvalidEmail: false })
-              this.sendInvites(this.state.contacts.filter(c => c.isValid))
-            }}
-          >
-            {i18n.t('ok')}
-          </Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
-  )
+  renderRemoveInviteDialog = () => {
+    const { userToRemove } = this.state
+    const { palette } = this.props.theme
+    return (
+      <Portal>
+        <Dialog visible={true} onDismiss={() => this.setState({ userToRemove: null })}>
+          <Dialog.Content>
+            <Subheading style={{ marginBottom: 8 }}>{i18n.t('share.removeDialog.title')}</Subheading>
+            {userToRemove.status === 'active' && (
+              <Paragraph>{i18n.t('share.removeDialog.description', { email: userToRemove.email })}</Paragraph>
+            )}
+          </Dialog.Content>
+          <Dialog.Actions style={styles.popupButtonsContainer}>
+            <Button color={palette.buttonColor} onPress={() => this.setState({ userToRemove: null })}>
+              {i18n.t('cancel')}
+            </Button>
+            <Button color={palette.buttonColor} onPress={() => this.setState({ userToRemove: null })}>
+              {i18n.t('ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
 
   render = () => (
     <>
       <ScrollView keyboardShouldPersistTaps={'always'} style={{ backgroundColor: this.props.theme.colors.background }}>
         <List.Item title={auth().currentUser.email} left={() => this.renderAvatar(auth().currentUser)} />
+        {this.state.invites.map((i, index) => (
+          <List.Item
+            key={index}
+            title={i.email}
+            description={i18n.t('share.inviteStatus.' + i.status)}
+            left={() => this.renderAvatar(i)}
+            right={() => (
+              <IconButton color={this.props.theme.colors.text} icon="delete" onPress={() => this.setState({ userToRemove: i })} />
+            )}
+          />
+        ))}
         {this.state.contacts.map((c, index) => (
           <List.Item
             key={index}
@@ -287,7 +354,10 @@ class ShareScreen extends Component {
         </Surface>
       </ScrollView>
       {this.renderInvalidEmailDialog()}
-      {this.renderSnackBar()}
+      {this.state.userToRemove && this.renderRemoveInviteDialog()}
+      <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+        {this.state.snackBarMessage}
+      </Snackbar>
     </>
   )
 }

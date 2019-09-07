@@ -4,15 +4,17 @@
     "home": "Accueil",
     "addEntry": "Ajouter une saisie",
     "contact": "Contact",
+    "code": "Utiliser un code",
     "feedback": "Commentaires"
   },
   "menu": {
     "share": "Partage",
     "selectContact": "Envoyer à un contact",
+    "code": "Utiliser un code",
+    "feedback": "Commentaires",
     "title": "Préférences d'affichage",
     "day": "Mode jour",
-    "night": "Mode nuit",
-    "feedback": "Commentaires"
+    "night": "Mode nuit"
   },
   "vitaminD": "Vitamine D",
   "cancel": "Annuler",
@@ -28,7 +30,8 @@
     "groupedEntries": {
       "noData": "Aucune saisie"
     },
-    "greeting": "Bonjour %{name} !"
+    "greeting": "Bonjour %{name} !",
+    "accountLinked": "Bravo, votre compte a été rattaché !"
   },
   "add": {
     "date": "Date",
@@ -53,7 +56,18 @@
       "body": "%{name} (%{email}) a partagé des saisies avec vous.",
       "button": "Ouvrir dans Allaitement : %{shareLink}",
       "download": "Pour obtenir l’App, visitez ce lien : %{url}"
+    },
+    "removeDialog": {
+      "title": "Retirer un contact invité ?",
+      "description": "Si vous continuez, %{email} ne pourra plus visualiser ou interragir avec vous."
+    },
+    "inviteStatus": {
+      "active": "Actif",
+      "pending": "Invité"
     }
+  },
+  "code": {
+    "invalidCode": "Code invalide"
   },
   "feedback": {
     "title": "Merci d’utiliser cette App d’Allaitement",
