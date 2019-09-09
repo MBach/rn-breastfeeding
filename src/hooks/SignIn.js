@@ -1,28 +1,34 @@
 import React from 'react'
 import { GoogleSignin, statusCodes } from 'react-native-google-signin'
 import auth, { firebase } from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database'
 
-const migrateFromAnonToAuthed = (anonUid, res) => {
-  console.warn('migrateFromAnonToAuthed', anonUid, res)
+const deleteAnonymousDataWhenAuthed = anonUid => {
+  const ref = database().ref(`/users/${anonUid}`)
+  ref.once('value').then(snapshot => {
+    if (snapshot.val()) {
+      ref.remove()
+    }
+  })
 }
 
 const signIn = async callback => {
   if (auth().currentUser && !auth().currentUser.isAnonymous) {
-    console.warn('already signed in 1', auth().currentUser.uid)
+    //console.log('already signed in 1', auth().currentUser.uid)
     return
   }
   try {
     let anonUid = null
     if (auth().currentUser && auth().currentUser.isAnonymous) {
       anonUid = auth().currentUser.uid
-      console.warn('anonUid', anonUid)
+      //console.log('anonUid', anonUid)
     }
     const { idToken, accessToken } = await GoogleSignin.signIn()
     const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken)
     const res = await auth().signInWithCredential(credential)
     if (res && res.additionalUserInfo) {
       if (anonUid) {
-        migrateFromAnonToAuthed(anonUid, res)
+        deleteAnonymousDataWhenAuthed(anonUid)
       }
       if (callback) {
         callback(res.additionalUserInfo.profile.name)
@@ -41,4 +47,4 @@ const signIn = async callback => {
   }
 }
 
-export { signIn, migrateFromAnonToAuthed }
+export { signIn }

@@ -44,6 +44,8 @@
     "noDuration": "Your entry has no duration"
   },
   "share": {
+    "sectionHost": "You can invite 3 contacts",
+    "sectionGuest": "You cannot share data already shared with you",
     "placeholder": "Name or e-mail address for sharing",
     "contactAlreadyAdded": "You've already added this contact",
     "invalidEmail": "This email isn't valid",
@@ -64,9 +66,14 @@
     "inviteStatus": {
       "active": "Active",
       "pending": "Pending"
+    },
+    "leaveButton": "Leave",
+    "leaveDialog": {
+      "description": "Remove yourself from inputs shared with you?"
     }
   },
   "code": {
+    "verify": "Verify code",
     "invalidCode": "Invalid code"
   },
   "feedback": {

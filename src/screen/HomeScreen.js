@@ -110,16 +110,9 @@ class HomeScreen extends Component {
       this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
     const { params } = this.props.navigation.state
-    //console.warn('params', params)
-    if (params) {
-      // Used when one has added a new entry
-      /*if (params.refresh) {
-        await dataStore.fetchCloudData()
-      }*/
-      // Used when one has successfully linked his account from another one by using a code
-      if (params.accountLinked) {
-        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
-      }
+    // Used when one has successfully linked his account from another one by using a code
+    if (params && params.accountLinked) {
+      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
     }
     await dataStore.fetchCloudData()
     this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords })
@@ -330,7 +323,7 @@ class HomeScreen extends Component {
 
   renderProfileIcon = () => {
     if (auth().currentUser && !auth().currentUser.isAnonymous) {
-      //console.warn('auth().currentUser 1', auth().currentUser)
+      //console.log('auth().currentUser 1', auth().currentUser)
       return (
         <Appbar.Action
           icon={() => (
@@ -339,11 +332,13 @@ class HomeScreen extends Component {
               source={{ uri: auth().currentUser.photoURL }}
             />
           )}
-          onPress={() => console.warn('already signed in 2')}
+          onPress={() => {
+            //console.log('already signed in 2')
+          }}
         />
       )
     } else {
-      //console.warn('auth().currentUser 2', auth().currentUser)
+      //console.log('auth().currentUser 2', auth().currentUser)
       return (
         <Appbar.Action
           icon="account-circle"
@@ -359,7 +354,6 @@ class HomeScreen extends Component {
 
   renderEntries = () => {
     const { groupedRecords, fetching } = this.state
-    console.warn(dataStore.updating)
     if (fetching) {
       return <ActivityIndicator color={this.props.theme.colors.primary} />
     } else {

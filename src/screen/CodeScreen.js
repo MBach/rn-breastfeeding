@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 
+import { SHARE_STATUS } from '../config'
 import { signIn } from '../hooks/SignIn'
 import i18n from '../locales/i18n'
 
@@ -49,7 +50,7 @@ class CodeScreen extends Component {
       loading: false,
       showSnackbar: false,
       snackBarMessage: '',
-      isAnonymous: auth().currentUser && auth().currentUser.isAnonymous
+      isAnonymous: !auth().currentUser || (auth().currentUser && auth().currentUser.isAnonymous)
     }
   }
 
@@ -72,9 +73,11 @@ class CodeScreen extends Component {
 
       const ref2 = database().ref(`/users/${auth().currentUser.uid}`)
       const sender = arr[index].sender
-      ref2.set({ linked: true, host: sender })
+      ref2.child('/linked').set(true)
+      ref2.child('/host').set(sender)
       const refUserInvites = database().ref(`/users/${sender}/invites`)
       const userInvitesValues = await refUserInvites.once('value')
+      this.setState({ loading: false })
       if (userInvitesValues.val()) {
         const uiv = Object.values(userInvitesValues)
         const arr2 = Object.values(uiv[0].value)
@@ -82,14 +85,13 @@ class CodeScreen extends Component {
         if (index2 !== -1) {
           const child = refUserInvites.child(`/${index2}`)
           // Remove 'code' key
-          child.set({ email: auth().currentUser.email, status: 'active', uid: auth().currentUser.uid })
+          child.set({ email: auth().currentUser.email, status: SHARE_STATUS.ACTIVE, uid: auth().currentUser.uid })
           // Remove invitation
           const filteredInvites = arr.filter(s => s.dest !== auth().currentUser.email)
           refInvites.set(filteredInvites)
           this.props.navigation.dispatch(resetAction)
         }
       }
-      this.setState({ loading: false })
     })
   }
 
@@ -107,7 +109,7 @@ class CodeScreen extends Component {
                   mode="contained"
                   onPress={() =>
                     signIn(() => {
-                      this.setState({ isAnonymous: auth().currentUser && auth().currentUser.isAnonymous })
+                      this.setState({ isAnonymous: !auth().currentUser || (auth().currentUser && auth().currentUser.isAnonymous) })
                     })
                   }
                 >
@@ -131,8 +133,12 @@ class CodeScreen extends Component {
             {this.state.loading ? (
               <ActivityIndicator />
             ) : (
-              <Button disabled={dataStore.isAnonymous} mode="contained" onPress={() => !this.state.loading && this.verifyCode()}>
-                Verify
+              <Button
+                disabled={this.state.isAnonymous || this.state.code.length !== 4}
+                mode="contained"
+                onPress={() => !this.state.loading && this.verifyCode()}
+              >
+                {i18n.t('code.verify')}
               </Button>
             )}
           </View>

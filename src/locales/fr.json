@@ -44,6 +44,8 @@
     "noDuration": "Votre saisie n’a pas de durée"
   },
   "share": {
+    "sectionHost": "Vous pouvez inviter 3 contacts",
+    "sectionGuest": "Vous ne pouvez pas partager des données déjà partagées avec vous",
     "placeholder": "Nom ou adresse e-mail pour le partage",
     "contactAlreadyAdded": "Vous avez déjà ajouté ce contact",
     "invalidEmail": "Cette adresse e-mail est invalide",
@@ -64,9 +66,14 @@
     "inviteStatus": {
       "active": "Actif",
       "pending": "Invité"
+    },
+    "leaveButton": "Quitter",
+    "leaveDialog": {
+      "description": "Ne plus avoir accès aux données partagées avec vous ?"
     }
   },
   "code": {
+    "verify": "Vérifier le code",
     "invalidCode": "Code invalide"
   },
   "feedback": {

@@ -4,4 +4,9 @@ const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 const validateEmail = text => reg.test(text)
 
-export { isNotRunning, validateEmail }
+const SHARE_STATUS = {
+  PENDING: 'pending',
+  ACTIVE: 'active'
+}
+
+export { isNotRunning, validateEmail, SHARE_STATUS }

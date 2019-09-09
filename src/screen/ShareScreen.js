@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { FlatList, Image, PermissionsAndroid, ScrollView, StyleSheet, View } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
 import {
   withTheme,
   Avatar,
   Button,
-  IconButton,
+  Caption,
   Dialog,
+  IconButton,
   List,
   Paragraph,
   Portal,
@@ -16,18 +18,21 @@ import {
 } from 'react-native-paper'
 import Contacts from 'react-native-contacts'
 import Mailer from 'react-native-mail'
+import moment from 'moment'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 
-import { validateEmail } from '../config'
+import { validateEmail, SHARE_STATUS } from '../config'
 import i18n from '../locales/i18n'
 
 const styles = StyleSheet.create({
   inputContainer: {
     display: 'flex',
     flexDirection: 'row',
-    margin: 12
+    marginTop: 4,
+    marginBottom: 12,
+    marginHorizontal: 12
   },
   suggestions: {
     elevation: 2,
@@ -45,6 +50,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 20
   }
+})
+
+const resetAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Home' })]
 })
 
 /**
@@ -76,12 +86,14 @@ class ShareScreen extends Component {
       showSnackbar: false,
       snackBarMessage: '',
       hasInvalidEmail: false,
-      userToRemove: null
+      userToRemove: null,
+      unlinkDialog: false
     }
   }
 
   componentDidMount() {
     this.props.navigation.setParams({ handleSend: () => this.aboutToSendInvites() })
+    // Fetch all invites (whether one has accepted or not the invitation)
     const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
     ref.once('value').then(snapshot => {
       if (snapshot.val()) {
@@ -129,7 +141,7 @@ class ShareScreen extends Component {
       if (email.length > 1) {
         Contacts.getContactsMatchingString(email, (err, contacts) => {
           if (err === 'denied') {
-            console.log('permission denied')
+            //console.log('permission denied')
           } else {
             // Filter contacts without email addresses
             contacts = contacts.filter(c => c.emailAddresses.length > 0).map(c => ({ ...c, photo: c.thumbnailPath }))
@@ -165,44 +177,101 @@ class ShareScreen extends Component {
       return
     }
 
-    const code = Math.floor(Math.random() * 9999) + 1
+    // Generate a 4 digits code
+    const code = Math.floor(1000 + Math.random() * 9000)
+    const date = moment().unix()
 
     // Create shares on firebase
     const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
-    const c = contacts.map(contact => {
-      return { email: contact.email, status: 'pending', code }
-    })
-    ref.set(c)
+    const snapshot = await ref.once('value')
+    let invites = []
+    if (snapshot.val()) {
+      const data = snapshot.val()
+      for (const invite of data) {
+        invites.push(invite)
+      }
+    }
+    for (const contact of contacts) {
+      invites.push({ email: contact.email, status: SHARE_STATUS.PENDING, code, date })
+    }
+    ref.set(invites)
 
     const ref2 = database().ref(`/invites/${code}`)
     const c2 = contacts.map(contact => {
       return { dest: contact.email, sender: auth().currentUser.uid }
     })
-    ref2.set(c2)
+    ref2.set(c2).then(() => {
+      // Send email
+      const { displayName: name, email } = auth().currentUser
+      let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
+        ${i18n.t('share.mail.code')}<br><br>
+        <b>${code}</b><br><br>
+        ${i18n.t('share.mail.download', {
+          url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding&referrer=' + email
+        })}`
+      Mailer.mail(
+        {
+          subject: i18n.t('share.mail.subject', { name }),
+          recipients: contacts.map(c => c.email),
+          body,
+          isHTML: true
+        },
+        (error, event) => {
+          // console.warn('Error sending the mail', error, event)
+        }
+      )
+      // After one has sent invites, modify lists to display to user, and remove the possibility to invite same contact twice
+      this.setState({ contacts: [], invites })
+    })
+  }
 
-    // Send email
-    const { displayName: name, email } = auth().currentUser
-    let body = `${i18n.t('share.mail.body', { name, email })}<br><br>
-      ${i18n.t('share.mail.code')}<br><br>
-      ${code}<br><br>
-      ${i18n.t('share.mail.download', {
-        url: 'https://play.google.com/store/apps/details?id=io.matierenoire.breastfeeding&referrer=' + email
-      })}`
-    Mailer.mail(
-      {
-        subject: i18n.t('share.mail.subject', { name }),
-        recipients: contacts.map(c => c.email),
-        body,
-        isHTML: true
-      },
-      (error, event) => {
-        console.warn('error mail', error, event)
+  removeInvite = async () => {
+    const { userToRemove, invites } = this.state
+    const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
+    const snapshot = await ref.once('value')
+    if (snapshot.val()) {
+      ref.set(snapshot.val().filter(invite => invite.email !== userToRemove.email))
+
+      // Clean invite 'table'
+      const ref2 = database().ref(`/invites/${userToRemove.code}`)
+      const snapshot2 = await ref2.once('value')
+      if (snapshot2.val()) {
+        ref2.set(snapshot2.val().filter(invite => !(invite.sender === auth().currentUser.uid && invite.dest === userToRemove.email)))
       }
-    )
+
+      const ref3 = database().ref(`/users/${userToRemove.uid}`)
+      ref3.child('host').remove()
+      ref3.child('linked').remove()
+
+      // Also remove data in list without doing a remote call
+      let i = invites.filter(invite => invite.email !== userToRemove.email)
+
+      this.setState({ userToRemove: null, invites: i })
+    }
+  }
+
+  unlinkGuestToHost = async () => {
+    const ref = database().ref(`/users/${auth().currentUser.uid}`)
+    ref.child('linked').remove()
+    const snapshot = await ref.child('host').once('value')
+    if (snapshot.val()) {
+      const host = snapshot.val()
+      const refHostInvites = database().ref(`/users/${host}/invites`)
+      const snapshotInvites = await refHostInvites.once('value')
+      if (snapshotInvites.val()) {
+        refHostInvites.set(snapshotInvites.val().filter(invite => invite.uid !== auth().currentUser.uid))
+      }
+      ref.child('host').remove()
+      dataStore.userIsGuest = false
+      this.props.navigation.dispatch(resetAction)
+    }
   }
 
   /// render functions
 
+  /**
+   * Display a list of matching contacts that current user can invite.
+   */
   renderSuggestions = () =>
     this.state.suggestions.map((s, index) => (
       <List.Item
@@ -213,25 +282,41 @@ class ShareScreen extends Component {
       />
     ))
 
+  /**
+   * Display an input where current user can type to search from his contacts list.
+   */
   renderInputForm = () => {
-    const { colors } = this.props.theme
-    return (
-      <View style={styles.inputContainer}>
-        <Avatar.Icon style={{ marginRight: 12 }} size={48} icon="person-add" />
-        <TextInput
-          autoCapitalize="none"
-          keyboardType="email-address"
-          style={{ flexGrow: 1, backgroundColor: colors.background }}
-          value={this.state.email}
-          placeholder={i18n.t('share.placeholder')}
-          onChangeText={this.onChangeText}
-          underlineColor={colors.background}
-          onSubmitEditing={this.addContactFromTextInput}
-        />
-      </View>
-    )
+    const { invites, contacts, email } = this.state
+    if (dataStore.userIsGuest) {
+      return (
+        <Button mode="contained" icon="exit-to-app" style={{ marginBottom: 16 }} onPress={() => this.setState({ unlinkDialog: true })}>
+          {i18n.t('share.leaveButton')}
+        </Button>
+      )
+    } else if (invites.length + contacts.length < 3) {
+      const { colors } = this.props.theme
+      return (
+        <View style={styles.inputContainer}>
+          <Avatar.Icon size={48} icon="person-add" />
+          <TextInput
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={{ flexGrow: 1, backgroundColor: colors.background }}
+            value={email}
+            placeholder={i18n.t('share.placeholder')}
+            onChangeText={this.onChangeText}
+            underlineColor={colors.background}
+            onSubmitEditing={this.addContactFromTextInput}
+          />
+        </View>
+      )
+    }
+    return false
   }
 
+  /**
+   * If current user or contact has an attached picture, try to display it.
+   */
   renderAvatar = contact => {
     if (contact.photoURL) {
       return (
@@ -249,6 +334,9 @@ class ShareScreen extends Component {
     }
   }
 
+  /**
+   * Render a contact not yet added to the list of invites.
+   */
   renderSuggestion = ({ item }) => (
     <List.Item
       style={{ elevation: 1 }}
@@ -259,6 +347,9 @@ class ShareScreen extends Component {
     />
   )
 
+  /**
+   * Display a warning if one wants to send invites when a malformed email was typed.
+   */
   renderInvalidEmailDialog = () => {
     const { palette } = this.props.theme
     return (
@@ -292,6 +383,9 @@ class ShareScreen extends Component {
     )
   }
 
+  /**
+   * Display a confirmation dialog when one wants to remove a contact already linked.
+   */
   renderRemoveInviteDialog = () => {
     const { userToRemove } = this.state
     const { palette } = this.props.theme
@@ -300,7 +394,7 @@ class ShareScreen extends Component {
         <Dialog visible={true} onDismiss={() => this.setState({ userToRemove: null })}>
           <Dialog.Content>
             <Subheading style={{ marginBottom: 8 }}>{i18n.t('share.removeDialog.title')}</Subheading>
-            {userToRemove.status === 'active' && (
+            {userToRemove.status === SHARE_STATUS.ACTIVE && (
               <Paragraph>{i18n.t('share.removeDialog.description', { email: userToRemove.email })}</Paragraph>
             )}
           </Dialog.Content>
@@ -308,7 +402,7 @@ class ShareScreen extends Component {
             <Button color={palette.buttonColor} onPress={() => this.setState({ userToRemove: null })}>
               {i18n.t('cancel')}
             </Button>
-            <Button color={palette.buttonColor} onPress={() => this.setState({ userToRemove: null })}>
+            <Button color={palette.buttonColor} onPress={() => this.removeInvite()}>
               {i18n.t('ok')}
             </Button>
           </Dialog.Actions>
@@ -317,49 +411,81 @@ class ShareScreen extends Component {
     )
   }
 
-  render = () => (
-    <>
-      <ScrollView keyboardShouldPersistTaps={'always'} style={{ backgroundColor: this.props.theme.colors.background }}>
-        <List.Item title={auth().currentUser.email} left={() => this.renderAvatar(auth().currentUser)} />
-        {this.state.invites.map((i, index) => (
-          <List.Item
-            key={index}
-            title={i.email}
-            description={i18n.t('share.inviteStatus.' + i.status)}
-            left={() => this.renderAvatar(i)}
-            right={() => (
-              <IconButton color={this.props.theme.colors.text} icon="delete" onPress={() => this.setState({ userToRemove: i })} />
-            )}
-          />
-        ))}
-        {this.state.contacts.map((c, index) => (
-          <List.Item
-            key={index}
-            title={c.displayName ? c.displayName : c.email}
-            description={c.displayName ? c.email : c.isValid ? false : i18n.t('share.invalidEmail')}
-            left={() => this.renderAvatar(c)}
-            right={() => <IconButton color={this.props.theme.colors.text} icon="close" onPress={() => this.removeContact(c.email)} />}
-          />
-        ))}
-        {this.renderInputForm()}
-        <Surface style={styles.suggestions}>
-          <FlatList
-            keyboardShouldPersistTaps={'always'}
-            data={this.state.suggestions}
-            extraData={this.state.suggestions}
-            extractData={this.state.suggestions.length}
-            keyExtractor={(item, index) => `s-${index}`}
-            renderItem={this.renderSuggestion}
-          />
-        </Surface>
-      </ScrollView>
-      {this.renderInvalidEmailDialog()}
-      {this.state.userToRemove && this.renderRemoveInviteDialog()}
-      <Snackbar visible={this.state.showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
-        {this.state.snackBarMessage}
-      </Snackbar>
-    </>
-  )
+  /**
+   * Display a confirmation dialog when a guest wants to leave shared dataSet.
+   */
+  renderUnlinkDialog = () => {
+    const { palette } = this.props.theme
+    return (
+      <Portal>
+        <Dialog visible={this.state.unlinkDialog} onDismiss={() => this.setState({ unlinkDialog: false })}>
+          <Dialog.Content>
+            <Subheading>{i18n.t('share.leaveDialog.description')}</Subheading>
+          </Dialog.Content>
+          <Dialog.Actions style={styles.popupButtonsContainer}>
+            <Button color={palette.buttonColor} onPress={() => this.setState({ unlinkDialog: false })}>
+              {i18n.t('cancel')}
+            </Button>
+            <Button color={palette.buttonColor} onPress={() => this.unlinkGuestToHost()}>
+              {i18n.t('ok')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
+
+  render = () => {
+    const { colors } = this.props.theme
+    const { invites, contacts, suggestions, showSnackbar, snackBarMessage, userToRemove } = this.state
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView keyboardShouldPersistTaps={'always'} style={{ padding: 8, backgroundColor: colors.background }}>
+          <Caption style={{ marginHorizontal: 12, marginTop: 12 }}>
+            {dataStore.userIsGuest ? i18n.t('share.sectionGuest') : i18n.t('share.sectionHost')}
+          </Caption>
+          <List.Section>
+            <List.Item title={auth().currentUser.email} left={() => this.renderAvatar(auth().currentUser)} />
+            {invites.map((i, index) => (
+              <List.Item
+                key={index}
+                title={i.email}
+                description={i18n.t('share.inviteStatus.' + i.status)}
+                left={() => this.renderAvatar(i)}
+                right={() => <IconButton color={colors.text} icon="delete" onPress={() => this.setState({ userToRemove: i })} />}
+              />
+            ))}
+            {contacts.map((c, index) => (
+              <List.Item
+                key={index}
+                title={c.displayName ? c.displayName : c.email}
+                description={c.displayName ? c.email : c.isValid ? false : i18n.t('share.invalidEmail')}
+                left={() => this.renderAvatar(c)}
+                right={() => <IconButton color={colors.text} icon="close" onPress={() => this.removeContact(c.email)} />}
+              />
+            ))}
+          </List.Section>
+          {this.renderInputForm()}
+          <Surface style={styles.suggestions}>
+            <FlatList
+              keyboardShouldPersistTaps={'always'}
+              data={suggestions}
+              extraData={suggestions}
+              extractData={suggestions.length}
+              keyExtractor={(item, index) => `s-${index}`}
+              renderItem={this.renderSuggestion}
+            />
+          </Surface>
+        </ScrollView>
+        {this.renderInvalidEmailDialog()}
+        {userToRemove && this.renderRemoveInviteDialog()}
+        {this.renderUnlinkDialog()}
+        <Snackbar visible={showSnackbar} onDismiss={() => this.setState({ showSnackbar: false })}>
+          {snackBarMessage}
+        </Snackbar>
+      </View>
+    )
+  }
 }
 
 export default withTheme(ShareScreen)

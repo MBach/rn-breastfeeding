@@ -36,9 +36,7 @@ class LoadingScreen extends Component {
       <Appbar.Header>
         <Appbar.Content title={''} />
       </Appbar.Header>
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </View>
+      <View style={{ flex: 1, justifyContent: 'center' }}></View>
     </View>
   )
 }

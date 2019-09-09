@@ -10,10 +10,6 @@ import database from '@react-native-firebase/database'
  * @version 2.0
  */
 class DataStore {
-  @observable updating = false
-
-  ///
-
   @persist
   @observable
   _theme = 'day'
@@ -142,7 +138,7 @@ class DataStore {
 
   ///
 
-  //@persist('object')
+  @persist('object')
   @observable
   _records = []
 
@@ -174,7 +170,12 @@ class DataStore {
 
   ///
 
-  _refUser = null
+  @observable
+  userIsGuest = false
+
+  ///
+
+  _refUserInputs = null
 
   fetchCloudData = async () => {
     if (/*dataStore.migrated &&*/ auth().currentUser) {
@@ -184,12 +185,13 @@ class DataStore {
         const data = snapshot.val()
         // Check if current user is the owner or has been invited by someone else
         if (data.linked) {
-          _refUser = database().ref(`/users/${data.host}/inputs`)
+          this.userIsGuest = true
+          this._refUserInputs = database().ref(`/users/${data.host}/inputs`)
         } else {
-          _refUser = ref.child('inputs')
+          this._refUserInputs = ref.child('inputs')
         }
         // Get the dataSet
-        const snapshot2 = await _refUser.once('value')
+        const snapshot2 = await this._refUserInputs.once('value')
         if (snapshot2.val()) {
           const values = Object.values(snapshot2)
           // Convert back Object to Array
@@ -213,15 +215,17 @@ class DataStore {
   @action
   addEntry = async data => {
     if (auth().currentUser) {
-      const ref = _refUser.child(data.date.toString())
+      let ref
+      if (this._refUserInputs === null) {
+        ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date.toString()}`)
+      } else {
+        ref = this._refUserInputs.child(data.date.toString())
+      }
       await ref.set({ ...data })
-      // console.log('new data inserted')
     } else {
-      this.updating = true
       let r = [...this.records]
       r.push(data)
       this.records = r
-      this.updating = false
     }
     this.isRunning = { left: false, right: false }
     this.toggles = { left: false, right: false }
@@ -237,17 +241,20 @@ class DataStore {
   updateGroup = async newGroup => {
     let groups = this.groupedRecords
     if (auth().currentUser) {
-      //console.warn('newGroup', newGroup)
       let toDelete = groups.find(g => g.day === newGroup.day)
-      //console.warn('toDelete', toDelete)
       if (toDelete) {
-        const ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+        let ref
+        if (this._refUserInputs === null) {
+          ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+        } else {
+          ref = this._refUserInputs
+        }
+
         for (const entry of toDelete.group) {
           await ref.child(`${entry.date}`).remove()
         }
         for (const entry of newGroup.group) {
-          const ref2 = database().ref(`/users/${auth().currentUser.uid}/inputs/${entry.date}`)
-          await ref2.set({ ...entry })
+          await ref.child(entry.date).set({ ...entry })
         }
       }
       await this.fetchCloudData()

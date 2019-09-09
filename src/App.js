@@ -87,7 +87,7 @@ export default function App() {
               console.log('signInSilently', res2)
             })
             .catch(err => {
-              console.warn('cannot sign-in with credential', err)
+              console.log('cannot sign-in with credential', err)
             })
         }
       })
@@ -100,7 +100,7 @@ export default function App() {
               console.log('signInAnonymously', res)
             })
             .catch(err => {
-              console.warn('cannot sign-in anonymously', err)
+              console.log('cannot sign-in anonymously', err)
             })
         }
       })
@@ -108,7 +108,6 @@ export default function App() {
   }, [])
 
   const onAuthStateChanged = user => {
-    //console.warn('user', user)
     if (initilizing) setInitilizing(false)
   }
 

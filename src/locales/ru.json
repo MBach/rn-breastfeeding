@@ -44,6 +44,7 @@
     "noDuration": "Ваша запись не имеет длительности"
   },
   "share": {
+    "section": "",
     "placeholder": "",
     "contactAlreadyAdded": "",
     "invalidEmail": "",
@@ -64,9 +65,14 @@
     "inviteStatus": {
       "active": "",
       "pending": ""
+    },
+    "leaveButton": "",
+    "leaveDialog": {
+      "description": ""
     }
   },
   "code": {
+    "verify": "",
     "invalidCode": ""
   },
   "feedback": {
