@@ -25,16 +25,16 @@ class DataStore {
   ///
 
   @persist
-  @observable
+  //@observable
   _migrated = false
 
-  @computed
+  /*@computed
   get migrated() {
     return this._migrated
   }
   set migrated(m) {
     this._migrated = m
-  }
+  }*/
 
   ///
 
@@ -178,55 +178,63 @@ class DataStore {
   _refUserInputs = null
 
   fetchCloudData = async () => {
-    if (/*dataStore.migrated &&*/ auth().currentUser) {
-      const ref = database().ref(`/users/${auth().currentUser.uid}`)
-      const snapshot = await ref.once('value')
-      if (snapshot.val()) {
-        const data = snapshot.val()
-        // Check if current user is the owner or has been invited by someone else
-        if (data.linked) {
-          this.userIsGuest = true
-          this._refUserInputs = database().ref(`/users/${data.host}/inputs`)
-        } else {
-          this._refUserInputs = ref.child('inputs')
-        }
-        // Get the dataSet
-        const snapshot2 = await this._refUserInputs.once('value')
-        if (snapshot2.val()) {
-          const values = Object.values(snapshot2)
-          // Convert back Object to Array
-          let r = []
-          for (const entry of Object.values(values[0].value)) {
-            r.push(entry)
-          }
-          this._records = r
-        }
+    if (!auth().currentUser) {
+      return
+    }
+    const ref = database().ref(`/users/${auth().currentUser.uid}`)
+    const snapshot = await ref.once('value')
+    if (snapshot.val()) {
+      const data = snapshot.val()
+      // Check if current user is the owner or has been invited by someone else
+      if (data.linked) {
+        this.userIsGuest = true
+        this._refUserInputs = database().ref(`/users/${data.host}/inputs`)
       } else {
-        this._records = []
+        this._refUserInputs = ref.child('inputs')
+      }
+      // Get the dataSet
+      const snapshot2 = await this._refUserInputs.once('value')
+      if (snapshot2.val()) {
+        const values = Object.values(snapshot2)
+        // Convert back Object to Array
+        let r = []
+        for (const entry of Object.values(values[0].value)) {
+          r.push(entry)
+        }
+        this.records = r
       }
     }
+  }
+
+  migrate = async newUid => {
+    if (this._migrated) {
+      return
+    }
+    // User has installed v2 and therefore has an uid
+    for (const record of this.records) {
+      const ref = database().ref(`/users/${newUid}/inputs/${record.date}`)
+      await ref.set({ ...record })
+    }
+    this._migrated = true
   }
 
   @action
   hydrateComplete = () => {
-    database().setPersistenceEnabled(true)
+    //database().setPersistenceEnabled(true)
   }
 
   @action
   addEntry = async data => {
-    if (auth().currentUser) {
-      let ref
-      if (this._refUserInputs === null) {
-        ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${data.date.toString()}`)
-      } else {
-        ref = this._refUserInputs.child(data.date.toString())
-      }
-      await ref.set({ ...data })
-    } else {
-      let r = [...this.records]
-      r.push(data)
-      this.records = r
+    if (this._refUserInputs === null) {
+      this._refUserInputs = database().ref(`/users/${auth().currentUser.uid}/inputs`)
     }
+    const ref = this._refUserInputs.child(data.date.toString())
+    await ref.set({ ...data }, error => {
+      if (error) {
+        console.error(error)
+        return false
+      }
+    })
     this.isRunning = { left: false, right: false }
     this.toggles = { left: false, right: false }
     this.timers = { left: 0, right: 0 }

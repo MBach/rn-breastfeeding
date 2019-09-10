@@ -17,7 +17,6 @@ import {
   Paragraph
 } from 'react-native-paper'
 import auth from '@react-native-firebase/auth'
-import database from '@react-native-firebase/database'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
@@ -115,22 +114,13 @@ class HomeScreen extends Component {
       this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
     }
     await dataStore.fetchCloudData()
-    this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords })
+    const groupedRecords = dataStore.groupedRecords
+    this.setState({ fetching: false, groupedRecords })
   }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.refreshLastEntry)
     clearInterval(this.autoRefresh)
-  }
-
-  migrateDataToFirebase = async () => {
-    if (!dataStore.migrated) {
-      for (const r of dataStore.records) {
-        const ref = database().ref(`/users/${auth().currentUser.uid}/inputs/${r.date}`)
-        await ref.set({ ...r })
-      }
-      dataStore.migrated = true
-    }
   }
 
   createAnimation = () =>
@@ -342,11 +332,7 @@ class HomeScreen extends Component {
       return (
         <Appbar.Action
           icon="account-circle"
-          onPress={() =>
-            signIn(name => {
-              this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }, this.migrateDataToFirebase)
-            })
-          }
+          onPress={() => signIn(name => this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }))}
         />
       )
     }

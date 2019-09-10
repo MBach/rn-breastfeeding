@@ -4,14 +4,14 @@
     "home": "Casa",
     "addEntry": "Aggiungi una voce",
     "contact": "Contatto",
-    "code": "",
-    "feedback": ""
+    "code": "Usa un codice",
+    "feedback": "Risposta"
   },
   "menu": {
     "share": "Condividere",
     "selectContact": "Seleziona un contatto",
-    "code": "",
-    "feedback": "",
+    "code": "Usa un codice",
+    "feedback": "Risposta",
     "title": "Preferenze di visualizzazione",
     "day": "Modalità giorno",
     "night": "Modalità notte"
@@ -31,7 +31,7 @@
       "noData": "Nessuna voce"
     },
     "greeting": "Ciao %{name}!",
-    "accountLinked": ""
+    "accountLinked": "Congratulazioni, il tuo account è stato collegato!"
   },
   "add": {
     "date": "Data",
@@ -44,49 +44,50 @@
     "noDuration": "La tua voce non ha durata"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "Puoi invitare 3 contatti",
+    "sectionGuest": "Non puoi condividere dati già condivisi con te",
+    "placeholder": "Nome o indirizzo e-mail per la condivisione",
+    "contactAlreadyAdded": "Hai già aggiunto questo contatto",
+    "invalidEmail": "Questa email non è valida",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "Indirizzo email non valido",
+      "description": "I tuoi input non saranno condivisi con:"
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": " : %{url}"
+      "subject": "%{name} ha condiviso input con te",
+      "body": "%{name} (%{email}) ha condiviso input con te.",
+      "code": "Per visualizzare gli input, utilizzare questo codice:",
+      "download": "Per ottenere l'app, dai un'occhiata a questo link : %{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "Rimuovere il contatto invitato ?",
+      "description": "Se continui, %{email} non sarà più in grado di visualizzare o interagire con te."
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "Attivo",
+      "pending": "Stato in sospeso"
     },
-    "leaveButton": "",
+    "leaveButton": "Partire",
     "leaveDialog": {
-      "description": ""
+      "description": "Rimuovere te stesso dagli input condivisi con te ?"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "Verificare il codice",
+    "invalidCode": "Codice non valido"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
+    "title": "Grazie per aver utilizzato l'app Allattamento",
+    "subtitle": "Per favore, condividi i tuoi commenti, suggerimenti o segnalazioni di bug qui sotto",
+    "caption": "Seleziona un'opzione",
+    "comment": "Comment",
+    "suggestion": "Suggerimento",
+    "bug": "Bug",
+    "desc": "Aggiungi alcuni dettagli",
+    "sent": "Il tuo feedback è stato inviato. Grazie !",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "Devi selezionare un'opzione",
+      "desc": "Per favore, scrivi almeno 20 caratteri"
     }
   }
 }

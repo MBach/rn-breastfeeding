@@ -3,11 +3,14 @@ import { GoogleSignin, statusCodes } from 'react-native-google-signin'
 import auth, { firebase } from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 
-const deleteAnonymousDataWhenAuthed = anonUid => {
-  const ref = database().ref(`/users/${anonUid}`)
-  ref.once('value').then(snapshot => {
+const migrateDataWhenAuthed = (anonUid, uid) => {
+  const refAnon = database().ref(`/users/${anonUid}`)
+  refAnon.once('value').then(snapshot => {
     if (snapshot.val()) {
-      ref.remove()
+      const refAuthed = database().ref(`/users/${uid}`)
+      refAuthed.set(snapshot.val()).then(res => {
+        refAnon.remove()
+      })
     }
   })
 }
@@ -28,7 +31,7 @@ const signIn = async callback => {
     const res = await auth().signInWithCredential(credential)
     if (res && res.additionalUserInfo) {
       if (anonUid) {
-        deleteAnonymousDataWhenAuthed(anonUid)
+        migrateDataWhenAuthed(anonUid, res.user.uid)
       }
       if (callback) {
         callback(res.additionalUserInfo.profile.name)

@@ -1,92 +1,93 @@
 {
   "navigation": {
-    "title": "",
-    "home": "",
-    "addEntry": "",
-    "contact": "",
-    "code": "",
-    "feedback": ""
+    "title": "Amamentação",
+    "home": "casa",
+    "addEntry": "Adicionar uma nova entrada",
+    "contact": "Contact",
+    "code": "Use um código",
+    "feedback": "Feedback"
   },
   "menu": {
-    "share": "",
-    "selectContact": "",
-    "code": "",
-    "feedback": "",
-    "title": "",
-    "day": "",
-    "night": ""
+    "share": "Compartilhe",
+    "selectContact": "Selecione um contato",
+    "code": "Use um código",
+    "feedback": "Feedback",
+    "title": "Configurações de exibição",
+    "day": "Modo diurno",
+    "night": "Modo noturno"
   },
-  "vitaminD": "",
-  "cancel": "",
+  "vitaminD": "vitamina D",
+  "cancel": "Cancelar",
   "ok": "OK",
-  "left": "",
-  "right": "",
-  "bottle": "",
+  "left": "left",
+  "right": "certo",
+  "bottle": "Mamadeira",
   "minutes": "min",
   "home": {
-    "noEntry": "",
-    "lastEntry": "%{date}",
-    "add": "",
+    "noEntry": "Ainda não foram amamentadas",
+    "lastEntry": "Última amamentação à %{date}",
+    "add": "Toque no botão + para iniciar",
     "groupedEntries": {
-      "noData": ""
+      "noData": "Sem dados"
     },
-    "greeting": " %{name}!",
-    "accountLinked": ""
+    "greeting": "Olá %{name} !",
+    "accountLinked": "Parabéns, sua conta foi vinculada!"
   },
   "add": {
-    "date": "",
-    "timeSpent": "",
+    "date": "Date",
+    "timeSpent": "Tempo gasto",
     "remove1min": "-1min",
-    "add1min": "+1min",
-    "breast": "",
-    "manualEntry": "",
-    "durationPlaceholder": "",
-    "noDuration": ""
+    "add1min": "+ 1 min",
+    "breast": "Mama",
+    "manualEntry": "Entrada manual",
+    "durationPlaceholder": "Duração em minutos",
+    "noDuration": "Sua entrada não tem duração"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "Você pode convidar 3 contatos",
+    "sectionGuest": "Você não pode compartilhar dados já compartilhados com você",
+    "placeholder": "Nome ou endereço de email para compartilhamento",
+    "contactAlreadyAdded": "Você já adicionou este contato",
+    "invalidEmail": "Este email não é válido",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "Endereço de email inválido",
+      "description": "Suas entradas não serão compartilhadas com:"
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": ": %{url}"
+      "subject": "%{name} compartilhou entradas com você",
+      "body": "%{name} (%{email}) compartilhou entradas com você.",
+      "code": "Para visualizar as entradas, use este código:",
+      "download": "Para obter o aplicativo, confira este link : %{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "Remover contato convidado?",
+      "description": "Se você continuar, %{email} não poderá mais visualizar ou interagir com você."
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "Ativo",
+      "pending": "Pendente"
     },
-    "leaveButton": "",
+    "leaveButton": "Sair",
     "leaveDialog": {
-      "description": ""
+      "description": "Remover-se das entradas compartilhadas com você?"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "Verificar código",
+    "invalidCode": "Código inválido"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
-    "errors": {
-      "radio": "",
-      "desc": ""
+    "title": "Obrigado por usar o aplicativo de amamentação",
+    "subtitle": "Compartilhe seus comentários, sugestões ou relatório de erros abaixo",
+    "caption": "Selecione uma opção",
+    "comment": "Comentário",
+    "suggestion": "Sugestão",
+    "bug": "bug",
+    "desc": "Adicione alguns detalhes",
+    "sent": "Seus comentários foram enviados. Obrigado!",
+    "erros": {
+      "radio": "Você deve selecionar uma opção",
+      "desc": "Por favor, escreva pelo menos 20 caracteres"
     }
   }
 }

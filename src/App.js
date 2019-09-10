@@ -42,7 +42,6 @@ const DrawerNavigator = createDrawerNavigator(
     RootStack: RootStack
   },
   {
-    drawerLockMode: 'unlocked',
     drawerWidth: Math.min(width, height) * 0.8,
     overlayColor: 'rgba(0, 0, 0, 0.6)',
     contentComponent: Menu
@@ -96,8 +95,9 @@ export default function App() {
         if (err.userInfo === null) {
           auth()
             .signInAnonymously()
-            .then(res => {
+            .then(async res => {
               console.log('signInAnonymously', res)
+              await stores.dataStore.migrate(res.user.uid)
             })
             .catch(err => {
               console.log('cannot sign-in anonymously', err)

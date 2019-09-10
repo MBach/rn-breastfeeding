@@ -92,6 +92,15 @@ class ShareScreen extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
+        .then(res => {
+          // console.warn(res)
+        })
+        .catch(err => {
+          // console.warn(err)
+        })
+    }, 1000)
     this.props.navigation.setParams({ handleSend: () => this.aboutToSendInvites() })
     // Fetch all invites (whether one has accepted or not the invitation)
     const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
@@ -108,12 +117,21 @@ class ShareScreen extends Component {
   }
 
   addContactFromTextInput = () => {
-    if (this.state.email === '') {
+    const { email } = this.state
+    if (email === '') {
       return
     }
-    const isValid = validateEmail(this.state.email)
-    const contacts = [...this.state.contacts, { email: this.state.email, isValid }]
-    this.setState({ contacts, email: '', suggestions: [] })
+    if (this.state.contacts.findIndex(c => c.email === email) >= 0 || this.state.invites.findIndex(c => c.email === email) >= 0) {
+      this.setState({
+        showSnackbar: true,
+        snackBarMessage: i18n.t('share.contactAlreadyAdded'),
+        email
+      })
+    } else {
+      const isValid = validateEmail(email)
+      const contacts = [...this.state.contacts, { email, isValid }]
+      this.setState({ contacts, email: '', suggestions: [] })
+    }
   }
 
   addContactFromSuggestions = item => () => {
@@ -137,11 +155,14 @@ class ShareScreen extends Component {
 
   onChangeText = email => {
     this.setState({ email })
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS).then(() => {
+    PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS).then(res => {
+      if (!res) {
+        return
+      }
       if (email.length > 1) {
         Contacts.getContactsMatchingString(email, (err, contacts) => {
           if (err === 'denied') {
-            //console.log('permission denied')
+            // console.warn('permission denied')
           } else {
             // Filter contacts without email addresses
             contacts = contacts.filter(c => c.emailAddresses.length > 0).map(c => ({ ...c, photo: c.thumbnailPath }))

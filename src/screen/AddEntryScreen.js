@@ -183,6 +183,8 @@ class AddEntryScreen extends Component {
         if (res) {
           RNBreastFeeding.stopTimers()
           this.props.navigation.dispatch(resetAction)
+        } else {
+          this.setState({ sending: false })
         }
       })
     } else {

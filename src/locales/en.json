@@ -55,7 +55,7 @@
     },
     "mail": {
       "subject": "%{name} has shared inputs with you",
-      "body": "%{name} (%{email}) has shared inputs with you",
+      "body": "%{name} (%{email}) has shared inputs with you.",
       "code": "To view the inputs, use this code:",
       "download": "To get the App, check out this link: %{url}"
     },
@@ -84,7 +84,7 @@
     "suggestion": "Suggestion",
     "bug": "Bug",
     "desc": "Add some details",
-    "sent": "Your feeback has been sent. Thank you!",
+    "sent": "Your feedback has been sent. Thank you!",
     "errors": {
       "radio": "You must select an option",
       "desc": "Please write at least 20 characters"

@@ -4,14 +4,14 @@
     "home": "дом",
     "addEntry": "Добавить новую запись",
     "contact": "контакт",
-    "code": "",
-    "feedback": ""
+    "code": "Используйте код",
+    "feedback": "Обратная связь"
   },
   "menu": {
     "share": "Поделиться",
     "selectContact": "Выберите контакт",
-    "code": "",
-    "feedback": "",
+    "code": "Используйте код",
+    "feedback": "Обратная связь",
     "title": "Настройки отображения",
     "day": "Дневной режим",
     "night": "ночной режим"
@@ -30,8 +30,8 @@
     "groupedEntries": {
       "noData": "Нет данных"
     },
-    "greeting": "Привет %{name}!",
-    "accountLinked": ""
+    "greeting": "Привет %{name} !",
+    "accountLinked": "Поздравляем, ваш аккаунт был связан !"
   },
   "add": {
     "date": "дата",
@@ -44,49 +44,50 @@
     "noDuration": "Ваша запись не имеет длительности"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "Вы можете пригласить 3 контакта",
+    "sectionGuest": "Вы не можете делиться данными, уже переданными вам",
+    "placeholder": "Имя или адрес электронной почты для обмена",
+    "contactAlreadyAdded": "Вы уже добавили этот контакт",
+    "invalidEmail": "Это письмо недействительно",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "Неверный адрес электронной почты",
+      "description": "Ваши входные данные не будут переданы :"
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": " : %{url}"
+      "subject": "%{name} поделился с вами информацией",
+      "body": "%{name} (%{email}) поделился с вами информацией",
+      "code": "Для просмотра входов используйте этот код :",
+      "download": "Чтобы получить приложение, проверьте эту ссылку : %{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "Удалить приглашенный контакт?",
+      "description": "Если вы продолжите, %{email} не сможет больше визуализировать или взаимодействовать с вами."
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "активный",
+      "pending": "в ожидании"
     },
-    "leaveButton": "",
+    "leaveButton": "Покидать",
     "leaveDialog": {
-      "description": ""
+      "description": "Удалить себя из вкладов, которыми с вами поделились?"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "Проверить код",
+    "invalidCode": "Неверный код"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
+    "title": "Спасибо за использование приложения BreastFeeding",
+    "subtitle": "Пожалуйста, поделитесь вашими комментариями, предложениями или сообщением об ошибке ниже",
+    "caption": "Выберите опцию",
+    "comment": "Комментарий",
+    "suggestion": "предложение",
+    "bug": "ошибка",
+    "desc": "Добавить некоторые детали",
+    "sent": "Ваш отзыв отправлен. Спасибо!",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "Вы должны выбрать опцию",
+      "desc": "Пожалуйста, напишите не менее 20 символов"
     }
   }
 }

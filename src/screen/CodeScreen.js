@@ -121,7 +121,6 @@ class CodeScreen extends Component {
             <Subheading>To access shared inputs, enter the validation code</Subheading>
           )}
           <TextInput
-            ref={input => (this.codeInput = input)}
             label="Code"
             placeholder="4 digits code"
             keyboardType="numeric"

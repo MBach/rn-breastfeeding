@@ -4,14 +4,14 @@
     "home": "Startseite",
     "addEntry": "Einen neuen Eintrag hinzufügen",
     "contact": "Kontakt",
-    "code": "",
-    "feedback": ""
+    "code": "Verwenden Sie einen Code",
+    "feedback": "Feedback"
   },
   "menu": {
     "share": "Aktie",
     "selectContact": "Wählen Sie einen Kontakt aus",
-    "code": "",
-    "feedback": "",
+    "code": "Verwenden Sie einen Code",
+    "feedback": "Feedback",
     "title": "Bildschirmeinstellungen",
     "day": "Tages-Modus",
     "night": "Nacht-Modus"
@@ -31,7 +31,7 @@
       "noData": "Keine Daten"
     },
     "greeting": "Hallo %{name}!",
-    "accountLinked": ""
+    "accountLinked": "Herzlichen Glückwunsch, Ihr Konto wurde verlinkt !"
   },
   "add": {
     "date": "Datum",
@@ -44,49 +44,50 @@
     "noDuration": "Ihr Eintrag hat keine Dauer"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "Sie können 3 Kontakte einladen",
+    "sectionGuest": "Sie können keine Daten freigeben, die bereits für Sie freigegeben wurden",
+    "placeholder": "Name oder E-Mail-Adresse zum Teilen",
+    "contactAlreadyAdded": "Sie haben diesen Kontakt bereits hinzugefügt",
+    "invalidEmail": "Diese E-Mail ist nicht gültig",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "Ungültige E-Mail-Adresse",
+      "description": "Ihre Eingaben werden nicht geteilt mit:"
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": " : %{url}"
+      "subject": "%{name} hat Beiträge mit Ihnen geteilt",
+      "body": "%{name} (%{email})  hat Beiträge mit Ihnen geteilt.",
+      "code": "Verwenden Sie diesen Code, um die Eingaben anzuzeigen:",
+      "download": "Um die App zu erhalten, checke diesen Link aus : %{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "Eingeladenen Kontakt entfernen?",
+      "description": "Wenn Sie fortfahren, kann %{email} Sie nicht mehr visualisieren oder mit Ihnen interagieren."
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "Aktiv",
+      "pending": "Anstehend"
     },
-    "leaveButton": "",
+    "leaveButton": "Verlassen",
     "leaveDialog": {
-      "description": ""
+      "description": "Entfernen Sie sich von den mit Ihnen geteilten Eingaben ?"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "Code überprüfen",
+    "invalidCode": "Ungültiger Code"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
+    "title": "Vielen Dank, dass Sie die Stillen App verwenden",
+    "subtitle": "Bitte teilen Sie Ihre Kommentare, Vorschläge oder Fehlerbericht unten",
+    "caption": "Wähle eine Option",
+    "comment": "Kommentar",
+    "suggestion": "Vorschlag",
+    "bug": "Fehler",
+    "desc": "Fügen Sie einige Details hinzu",
+    "sent": "Ihr Feedback wurde gesendet. Vielen Dank !",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "Sie müssen eine Option auswählen",
+      "desc": "Bitte schreiben Sie mindestens 20 Zeichen"
     }
   }
 }

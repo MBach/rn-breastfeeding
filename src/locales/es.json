@@ -4,14 +4,14 @@
     "home": "Inicio",
     "addEntry": "Añadir una entrada",
     "contact": "Contacto",
-    "code": "",
-    "feedback": ""
+    "code": "Usa un código",
+    "feedback": "Realimentación"
   },
   "menu": {
     "share": "Compartir",
     "selectContact": "Seleccione un contacto",
-    "code": "",
-    "feedback": "",
+    "code": "Usa un código",
+    "feedback": "Realimentación",
     "title": "Preferencias de pantalla",
     "day": "Modo diurno",
     "night": "Modo nocturno"
@@ -31,7 +31,7 @@
       "noData": "Sin convulsiones"
     },
     "greeting": "¡Hola %{name}!",
-    "accountLinked": ""
+    "accountLinked": "¡Felicitaciones, su cuenta ha sido vinculada!"
   },
   "add": {
     "date": "Fecha",
@@ -44,49 +44,50 @@
     "noDuration": "Tu entrada no tiene duración"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "Puedes invitar a 3 contactos",
+    "sectionGuest": "No puede compartir datos ya compartidos con usted",
+    "placeholder": "Nombre o dirección de correo electrónico para compartir",
+    "contactAlreadyAdded": "Ya has agregado este contacto",
+    "invalidEmail": "Este correo no es valido",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "Dirección de correo electrónico no válida",
+      "description": "Sus entradas no se compartirán con :"
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": " : %{url}"
+      "subject": "%{name} ha compartido entradas contigo",
+      "body": "%{name} (%{email}) ha compartido entradas contigo.",
+      "code": "Para ver las entradas, use este código:",
+      "download": "Para obtener la aplicación, mira este enlace : %{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "¿Eliminar contacto invitado?",
+      "description": "Si continúa, %{email} ya no podrá visualizarlo ni interactuar con usted."
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "Activo",
+      "pending": "Pendiente"
     },
-    "leaveButton": "",
+    "leaveButton": "Salir",
     "leaveDialog": {
-      "description": ""
+      "description": "¿Eliminar de entradas compartidas con usted?"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "Código de verificación",
+    "invalidCode": "Codigo invalido"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
+    "title": "Gracias por usar la aplicación Amamantamiento",
+    "subtitle": "Comparta sus comentarios, sugerencias o informe de errores a continuación",
+    "caption": "Seleccione una opcion",
+    "comment": "Comentario",
+    "suggestion": "Sugerencia",
+    "bug": "Bug",
+    "desc": "Agrega algunos detalles",
+    "sent": "Su respuesta ha sido enviada. ¡Gracias!",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "Debes seleccionar una opción",
+      "desc": "Por favor escriba al menos 20 caracteres"
     }
   }
 }

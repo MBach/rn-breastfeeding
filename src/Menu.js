@@ -41,7 +41,9 @@ class Menu extends Component {
       this.navigate('Share')
     } else {
       this.props.navigation.closeDrawer()
-      setTimeout(signIn, 700)
+      setTimeout(() => {
+        signIn(() => this.navigate('Share'))
+      }, 700)
     }
   }
 

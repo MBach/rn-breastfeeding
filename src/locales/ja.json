@@ -4,14 +4,14 @@
     "home": "家",
     "addEntry": "エントリを追加する",
     "contact": "連絡",
-    "code": "",
-    "feedback": ""
+    "code": "コードを使用する",
+    "feedback": "フィードバック"
   },
   "menu": {
     "share": "シェア",
     "selectContact": "連絡先を選択",
-    "code": "",
-    "feedback": "",
+    "code": "コードを使用する",
+    "feedback": "フィードバック",
     "title": "ディスプレイの設定",
     "day": "日モード",
     "night": "夜モード"
@@ -31,7 +31,7 @@
       "noData": "データなし"
     },
     "greeting": "こんにちは%{name}！",
-    "accountLinked": ""
+    "accountLinked": "おめでとうございます、あなたのアカウントはリンクされました！"
   },
   "add": {
     "date": "日付",
@@ -44,49 +44,50 @@
     "noDuration": "あなたのエントリーは期間がありません"
   },
   "share": {
-    "section": "",
-    "placeholder": "",
-    "contactAlreadyAdded": "",
-    "invalidEmail": "",
+    "sectionHost": "3つの連絡先を招待できます",
+    "sectionGuest": "既に共有されているデータを共有することはできません",
+    "placeholder": "共有する名前または電子メールアドレス",
+    "contactAlreadyAdded": "この連絡先は既に追加されています",
+    "invalidEmail": "このメールは無効です",
     "invalidDialog": {
-      "title": "",
-      "description": ""
+      "title": "無効なメールアドレス",
+      "description": "あなたの入力は共有されません："
     },
     "mail": {
-      "subject": "%{name} ",
-      "body": "%{name} (%{email}) ",
-      "button": ": %{shareLink}",
-      "download": " : %{url}"
+      "subject": "%{name}はあなたと入力を共有しました",
+      "body": "%{name} (%{email}) はあなたと入力を共有しました",
+      "code": "入力を表示するには、次のコードを使用します：",
+      "download": "アプリを入手するには、次のリンクを確認してください：%{url}"
     },
     "removeDialog": {
-      "title": "",
-      "description": ""
+      "title": "招待された連絡先を削除しますか？",
+      "description": "続行すると、%{email}はあなたを視覚化したり対話したりできなくなります。"
     },
     "inviteStatus": {
-      "active": "",
-      "pending": ""
+      "active": "アクティブ",
+      "pending": "保留中"
     },
-    "leaveButton": "",
+    "leaveButton": "去る",
     "leaveDialog": {
-      "description": ""
+      "description": "共有された入力から自分自身を削除しますか？"
     }
   },
   "code": {
-    "verify": "",
-    "invalidCode": ""
+    "verify": "コードを確認する",
+    "invalidCode": "無効なコード"
   },
   "feedback": {
-    "title": "",
-    "subtitle": "",
-    "caption": "",
-    "comment": "",
-    "suggestion": "",
-    "bug": "",
-    "desc": "",
-    "sent": "",
+    "title": "乳房授乳アプリをご利用いただきありがとうございます",
+    "subtitle": "コメント、提案、バグレポートを下に共有してください",
+    "caption": "オプションを選択",
+    "comment": "コメント",
+    "suggestion": "提案",
+    "bug": "バグ",
+    "desc": "詳細を追加する",
+    "sent": "フィードバックが送信されました。ありがとうございます！",
     "errors": {
-      "radio": "",
-      "desc": ""
+      "radio": "オプションを選択する必要があります",
+      "desc": "少なくとも20文字を書いてください"
     }
   }
 }
