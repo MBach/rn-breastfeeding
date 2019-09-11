@@ -73,6 +73,12 @@
     }
   },
   "code": {
+    "title": "¿Recibiste un código de alguien?",
+    "description": "Para acceder a las entradas compartidas, inicie sesión e ingrese el código de validación",
+    "descriptionConnected": "Para acceder a las entradas compartidas, ingrese el código de validación",
+    "signIn": "Iniciar sesión",
+    "label": "Código",
+    "placeholder": "Código de 4 dígitos",
     "verify": "Código de verificación",
     "invalidCode": "Codigo invalido"
   },

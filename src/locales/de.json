@@ -73,6 +73,12 @@
     }
   },
   "code": {
+    "title": "Sie haben einen Code von jemandem erhalten?",
+    "description": "Um auf gemeinsame Eingaben zuzugreifen, melden Sie sich an und geben Sie den Validierungscode ein.",
+    "descriptionConnected": "Geben Sie den Validierungscode ein, um auf gemeinsam genutzte Eingänge zuzugreifen.",
+    "signIn": "Anmelden",
+    "label": "Code",
+    "placeholder": "4-stelliger Code",
     "verify": "Code überprüfen",
     "invalidCode": "Ungültiger Code"
   },

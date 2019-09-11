@@ -56,7 +56,7 @@
     "mail": {
       "subject": "%{name} a partagé des saisies avec vous",
       "body": "%{name} (%{email}) a partagé des saisies avec vous.",
-      "code": "Pour visualisez les saisies, utilisez ce code:",
+      "code": "Pour visualiser les saisies, utilisez ce code:",
       "download": "Pour obtenir l’App, visitez ce lien : %{url}"
     },
     "removeDialog": {
@@ -73,6 +73,12 @@
     }
   },
   "code": {
+    "title": "Vous avez reçu un code via quelqu’un que vous connaissez ?",
+    "description": "Pour accéder aux données partagées, veuillez vous connecter et entrer le code de validation",
+    "descriptionConnected": "Pour accéder aux données partagées, veuillez entrer le code de validation",
+    "signIn": "Se connecter",
+    "label": "Code",
+    "placeholder": "Code à 4 chiffres",
     "verify": "Vérifier le code",
     "invalidCode": "Code invalide"
   },

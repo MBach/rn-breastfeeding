@@ -100,10 +100,10 @@ class CodeScreen extends Component {
     return (
       <>
         <View style={{ padding: 8, backgroundColor: colors.background, flex: 1 }}>
-          <Subheading style={{ marginBottom: 16 }}>You have received a code from someone?</Subheading>
+          <Subheading style={{ marginBottom: 16 }}>{i18n.t('code.title')}</Subheading>
           {this.state.isAnonymous ? (
             <>
-              <Subheading>To access shared inputs, please sign in and enter the validation code</Subheading>
+              <Subheading>{i18n.t('code.description')}</Subheading>
               <View style={styles.signInButton}>
                 <Button
                   mode="contained"
@@ -113,16 +113,16 @@ class CodeScreen extends Component {
                     })
                   }
                 >
-                  Sign in
+                  {i18n.t('code.signIn')}
                 </Button>
               </View>
             </>
           ) : (
-            <Subheading>To access shared inputs, enter the validation code</Subheading>
+            <Subheading>{i18n.t('code.descriptionConnected')}</Subheading>
           )}
           <TextInput
-            label="Code"
-            placeholder="4 digits code"
+            label={i18n.t('code.label')}
+            placeholder={i18n.t('code.placeholder')}
             keyboardType="numeric"
             maxLength={4}
             value={this.state.code}

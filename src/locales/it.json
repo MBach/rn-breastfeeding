@@ -73,6 +73,12 @@
     }
   },
   "code": {
+    "title": "Hai ricevuto un codice da qualcuno?",
+    "description": "Per accedere a input condivisi, accedi e inserisci il codice di convalida",
+    "descriptionConnected": "Per accedere a input condivisi, inserisci il codice di convalida",
+    "signIn": "Accedi",
+    "label": "Code",
+    "placeholder": "Codice a 4 cifre",
     "verify": "Verificare il codice",
     "invalidCode": "Codice non valido"
   },

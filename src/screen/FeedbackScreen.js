@@ -64,7 +64,7 @@ class FeedbackScreen extends Component {
 
   renderRadio = (value, tr) => (
     <View style={styles.radioItem}>
-      <RadioButton value={value} />
+      <RadioButton accessibilityLabel={value} accessibilityRole="radio" value={value} />
       <Text onPress={() => this.setState({ radio: value })}>{i18n.t(tr)}</Text>
     </View>
   )

@@ -73,6 +73,12 @@
     }
   },
   "code": {
+    "title": "You have received a code from someone?",
+    "description": "To access shared inputs, please sign in and enter the validation code",
+    "descriptionConnected": "To access shared inputs, enter the validation code",
+    "signIn": "Sign in",
+    "label": "Code",
+    "placeholder": "4 digits code",
     "verify": "Verify code",
     "invalidCode": "Invalid code"
   },
