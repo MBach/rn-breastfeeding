@@ -15,23 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "954958868925-jj67922d02c02u088o6go0ju4r45367g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.matierenoire.breastfeeding",
-            "certificate_hash": "ff50aff0bccf8841197324efe32659472901fb32"
-          }
-        },
-        {
-          "client_id": "954958868925-u43rv07r15ah2opus6huhvqa0tkd57p1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.matierenoire.breastfeeding",
-            "certificate_hash": "7bcb5515492357726c8bae0344df119848a978be"
-          }
-        },
-        {
-          "client_id": "954958868925-inh064euo4mrdt38a8jst9hq13mi85uv.apps.googleusercontent.com",
+          "client_id": "954958868925-pcrtsf0dva4ds998ulr8k0pd10kurllh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.matierenoire.breastfeeding",
@@ -45,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyByoHx72yD0FYBFR2TezptkMIz7kFJ6Y2g"
+          "current_key": "AIzaSyDFiXg9yITUxSHeZVTGtTeags1NH2btfMk"
         }
       ],
       "services": {
