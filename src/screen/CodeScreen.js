@@ -106,6 +106,7 @@ class CodeScreen extends Component {
               <Subheading>{i18n.t('code.description')}</Subheading>
               <View style={styles.signInButton}>
                 <Button
+                  accessibilityLabel={i18n.t('code.signIn')}
                   mode="contained"
                   onPress={() =>
                     signIn(() => {
@@ -121,6 +122,7 @@ class CodeScreen extends Component {
             <Subheading>{i18n.t('code.descriptionConnected')}</Subheading>
           )}
           <TextInput
+            accessibilityLabel={i18n.t('code.label')}
             label={i18n.t('code.label')}
             placeholder={i18n.t('code.placeholder')}
             keyboardType="numeric"
@@ -133,6 +135,7 @@ class CodeScreen extends Component {
               <ActivityIndicator />
             ) : (
               <Button
+                accessibilityLabel={i18n.t('code.verify')}
                 disabled={this.state.isAnonymous || this.state.code.length !== 4}
                 mode="contained"
                 onPress={() => !this.state.loading && this.verifyCode()}

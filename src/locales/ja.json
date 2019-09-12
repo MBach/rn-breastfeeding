@@ -51,13 +51,13 @@
     "invalidEmail": "このメールは無効です",
     "invalidDialog": {
       "title": "無効なメールアドレス",
-      "description": "あなたの入力は共有されません："
+      "description": "あなたの入力は共有されません:"
     },
     "mail": {
       "subject": "%{name}はあなたと入力を共有しました",
       "body": "%{name} (%{email}) はあなたと入力を共有しました",
-      "code": "入力を表示するには、次のコードを使用します：",
-      "download": "アプリを入手するには、次のリンクを確認してください：%{url}"
+      "code": "入力を表示するには、次のコードを使用します:",
+      "download": "アプリを入手するには、次のリンクを確認してください:%{url}"
     },
     "removeDialog": {
       "title": "招待された連絡先を削除しますか？",
@@ -95,5 +95,21 @@
       "radio": "オプションを選択する必要があります",
       "desc": "少なくとも20文字を書いてください"
     }
+  },
+  "a11y": {
+    "menuIcon": "メニュー",
+    "signInIcon": "サインイン",
+    "loggedInIcon": "あなたは既に接続されています",
+    "backIcon": "戻る",
+    "goToAdd": "エントリの追加画面に移動",
+    "timerRunning": "タイマーが作動しています",
+    "addEntryIcon": "エントリの追加",
+    "buttonTimer": "%{timer}タイマー",
+    "removeml": "10mLを削除",
+    "addml": "10mLを追加",
+    "sliderml": "mL単位での量の調整",
+    "loadingIcon": "読み込み中",
+    "sendFeedbackIcon": "フィードバックを送信",
+    "sendInviteIcon": "招待状を送信"
   }
 }

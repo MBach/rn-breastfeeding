@@ -285,6 +285,7 @@ class HomeScreen extends Component {
       return (
         <View style={styles.absFab}>
           <FAB
+            accessibilityLabel={i18n.t('a11y.goToAdd')}
             style={[styles.fab, { backgroundColor: colors.primary }]}
             icon={'add'}
             onPress={() =>
@@ -302,6 +303,7 @@ class HomeScreen extends Component {
       return (
         <Animated.View style={styles.absFab}>
           <FAB
+            accessibilityLabel={i18n.t('a11y.timerRunning')}
             style={[styles.fab, { opacity: this.state.opacity, backgroundColor: colors.primary }]}
             icon={'timer'}
             onPress={() => this.props.navigation.navigate('AddEntry')}
@@ -313,24 +315,22 @@ class HomeScreen extends Component {
 
   renderProfileIcon = () => {
     if (auth().currentUser && !auth().currentUser.isAnonymous) {
-      //console.log('auth().currentUser 1', auth().currentUser)
       return (
         <Appbar.Action
+          accessibilityLabel={i18n.t('a11y.loggedInIcon')}
           icon={() => (
             <Image
               style={{ width: 32, height: 32, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 16 }}
               source={{ uri: auth().currentUser.photoURL }}
             />
           )}
-          onPress={() => {
-            //console.log('already signed in 2')
-          }}
+          // onPress={() => {}}
         />
       )
     } else {
-      //console.log('auth().currentUser 2', auth().currentUser)
       return (
         <Appbar.Action
+          accessibilityLabel={i18n.t('a11y.signInIcon')}
           icon="account-circle"
           onPress={() => signIn(name => this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }))}
         />
@@ -373,7 +373,7 @@ class HomeScreen extends Component {
     return (
       <View style={{ backgroundColor: colors.background, flex: 1 }}>
         <Appbar.Header>
-          <Appbar.Action icon="menu" onPress={() => this.props.navigation.toggleDrawer()} />
+          <Appbar.Action accessibilityLabel={i18n.t('a11y.menuIcon')} icon="menu" onPress={() => this.props.navigation.toggleDrawer()} />
           <Appbar.Content title={i18n.t('navigation.home')} />
           {this.renderProfileIcon()}
         </Appbar.Header>

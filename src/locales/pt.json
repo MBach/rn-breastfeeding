@@ -95,5 +95,21 @@
       "radio": "Você deve selecionar uma opção",
       "desc": "Por favor, escreva pelo menos 20 caracteres"
     }
+  },
+  "a11y": {
+    "menuIcon": "Menu",
+    "signInIcon": "Fazer login",
+    "logInIcon": "Você já está conectado",
+    "backIcon": "Voltar",
+    "goToAdd": "Vá para a tela Adicionar entrada",
+    "timerRunning": "O cronômetro está em execução",
+    "addEntryIcon": "Adicionar entrada",
+    "buttonTimer": "%{timer} cronômetro",
+    "removeml": "Remova 10 mL",
+    "addml": "Adicione 10 mL",
+    "sliderml": "Ajustar quantidade em mL",
+    "loadingIcon": "Carregando",
+    "sendFeedbackIcon": "Enviar feedback",
+    "sendInviteIcon": "Enviar convite"
   }
 }

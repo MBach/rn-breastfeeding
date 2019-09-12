@@ -210,6 +210,7 @@ class AddEntryScreen extends Component {
     return (
       <View style={{ flexDirection: 'column' }}>
         <FAB
+          accessibilityLabel={i18n.t('a11y.buttonTimer', { timer: i18n.t(timerId) })}
           style={[styles.fab, { backgroundColor: dataStore.isRunning[timerId] ? colors.secondary : colors.primary }]}
           icon={dataStore.isRunning[timerId] ? 'pause' : i18n.getLocalizedButton(timerId)}
           onPress={() => this.pauseResumeTimer(timerId)}
@@ -226,6 +227,7 @@ class AddEntryScreen extends Component {
     return (
       <View style={{ display: 'flex', flexDirection: 'row' }}>
         <Button
+          accessibilityLabel={i18n.t('a11y.removeml')}
           disabled={this.state.bottle === 0}
           color={palette.buttonColor}
           style={{ alignContent: 'center', justifyContent: 'center' }}
@@ -240,6 +242,7 @@ class AddEntryScreen extends Component {
         </Button>
         <View style={{ flex: 1, marginTop: 23 }}>
           <Slider
+            accessibilityLabel={i18n.t('a11y.sliderml')}
             value={dataStore.bottle}
             minimumValue={0}
             maximumValue={240}
@@ -254,6 +257,7 @@ class AddEntryScreen extends Component {
           </ThemedText>
         </View>
         <Button
+          accessibilityLabel={i18n.t('a11y.addml')}
           disabled={this.state.bottle === 240}
           color={palette.buttonColor}
           style={{ alignContent: 'center', justifyContent: 'center' }}
@@ -337,12 +341,12 @@ class AddEntryScreen extends Component {
     return (
       <View style={{ backgroundColor: colors.background, flex: 1 }}>
         <Appbar.Header>
-          <Appbar.BackAction onPress={() => this.props.navigation.navigate('Home')} />
+          <Appbar.BackAction accessibilityLabel={i18n.t('a11y.backIcon')} onPress={() => this.props.navigation.navigate('Home')} />
           <Appbar.Content title={i18n.t('navigation.addEntry')} />
           {this.state.sending ? (
-            <Appbar.Action icon={() => <ActivityIndicator size="small" color="white" />} />
+            <Appbar.Action accessibilityLabel={i18n.t('a11y.loadingIcon')} icon={() => <ActivityIndicator size="small" color="white" />} />
           ) : (
-            <Appbar.Action icon="check" onPress={() => this.validateEntry()} />
+            <Appbar.Action accessibilityLabel={i18n.t('a11y.addEntryIcon')} icon="check" onPress={() => this.validateEntry()} />
           )}
         </Appbar.Header>
         <View onLayout={this.onLayout} style={styles.mainContainer}>
@@ -365,6 +369,7 @@ class AddEntryScreen extends Component {
             <View style={{ marginBottom: 16 }}>
               <ThemedText palette={palette}>{i18n.t('vitaminD')}</ThemedText>
               <Switch
+                accessibilityLabel={i18n.t('vitaminD')}
                 value={dataStore.vitaminD}
                 onValueChange={() => {
                   dataStore.vitaminD = !dataStore.vitaminD
@@ -374,6 +379,7 @@ class AddEntryScreen extends Component {
             <ThemedText palette={palette}>{i18n.t('add.timeSpent')}</ThemedText>
             <View style={styles.timerContainer}>
               <Button
+                accessibilityLabel={i18n.t('add.remove1min')}
                 disabled={isNotRunning(dataStore.timers)}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}
@@ -388,6 +394,7 @@ class AddEntryScreen extends Component {
                 </ThemedText>
               </TouchableOpacity>
               <Button
+                accessibilityLabel={i18n.t('add.add1min')}
                 disabled={isNotRunning(dataStore.timers)}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}

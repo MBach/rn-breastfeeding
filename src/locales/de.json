@@ -95,5 +95,21 @@
       "radio": "Sie müssen eine Option auswählen",
       "desc": "Bitte schreiben Sie mindestens 20 Zeichen"
     }
+  },
+  "a11y": {
+    "menuIcon": "Menü",
+    "signInIcon": "Anmelden",
+    "loggedInIcon": "Sie sind bereits verbunden",
+    "backIcon": "Geh zurück",
+    "goToAdd": "Zum Bildschirm Eintrag hinzufügen",
+    "timerRunning": "Timer läuft",
+    "addEntryIcon": "Eintrag hinzufügen",
+    "buttonTimer": "%{timer} timer",
+    "removeml": "10mL entfernen",
+    "addml": "10mL hinzufügen",
+    "sliderml": "Menge in mL einstellen",
+    "loadingIcon": "Wird geladen",
+    "sendFeedbackIcon": "Feedback senden",
+    "sendInviteIcon": "Einladung senden"
   }
 }

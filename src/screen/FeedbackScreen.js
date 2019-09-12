@@ -72,12 +72,12 @@ class FeedbackScreen extends Component {
   render = () => (
     <View style={{ backgroundColor: this.props.theme.colors.background, flex: 1 }}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => this.props.navigation.navigate('Home')} />
+        <Appbar.BackAction accessibilityLabel={i18n.t('a11y.backIcon')} onPress={() => this.props.navigation.navigate('Home')} />
         <Appbar.Content title={i18n.t('navigation.feedback')} />
         {this.state.sending ? (
-          <Appbar.Action icon={() => <ActivityIndicator size="small" color="white" />} />
+          <Appbar.Action accessibilityLabel={i18n.t('a11y.loadingIcon')} icon={() => <ActivityIndicator size="small" color="white" />} />
         ) : (
-          <Appbar.Action icon="send" onPress={() => this.sendFeedback()} />
+          <Appbar.Action accessibilityLabel={i18n.t('a11y.sendFeedbackIcon')} icon="send" onPress={() => this.sendFeedback()} />
         )}
       </Appbar.Header>
       <ScrollView keyboardShouldPersistTaps={'always'} style={{ margin: 8 }}>
@@ -90,6 +90,7 @@ class FeedbackScreen extends Component {
           {this.renderRadio('bug', 'feedback.bug')}
         </RadioButton.Group>
         <TextInput
+          accessibilityLabel={i18n.t('feedback.desc')}
           style={styles.mt}
           mode={'outlined'}
           label={`${i18n.t('feedback.desc')} *`}

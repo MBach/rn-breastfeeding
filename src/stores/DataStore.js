@@ -257,12 +257,11 @@ class DataStore {
         } else {
           ref = this._refUserInputs
         }
-
         for (const entry of toDelete.group) {
           await ref.child(`${entry.date}`).remove()
         }
         for (const entry of newGroup.group) {
-          await ref.child(entry.date).set({ ...entry })
+          await ref.child(entry.date.toString()).set({ ...entry })
         }
       }
       await this.fetchCloudData()

@@ -72,7 +72,14 @@ class ShareScreen extends Component {
     return {
       title: i18n.t('navigation.contact'),
       headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: <IconButton icon="check" color="white" onPress={() => params.handleSend && params.handleSend()} />
+      headerRight: (
+        <IconButton
+          accessibilityLabel={i18n.t('a11y.sendInviteIcon')}
+          icon="check"
+          color="white"
+          onPress={() => params.handleSend && params.handleSend()}
+        />
+      )
     }
   }
 

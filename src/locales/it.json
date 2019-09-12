@@ -95,5 +95,21 @@
       "radio": "Devi selezionare un'opzione",
       "desc": "Per favore, scrivi almeno 20 caratteri"
     }
+  },
+  "a11y": {
+    "menuIcon": "Menu",
+    "signInIcon": "Accedi",
+    "loggInIcon": "Sei già connesso",
+    "backIcon": "Torna indietro",
+    "goToAdd": "Vai alla schermata Aggiungi voce",
+    "timerRunning": "Il timer è in esecuzione",
+    "addEntryIcon": "Aggiungi voce",
+    "buttonTimer": "%{timer} timer",
+    "removeml": "Rimuovi 10mL",
+    "addml": "Aggiungi 10mL",
+    "sliderml": "Regola quantità in mL",
+    "loadingIcon": "Caricamento",
+    "sendFeedbackIcon": "Invia feedback",
+    "sendInviteIcon": "Spedire un invito"
   }
 }
