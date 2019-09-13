@@ -12,11 +12,15 @@ Get the app on the Play Store [here](https://play.google.com/store/apps/details?
 
 ![Add entry](https://mbach.github.io/rn-breastfeeding/screenshots/add_entry.jpg)
 
+![Drawer](https://mbach.github.io/rn-breastfeeding/screenshots/drawer.jpg)
+
 ![App shortcut supported](https://mbach.github.io/rn-breastfeeding/screenshots/app_shortcut.jpg)
 
 ![Edit group](https://mbach.github.io/rn-breastfeeding/screenshots/edit_group.jpg)
 
 ![Main dark](https://mbach.github.io/rn-breastfeeding/screenshots/main_dark.jpg)
+
+![Notification](https://mbach.github.io/rn-breastfeeding/screenshots/notification.jpg)
 
 ## Requirements
 
@@ -28,17 +32,18 @@ You would like to translate this App in your language, or submit a bug / feature
 
 ### Translations
 
-- Verified: English, French
+- Verified: English, French, Italian
 
 ![en](https://mbach.github.io/rn-breastfeeding/flags/gb.png)
 ![fr](https://mbach.github.io/rn-breastfeeding/flags/fr.png)
+![it](https://mbach.github.io/rn-breastfeeding/flags/it.png)
 
 - Machine translated
 
 ![de](https://mbach.github.io/rn-breastfeeding/flags/de.png)
 ![es](https://mbach.github.io/rn-breastfeeding/flags/es.png)
-![it](https://mbach.github.io/rn-breastfeeding/flags/it.png)
 ![ja](https://mbach.github.io/rn-breastfeeding/flags/ja.png)
+![pt](https://mbach.github.io/rn-breastfeeding/flags/pt.png)
 ![ru](https://mbach.github.io/rn-breastfeeding/flags/ru.png)
 
 ## Copyright info
