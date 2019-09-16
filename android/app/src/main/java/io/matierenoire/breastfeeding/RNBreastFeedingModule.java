@@ -102,7 +102,9 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         payload.putString("timerId", timerId);
         payload.putDouble("timer", millis);
         payload.putBoolean("isRunning", isRunning);
-        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(ON_TICK, payload);
+        if (reactContext.hasActiveCatalystInstance()) {
+            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(ON_TICK, payload);
+        }
     }
 
     /**
