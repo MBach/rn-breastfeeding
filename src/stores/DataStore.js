@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx'
 import { persist } from 'mobx-persist'
+import moment from 'moment'
 import _ from 'lodash'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
@@ -25,16 +26,7 @@ class DataStore {
   ///
 
   @persist
-  //@observable
   _migrated = false
-
-  /*@computed
-  get migrated() {
-    return this._migrated
-  }
-  set migrated(m) {
-    this._migrated = m
-  }*/
 
   ///
 
@@ -152,6 +144,7 @@ class DataStore {
 
   @computed
   get groupedRecords() {
+    console.warn('DS groupedRecords')
     let groups = _.groupBy(this.records, record => record.day)
     let result = _.map(groups, (g, day) => {
       const group = _.orderBy(g, ['date'], ['desc'])
@@ -206,6 +199,42 @@ class DataStore {
     }
   }
 
+  fetchGroup = async () => {
+    if (!auth().currentUser) {
+      return
+    }
+
+    // Check if current user is the owner or has been invited by someone else
+    const refLinked = database().ref(`/users/${auth().currentUser.uid}/linked`)
+    const snapshot = await refLinked.once('value')
+    // User is a guest
+    if (snapshot.val()) {
+      this.userIsGuest = true
+
+      const refHost = database().ref(`/users/${auth().currentUser.uid}/host`)
+      const host = await refHost.once('value')
+      this._refUserInputs = database()
+        .ref(`/users/${host.val()}/inputs`)
+        .orderByKey()
+        .limitToLast(1)
+    } else {
+      this._refUserInputs = database()
+        .ref(`/users/${auth().currentUser.uid}/inputs`)
+        .orderByKey()
+        .limitToLast(1)
+    }
+
+    // Get the latest input
+    const lastOne = await this._refUserInputs.once('value')
+    if (lastOne.val()) {
+      const day = Object.values(lastOne.val())[0].day
+      const from = moment.unix(day).subtract(1, 'week')
+      console.warn(from)
+    } else {
+      console.warn('no data ?')
+    }
+  }
+
   migrate = async newUid => {
     if (this._migrated) {
       return
@@ -225,16 +254,11 @@ class DataStore {
 
   @action
   addEntry = async data => {
-    if (this._refUserInputs === null) {
-      this._refUserInputs = database().ref(`/users/${auth().currentUser.uid}/inputs`)
-    }
-    const ref = this._refUserInputs.child(data.date.toString())
-    await ref.set({ ...data }, error => {
-      if (error) {
-        console.error(error)
-        return false
-      }
-    })
+    // Save data to localStorage
+    let r = [...this.records]
+    r.push(data)
+    this.records = r
+
     this.isRunning = { left: false, right: false }
     this.toggles = { left: false, right: false }
     this.timers = { left: 0, right: 0 }
@@ -246,9 +270,31 @@ class DataStore {
   }
 
   @action
-  updateGroup = async newGroup => {
+  saveToCloud = async () => {
+    if (this._refUserInputs === null) {
+      this._refUserInputs = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+    }
+
+    // Make a backup
+    console.warn('saveToCloud')
+    let r = []
+    for (let record of this.records) {
+      if (record.s === undefined) {
+        console.warn('updating data', record)
+        const ref = this._refUserInputs.child(record.date.toString())
+        await ref.set({ ...record })
+        record.s = true
+      }
+      r.push(record)
+    }
+    this.records = r
+  }
+
+  @action
+  updateGroup = (currentGroup, newGroup) => {
+    console.warn('updateGroup', currentGroup, newGroup)
     let groups = this.groupedRecords
-    if (auth().currentUser) {
+    /*if (auth().currentUser) {
       let toDelete = groups.find(g => g.day === newGroup.day)
       if (toDelete) {
         let ref
@@ -258,18 +304,16 @@ class DataStore {
           ref = this._refUserInputs
         }
         for (const entry of toDelete.group) {
-          await ref.child(`${entry.date}`).remove()
+          ref.child(`${entry.date}`).remove()
         }
         for (const entry of newGroup.group) {
-          await ref.child(entry.date.toString()).set({ ...entry })
+          ref.child(entry.date.toString()).set({ ...entry })
         }
       }
-      await this.fetchCloudData()
-    } else {
-      groups = groups.filter(g => g.day !== newGroup.day)
-      groups.push(newGroup)
-      this.records = _.flatten(groups.map(g => g.group))
-    }
+    }*/
+    groups = groups.filter(g => g.day !== newGroup.day)
+    groups.push(newGroup)
+    this.records = _.flatten(groups.map(g => g.group))
   }
 }
 

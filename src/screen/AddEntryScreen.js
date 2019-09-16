@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 
 const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Home' })]
+  actions: [NavigationActions.navigate({ routeName: 'Home', params: { saveRemote: true } })]
 })
 
 function ThemedText({ style, palette, children }) {
@@ -179,12 +179,12 @@ class AddEntryScreen extends Component {
         vitaminD: dataStore.vitaminD
       }
       this.setState({ sending: true }, async () => {
-        const res = await dataStore.addEntry(data)
-        if (res) {
+        if (dataStore.addEntry(data)) {
           RNBreastFeeding.stopTimers()
           this.props.navigation.dispatch(resetAction)
         } else {
           this.setState({ sending: false })
+          console.warn('error when adding new input')
         }
       })
     } else {
@@ -380,7 +380,7 @@ class AddEntryScreen extends Component {
             <View style={styles.timerContainer}>
               <Button
                 accessibilityLabel={i18n.t('add.remove1min')}
-                disabled={isNotRunning(dataStore.timers)}
+                disabled={!dataStore.isRunning['left'] && !dataStore.isRunning['right']}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}
                 mode="text"
@@ -395,7 +395,7 @@ class AddEntryScreen extends Component {
               </TouchableOpacity>
               <Button
                 accessibilityLabel={i18n.t('add.add1min')}
-                disabled={isNotRunning(dataStore.timers)}
+                disabled={!dataStore.isRunning['left'] && !dataStore.isRunning['right']}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}
                 mode="text"

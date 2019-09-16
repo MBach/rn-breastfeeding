@@ -86,6 +86,7 @@ class HomeScreen extends Component {
       groupedRecords: [],
       appState: AppState.currentState,
       currentGroup: null,
+      newGroup: null,
       editGroupDialog: false,
       editLastEntry: false,
       opacity: new Animated.Value(1),
@@ -109,11 +110,17 @@ class HomeScreen extends Component {
       this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
     const { params } = this.props.navigation.state
-    // Used when one has successfully linked his account from another one by using a code
-    if (params && params.accountLinked) {
-      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
+    if (params) {
+      if (params.saveRemote) {
+        console.warn('about to remote save')
+        dataStore.saveToCloud()
+      }
+      // Used when one has successfully linked his account from another one by using a code
+      if (params && params.accountLinked) {
+        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
+      }
     }
-    await dataStore.fetchCloudData()
+    //await dataStore.fetchCloudData()
     const groupedRecords = dataStore.groupedRecords
     this.setState({ fetching: false, groupedRecords })
   }
@@ -150,8 +157,8 @@ class HomeScreen extends Component {
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
 
-  editGroup = item => {
-    this.setState({ currentGroup: { ...item }, editGroupDialog: true })
+  fetchMore = () => {
+    // dataStore.fetchGroup()
   }
 
   ///
@@ -194,7 +201,7 @@ class HomeScreen extends Component {
     return (
       <TouchableRipple
         style={{ borderBottomColor: palette.separator, ...styles.list }}
-        onPress={() => this.editGroup(item)}
+        onPress={() => this.setState({ currentGroup: { ...item }, newGroup: { ...item }, editGroupDialog: true })}
         rippleColor={palette.rippleColor}
       >
         <List.Section title={i18n.formatLongDay(item.day)}>
@@ -212,15 +219,15 @@ class HomeScreen extends Component {
 
   editGroupDialog = () => {
     const { colors, palette } = this.props.theme
-    let { currentGroup } = this.state
-    if (!currentGroup) {
+    let { currentGroup, newGroup } = this.state
+    if (!newGroup) {
       return false
     }
     let data
-    if (currentGroup.group.length === 0) {
+    if (newGroup.group.length === 0) {
       data = <List.Item title={i18n.t('home.groupedEntries.noData')} />
     } else {
-      data = currentGroup.group.map((entry, index) => {
+      data = newGroup.group.map((entry, index) => {
         let description = []
         if (entry.timers['left'] > 0) {
           description.push(i18n.t('left') + `:  ${i18n.getMin(entry.timers['left'])}`)
@@ -242,8 +249,8 @@ class HomeScreen extends Component {
             right={() => (
               <TouchableRipple
                 onPress={() => {
-                  currentGroup.group = [...currentGroup.group.filter(item => item.date !== entry.date)]
-                  this.setState({ currentGroup })
+                  newGroup.group = [...newGroup.group.filter(item => item.date !== entry.date)]
+                  this.setState({ newGroup })
                 }}
               >
                 <List.Icon color={colors.text} icon="delete" />
@@ -267,7 +274,7 @@ class HomeScreen extends Component {
             <Button
               color={palette.buttonColor}
               onPress={async () => {
-                await dataStore.updateGroup(currentGroup)
+                await dataStore.updateGroup(currentGroup, newGroup)
                 this.setState({ editGroupDialog: false, groupedRecords: dataStore.groupedRecords })
               }}
             >
@@ -352,6 +359,7 @@ class HomeScreen extends Component {
               extraData={groupedRecords}
               extractData={groupedRecords.length}
               keyExtractor={item => `${item.key}`}
+              onEndReached={() => this.fetchMore()}
               renderItem={this.renderItem}
             />
           </>
