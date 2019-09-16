@@ -77,11 +77,17 @@ public class ChronoService extends Service {
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_ADD_TIME)) {
             Log.d(TAG, "request ACTION_ADD_TIME");
             if (timer != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification(timerId));
+                }
                 timer.add(intent.getLongExtra(RNBreastFeedingModule.ACTION_ADD_TIME, 0));
             }
         } else if (intent.hasExtra(RNBreastFeedingModule.ACTION_CHANGE_TO)) {
             Log.d(TAG, "request ACTION_CHANGE_TO");
             if (timer != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForeground(RNBreastFeedingModule.NOTIFICATION_ID, RNBreastFeedingModule.INSTANCE.getNotification(timerId));
+                }
                 timer.changeTo(intent.getLongExtra(RNBreastFeedingModule.ACTION_CHANGE_TO, 0));
             }
         } else {
