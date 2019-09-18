@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, Drawer, Title } from 'react-native-paper'
 import auth from '@react-native-firebase/auth'
 import { inject, observer } from 'mobx-react'
@@ -17,6 +18,11 @@ const styles = StyleSheet.create({
   }
 })
 
+const resetAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Home' })]
+})
+
 /**
  * @author Matthieu BACHELIER
  * @since 2019-07
@@ -29,6 +35,7 @@ class Menu extends Component {
     dataStore.theme = theme
     this.props.screenProps.updateTheme(theme)
     this.props.navigation.closeDrawer()
+    this.props.navigation.dispatch(resetAction)
   }
 
   navigate = route => {
