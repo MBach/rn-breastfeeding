@@ -44,6 +44,7 @@
     "noDuration": "Ihr Eintrag hat keine Dauer"
   },
   "share": {
+    "banner": "Das Teilen von Daten mit einem vertrauenswürdigen Dritten erfordert, dass eine Kopie Ihrer Daten in der Cloud gespeichert wird.",
     "sectionHost": "Sie können 3 Kontakte einladen",
     "sectionGuest": "Sie können keine Daten freigeben, die bereits für Sie freigegeben wurden",
     "placeholder": "Name oder E-Mail-Adresse zum Teilen",
@@ -98,7 +99,6 @@
   },
   "a11y": {
     "menuIcon": "Menü",
-    "signInIcon": "Anmelden",
     "loggedInIcon": "Sie sind bereits verbunden",
     "backIcon": "Geh zurück",
     "goToAdd": "Zum Bildschirm Eintrag hinzufügen",
@@ -110,6 +110,9 @@
     "sliderml": "Menge in mL einstellen",
     "loadingIcon": "Wird geladen",
     "sendFeedbackIcon": "Feedback senden",
-    "sendInviteIcon": "Einladung senden"
+    "sendInviteIcon": "Einladung senden",
+    "deleteData": "Diesen Eintrag löschen",
+    "vitaminD": "Überprüfen Sie, ob Sie Vitamin D gegeben haben",
+    "cloud": "Daten in der Cloud teilen"
   }
 }

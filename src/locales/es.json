@@ -44,6 +44,7 @@
     "noDuration": "Tu entrada no tiene duración"
   },
   "share": {
+    "banner": "Compartir datos con un tercero de confianza requiere que se almacene una copia de sus datos en la nube",
     "sectionHost": "Puedes invitar a 3 contactos",
     "sectionGuest": "No puede compartir datos ya compartidos con usted",
     "placeholder": "Nombre o dirección de correo electrónico para compartir",
@@ -98,8 +99,7 @@
   },
   "a11y": {
     "menuIcon": "Menú",
-    "signInIcon": "Iniciar sesión",
-    "loginInIcon": "Ya estás conectado",
+    "loggedInIcon": "Ya estás conectado",
     "backIcon": "Volver",
     "goToAdd": "Ir a la pantalla Agregar entrada",
     "timerRunning": "El temporizador se está ejecutando",
@@ -110,6 +110,9 @@
     "sliderml": "Ajustar cantidad en mL",
     "loadingIcon": "Cargando",
     "sendFeedbackIcon": "Enviar comentarios",
-    "sendInviteIcon": "Enviar invitación"
+    "sendInviteIcon": "Enviar invitación",
+    "deleteData": "Eliminar esta entrada",
+    "vitaminD": "Verifique si le ha dado vitamina D",
+    "cloud": "Compartir datos en la nube"
   }
 }

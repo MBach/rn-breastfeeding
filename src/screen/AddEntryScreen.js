@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 
 const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Home', params: { saveRemote: true } })]
+  actions: [NavigationActions.navigate({ routeName: 'Home' })]
 })
 
 function ThemedText({ style, palette, children }) {
@@ -243,6 +243,7 @@ class AddEntryScreen extends Component {
         <View style={{ flex: 1, marginTop: 23 }}>
           <Slider
             accessibilityLabel={i18n.t('a11y.sliderml')}
+            accessibilityRole="adjustable"
             value={dataStore.bottle}
             minimumValue={0}
             maximumValue={240}
@@ -366,10 +367,12 @@ class AddEntryScreen extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{ marginBottom: 16 }}>
+            <View>
               <ThemedText palette={palette}>{i18n.t('vitaminD')}</ThemedText>
               <Switch
-                accessibilityLabel={i18n.t('vitaminD')}
+                style={{ minHeight: 48 }}
+                accessibilityLabel={i18n.t('a11y.vitaminD')}
+                accessibilityRole="switch"
                 value={dataStore.vitaminD}
                 onValueChange={() => {
                   dataStore.vitaminD = !dataStore.vitaminD
@@ -380,6 +383,7 @@ class AddEntryScreen extends Component {
             <View style={styles.timerContainer}>
               <Button
                 accessibilityLabel={i18n.t('add.remove1min')}
+                accessibilityRole="button"
                 disabled={!dataStore.isRunning['left'] && !dataStore.isRunning['right']}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}
@@ -395,6 +399,7 @@ class AddEntryScreen extends Component {
               </TouchableOpacity>
               <Button
                 accessibilityLabel={i18n.t('add.add1min')}
+                accessibilityRole="button"
                 disabled={!dataStore.isRunning['left'] && !dataStore.isRunning['right']}
                 color={palette.buttonColor}
                 style={{ alignContent: 'center', justifyContent: 'center' }}

@@ -64,7 +64,7 @@ class Menu extends Component {
     }
     const { colors } = this.props.theme
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: colors.background }} onPress={() => navigation.closeDrawer()}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.background }}>
         <Drawer.Section>
           <Title style={{ paddingLeft: 12, paddingVertical: 16, color: lightTheme.colors.primary }}>{i18n.t('navigation.title')}</Title>
         </Drawer.Section>

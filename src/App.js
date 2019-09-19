@@ -91,18 +91,7 @@ export default function App() {
         }
       })
       .catch(err => {
-        // No previous attempt found, about to sign in anonymously
-        if (err.userInfo === null) {
-          auth()
-            .signInAnonymously()
-            .then(async res => {
-              console.log('signInAnonymously', res)
-              await stores.dataStore.migrate(res.user.uid)
-            })
-            .catch(err => {
-              console.log('cannot sign-in anonymously', err)
-            })
-        }
+        // No previous attempt found, don't sign-in anonymously
       })
     return subscriber
   }, [])

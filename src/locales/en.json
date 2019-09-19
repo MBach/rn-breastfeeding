@@ -44,6 +44,7 @@
     "noDuration": "Your entry has no duration"
   },
   "share": {
+    "banner": "Sharing data with a trusted third party requires that a copy of your data to be stored in the Cloud",
     "sectionHost": "You can invite 3 contacts",
     "sectionGuest": "You cannot share data already shared with you",
     "placeholder": "Name or e-mail address for sharing",
@@ -98,7 +99,6 @@
   },
   "a11y": {
     "menuIcon": "Menu",
-    "signInIcon": "Sign in",
     "loggedInIcon": "You are already connected",
     "backIcon": "Go back",
     "goToAdd": "Go to Add Entry screen",
@@ -110,6 +110,9 @@
     "sliderml": "Adjust quantity in mL",
     "loadingIcon": "Loading",
     "sendFeedbackIcon": "Send feedback",
-    "sendInviteIcon": "Send invitation"
+    "sendInviteIcon": "Send invitation",
+    "deleteData": "Delete this entry",
+    "vitaminD": "Check if you have given vitamin D",
+    "cloud": "Sharing data into the Cloud"
   }
 }

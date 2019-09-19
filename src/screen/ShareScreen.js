@@ -4,6 +4,7 @@ import { NavigationActions, StackActions } from 'react-navigation'
 import {
   withTheme,
   Avatar,
+  Banner,
   Button,
   Caption,
   Dialog,
@@ -25,6 +26,7 @@ import { inject, observer } from 'mobx-react'
 
 import { validateEmail, SHARE_STATUS } from '../config'
 import i18n from '../locales/i18n'
+import { lightTheme } from '../styles'
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -86,6 +88,7 @@ class ShareScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      showBanner: true,
       email: '',
       invites: [],
       contacts: [],
@@ -205,6 +208,9 @@ class ShareScreen extends Component {
       return
     }
 
+    // Migrate data to firebase only here
+    dataStore.migrate()
+
     // Generate a 4 digits code
     const code = Math.floor(1000 + Math.random() * 9000)
     const date = moment().unix()
@@ -213,9 +219,8 @@ class ShareScreen extends Component {
     const ref = database().ref(`/users/${auth().currentUser.uid}/invites`)
     const snapshot = await ref.once('value')
     let invites = []
-    if (snapshot.val()) {
-      const data = snapshot.val()
-      for (const invite of data) {
+    if (snapshot && snapshot.val() !== null) {
+      for (const invite of snapshot.val()) {
         invites.push(invite)
       }
     }
@@ -264,11 +269,19 @@ class ShareScreen extends Component {
       const ref2 = database().ref(`/invites/${userToRemove.code}`)
       const snapshot2 = await ref2.once('value')
       if (snapshot2.val()) {
-        ref2.set(snapshot2.val().filter(invite => !(invite.sender === auth().currentUser.uid && invite.dest === userToRemove.email)))
+        /// remove 'linked' if empty
+        const inviteList = snapshot2
+          .val()
+          .filter(invite => !(invite.sender === auth().currentUser.uid && invite.dest === userToRemove.email))
+        ref2.set(inviteList)
+        if (inviteList.length === 0) {
+          database()
+            .ref(`/users/${auth().currentUser.uid}/linked`)
+            .remove()
+        }
       }
 
       const ref3 = database().ref(`/users/${userToRemove.uid}`)
-      ref3.child('host').remove()
       ref3.child('linked').remove()
 
       // Also remove data in list without doing a remote call
@@ -279,18 +292,24 @@ class ShareScreen extends Component {
   }
 
   unlinkGuestToHost = async () => {
-    const ref = database().ref(`/users/${auth().currentUser.uid}`)
-    ref.child('linked').remove()
-    const snapshot = await ref.child('host').once('value')
-    if (snapshot.val()) {
+    const ref = database().ref(`/users/${auth().currentUser.uid}/linked`)
+    const snapshot = await ref.once('value')
+    if (snapshot && snapshot.val() !== null) {
       const host = snapshot.val()
       const refHostInvites = database().ref(`/users/${host}/invites`)
       const snapshotInvites = await refHostInvites.once('value')
-      if (snapshotInvites.val()) {
-        refHostInvites.set(snapshotInvites.val().filter(invite => invite.uid !== auth().currentUser.uid))
+      if (snapshotInvites && snapshotInvites.val() !== null) {
+        const inviteList = snapshotInvites.val().filter(invite => invite.uid !== auth().currentUser.uid)
+        refHostInvites.set(inviteList)
+        if (inviteList.length === 0) {
+          database()
+            .ref(`/users/${host}/linked`)
+            .remove()
+        }
       }
-      ref.child('host').remove()
+      ref.remove()
       dataStore.userIsGuest = false
+      dataStore.targetUid = null
       this.props.navigation.dispatch(resetAction)
     }
   }
@@ -463,11 +482,29 @@ class ShareScreen extends Component {
     )
   }
 
+  renderBanner = () => (
+    <Banner
+      theme={{ colors: { primary: lightTheme.colors.primary } }}
+      accessibilityLabel={i18n.t('a11y.cloud')}
+      visible={this.state.showBanner}
+      image={() => <IconButton icon="cloud-upload" color={lightTheme.colors.primary} size={24} />}
+      actions={[
+        {
+          label: i18n.t('ok'),
+          onPress: () => this.setState({ showBanner: false })
+        }
+      ]}
+    >
+      {i18n.t('share.banner')}
+    </Banner>
+  )
+
   render = () => {
     const { colors } = this.props.theme
     const { invites, contacts, suggestions, showSnackbar, snackBarMessage, userToRemove } = this.state
     return (
       <View style={{ flex: 1 }}>
+        {!dataStore.userIsGuest && this.renderBanner()}
         <ScrollView keyboardShouldPersistTaps={'always'} style={{ padding: 8, backgroundColor: colors.background }}>
           <Caption style={{ marginHorizontal: 12, marginTop: 12 }}>
             {dataStore.userIsGuest ? i18n.t('share.sectionGuest') : i18n.t('share.sectionHost')}

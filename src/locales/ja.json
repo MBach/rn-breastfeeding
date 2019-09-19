@@ -44,6 +44,7 @@
     "noDuration": "あなたのエントリーは期間がありません"
   },
   "share": {
+    "banner": "信頼できる第三者とデータを共有するには、データのコピーをクラウドに保存する必要があります",
     "sectionHost": "3つの連絡先を招待できます",
     "sectionGuest": "既に共有されているデータを共有することはできません",
     "placeholder": "共有する名前または電子メールアドレス",
@@ -98,7 +99,6 @@
   },
   "a11y": {
     "menuIcon": "メニュー",
-    "signInIcon": "サインイン",
     "loggedInIcon": "あなたは既に接続されています",
     "backIcon": "戻る",
     "goToAdd": "エントリの追加画面に移動",
@@ -110,6 +110,9 @@
     "sliderml": "mL単位での量の調整",
     "loadingIcon": "読み込み中",
     "sendFeedbackIcon": "フィードバックを送信",
-    "sendInviteIcon": "招待状を送信"
+    "sendInviteIcon": "招待状を送信",
+    "deleteData": "このエントリを削除",
+    "vitaminD": "ビタミンDを投与したかどうかを確認してください",
+    "cloud": "クラウドへのデータの共有"
   }
 }

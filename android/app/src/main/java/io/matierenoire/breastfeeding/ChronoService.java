@@ -91,7 +91,8 @@ public class ChronoService extends Service {
                 timer.changeTo(intent.getLongExtra(RNBreastFeedingModule.ACTION_CHANGE_TO, 0));
             }
         } else {
-            Log.d(TAG, "intent extra not found?");
+            Log.w(TAG, "intent extra not found?");
+            stopSelf();
         }
         return START_NOT_STICKY;
     }

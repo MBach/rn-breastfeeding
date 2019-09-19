@@ -44,6 +44,7 @@
     "noDuration": "La tua voce non ha durata"
   },
   "share": {
+    "banner": "La condivisione dei dati con una terza parte attendibile richiede che una copia dei tuoi dati sia archiviata nel Cloud",
     "sectionHost": "Puoi invitare 3 contatti",
     "sectionGuest": "Non puoi condividere dati già condivisi con te",
     "placeholder": "Nome o indirizzo e-mail per la condivisione",
@@ -98,8 +99,7 @@
   },
   "a11y": {
     "menuIcon": "Menu",
-    "signInIcon": "Accedi",
-    "loggInIcon": "Sei già connesso",
+    "loggedInIcon": "Sei già connesso",
     "backIcon": "Torna indietro",
     "goToAdd": "Vai alla schermata Aggiungi voce",
     "timerRunning": "Il timer è in esecuzione",
@@ -110,6 +110,9 @@
     "sliderml": "Regola quantità in mL",
     "loadingIcon": "Caricamento",
     "sendFeedbackIcon": "Invia feedback",
-    "sendInviteIcon": "Spedire un invito"
+    "sendInviteIcon": "Spedire un invito",
+    "deleteData": "Elimina questa voce",
+    "vitaminD": "Controlla se hai dato vitamina D",
+    "cloud": "Condivisione dei dati nel cloud"
   }
 }

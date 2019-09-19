@@ -1,6 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx'
 import { persist } from 'mobx-persist'
-import moment from 'moment'
 import _ from 'lodash'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
@@ -22,11 +21,6 @@ class DataStore {
   set theme(t) {
     this._theme = t
   }
-
-  ///
-
-  @persist
-  _migrated = false
 
   ///
 
@@ -144,8 +138,7 @@ class DataStore {
 
   @computed
   get groupedRecords() {
-    console.warn('DS groupedRecords')
-    let groups = _.groupBy(this.records, record => record.day)
+    let groups = _.groupBy(this.records, record => record.day.toString())
     let result = _.map(groups, (g, day) => {
       const group = _.orderBy(g, ['date'], ['desc'])
       const index = group.findIndex(g => g.vitaminD)
@@ -166,94 +159,54 @@ class DataStore {
   @observable
   userIsGuest = false
 
+  @observable
+  targetUid = null
+
   ///
-
-  _refUserInputs = null
-
-  fetchCloudData = async () => {
-    if (!auth().currentUser) {
-      return
-    }
-    const ref = database().ref(`/users/${auth().currentUser.uid}`)
-    const snapshot = await ref.once('value')
-    if (snapshot.val()) {
-      const data = snapshot.val()
-      // Check if current user is the owner or has been invited by someone else
-      if (data.linked) {
-        this.userIsGuest = true
-        this._refUserInputs = database().ref(`/users/${data.host}/inputs`)
-      } else {
-        this._refUserInputs = ref.child('inputs')
-      }
-      // Get the dataSet
-      const snapshot2 = await this._refUserInputs.once('value')
-      if (snapshot2.val()) {
-        const values = Object.values(snapshot2)
-        // Convert back Object to Array
-        let r = []
-        for (const entry of Object.values(values[0].value)) {
-          r.push(entry)
-        }
-        this.records = r
-      }
-    }
-  }
-
-  fetchGroup = async () => {
-    if (!auth().currentUser) {
-      return
-    }
-
-    // Check if current user is the owner or has been invited by someone else
-    const refLinked = database().ref(`/users/${auth().currentUser.uid}/linked`)
-    const snapshot = await refLinked.once('value')
-    // User is a guest
-    if (snapshot.val()) {
-      this.userIsGuest = true
-
-      const refHost = database().ref(`/users/${auth().currentUser.uid}/host`)
-      const host = await refHost.once('value')
-      this._refUserInputs = database()
-        .ref(`/users/${host.val()}/inputs`)
-        .orderByKey()
-        .limitToLast(1)
-    } else {
-      this._refUserInputs = database()
-        .ref(`/users/${auth().currentUser.uid}/inputs`)
-        .orderByKey()
-        .limitToLast(1)
-    }
-
-    // Get the latest input
-    const lastOne = await this._refUserInputs.once('value')
-    if (lastOne.val()) {
-      const day = Object.values(lastOne.val())[0].day
-      const from = moment.unix(day).subtract(1, 'week')
-      console.warn(from)
-    } else {
-      console.warn('no data ?')
-    }
-  }
-
-  migrate = async newUid => {
-    if (this._migrated) {
-      return
-    }
-    // User has installed v2 and therefore has an uid
-    for (const record of this.records) {
-      const ref = database().ref(`/users/${newUid}/inputs/${record.date}`)
-      await ref.set({ ...record })
-    }
-    this._migrated = true
-  }
 
   @action
   hydrateComplete = () => {
     //database().setPersistenceEnabled(true)
   }
 
+  promisify = (isGuest, uid) => {
+    this.userIsGuest = isGuest
+    this.targetUid = uid
+    return new Promise((resolve, reject) => {
+      resolve({ sucess: true, isGuest })
+    })
+  }
+
   @action
-  addEntry = async data => {
+  isAccountLinked = () => {
+    // Check if current user exists and is connected
+    if (auth().currentUser && !auth().currentUser.isAnonymous) {
+      // To check if an account is linked, we need to check both cases: user is the host, and user is the guest
+      const refLinked = database().ref(`/users/${auth().currentUser.uid}/linked`)
+      return refLinked
+        .once('value')
+        .then(linked => {
+          if (linked && linked.val() !== null) {
+            // value = 'host' or uid (current user is guest)
+            if (linked.val() === 'host') {
+              return this.promisify(false, auth().currentUser.uid)
+            } else {
+              return this.promisify(true, linked.val())
+            }
+          } else {
+            return this.promisify(false, null)
+          }
+        })
+        .catch(err => {
+          return this.promisify(false, null)
+        })
+    } else {
+      return this.promisify(false, null)
+    }
+  }
+
+  @action
+  addEntry = data => {
     // Save data to localStorage
     let r = [...this.records]
     r.push(data)
@@ -266,54 +219,66 @@ class DataStore {
     this.vitaminD = false
     this.day = null
     this.currentTimerId = null
+
+    // Check if user has shared data with someone
+    // If so, then enable cloud replication, in order to sync data on all connected devices
+    if (this.targetUid) {
+      const ref = database().ref(`/users/${this.targetUid}/inputs/${data.date}`)
+      ref.set({ ...data })
+    }
+
     return true
   }
 
   @action
-  saveToCloud = async () => {
-    if (this._refUserInputs === null) {
-      this._refUserInputs = database().ref(`/users/${auth().currentUser.uid}/inputs`)
+  updateGroup = (currentGroup, newGroup) => {
+    let groups = this.groupedRecords
+    groups = groups.filter(g => g.day !== newGroup.day)
+    groups.push(newGroup)
+    this.records = _.flatten(groups.map(g => g.group))
+    if (this.targetUid) {
+      for (const current of currentGroup.group) {
+        if (newGroup.group.findIndex(c => c.date === current.date) === -1) {
+          const ref = database().ref(`/users/${this.targetUid}/inputs/${current.date}`)
+          ref.remove()
+        }
+      }
     }
+  }
+
+  fetchCloudData = async () => {
+    if (!this.targetUid) {
+      return
+    }
+    const ref = database().ref(`/users/${this.targetUid}/inputs`)
+    const snapshot = await ref.once('value')
+    // Get the dataSet
+    if (snapshot.val()) {
+      const values = Object.values(snapshot)
+      // Convert back Object to Array
+      let r = []
+      for (const entry of Object.values(values[0].value)) {
+        r.push(entry)
+      }
+      this.records = r
+    }
+  }
+
+  migrate = async () => {
+    let refUser = database().ref(`/users/${auth().currentUser.uid}/inputs`)
 
     // Make a backup
-    console.warn('saveToCloud')
     let r = []
     for (let record of this.records) {
       if (record.s === undefined) {
-        console.warn('updating data', record)
-        const ref = this._refUserInputs.child(record.date.toString())
-        await ref.set({ ...record })
-        record.s = true
+        const ref = refUser.child(record.date.toString())
+        ref.set({ ...record }).then(res => {
+          record.s = true
+        })
       }
       r.push(record)
     }
     this.records = r
-  }
-
-  @action
-  updateGroup = (currentGroup, newGroup) => {
-    console.warn('updateGroup', currentGroup, newGroup)
-    let groups = this.groupedRecords
-    /*if (auth().currentUser) {
-      let toDelete = groups.find(g => g.day === newGroup.day)
-      if (toDelete) {
-        let ref
-        if (this._refUserInputs === null) {
-          ref = database().ref(`/users/${auth().currentUser.uid}/inputs`)
-        } else {
-          ref = this._refUserInputs
-        }
-        for (const entry of toDelete.group) {
-          ref.child(`${entry.date}`).remove()
-        }
-        for (const entry of newGroup.group) {
-          ref.child(entry.date.toString()).set({ ...entry })
-        }
-      }
-    }*/
-    groups = groups.filter(g => g.day !== newGroup.day)
-    groups.push(newGroup)
-    this.records = _.flatten(groups.map(g => g.group))
   }
 }
 

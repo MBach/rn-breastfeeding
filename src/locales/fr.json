@@ -44,6 +44,7 @@
     "noDuration": "Votre saisie n’a pas de durée"
   },
   "share": {
+    "banner": "Le partage des données avec un tiers de confiance nécessite qu’une copie de vos données soit stockée dans le Nuage",
     "sectionHost": "Vous pouvez inviter 3 contacts",
     "sectionGuest": "Vous ne pouvez pas partager des données déjà partagées avec vous",
     "placeholder": "Nom ou adresse e-mail pour le partage",
@@ -84,7 +85,7 @@
   },
   "feedback": {
     "title": "Merci d’utiliser cette App d’Allaitement",
-    "subtitle": "Vous pouvez partagez vos commantaires, suggestions ou remonter un bug ci-dessous",
+    "subtitle": "Vous pouvez partagez vos commentaires, suggestions ou remonter un bug ci-dessous",
     "caption": "Sélectionner une option",
     "comment": "Commentaire",
     "suggestion": "Suggestion",
@@ -98,7 +99,6 @@
   },
   "a11y": {
     "menuIcon": "Menu",
-    "signInIcon": "Se connecter",
     "loggedInIcon": "Vous êtes déjà connecté",
     "backIcon": "Retour",
     "goToAdd": "Aller à l'écran d’Ajout",
@@ -110,6 +110,9 @@
     "sliderml": "Ajuster la quantité en mL",
     "loadingIcon": "Chargement",
     "sendFeedbackIcon": "Envoyer un commentaire",
-    "sendInviteIcon": "Envoyer une invitation"
+    "sendInviteIcon": "Envoyer une invitation",
+    "deleteData": "Supprimer cette saisie",
+    "vitaminD": "Cochez si vous avez donné de la vitamine D",
+    "cloud": "Partage des données dans le Nuage"
   }
 }

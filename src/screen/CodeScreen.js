@@ -73,8 +73,7 @@ class CodeScreen extends Component {
 
       const ref2 = database().ref(`/users/${auth().currentUser.uid}`)
       const sender = arr[index].sender
-      ref2.child('/linked').set(true)
-      ref2.child('/host').set(sender)
+      ref2.child('/linked').set(sender)
       const refUserInvites = database().ref(`/users/${sender}/invites`)
       const userInvitesValues = await refUserInvites.once('value')
       this.setState({ loading: false })
@@ -83,6 +82,9 @@ class CodeScreen extends Component {
         const arr2 = Object.values(uiv[0].value)
         const index2 = arr2.findIndex(s => s.email === auth().currentUser.email)
         if (index2 !== -1) {
+          database()
+            .ref(`/users/${sender}/linked`)
+            .set('host')
           const child = refUserInvites.child(`/${index2}`)
           // Remove 'code' key
           child.set({ email: auth().currentUser.email, status: SHARE_STATUS.ACTIVE, uid: auth().currentUser.uid })
@@ -109,9 +111,9 @@ class CodeScreen extends Component {
                   accessibilityLabel={i18n.t('code.signIn')}
                   mode="contained"
                   onPress={() =>
-                    signIn(() => {
+                    signIn(() =>
                       this.setState({ isAnonymous: !auth().currentUser || (auth().currentUser && auth().currentUser.isAnonymous) })
-                    })
+                    )
                   }
                 >
                   {i18n.t('code.signIn')}
@@ -129,6 +131,11 @@ class CodeScreen extends Component {
             maxLength={4}
             value={this.state.code}
             onChangeText={code => this.setState({ code })}
+            onSubmitEditing={() => {
+              if (!this.state.isAnonymous && this.state.code.length === 4) {
+                this.verifyCode()
+              }
+            }}
           />
           <View style={styles.marginV}>
             {this.state.loading ? (

@@ -21,7 +21,6 @@ import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 
 import { isNotRunning } from '../config'
-import { signIn } from '../hooks/SignIn'
 import i18n from '../locales/i18n'
 
 const styles = StyleSheet.create({
@@ -106,23 +105,27 @@ class HomeScreen extends Component {
       this.forceUpdate()
     }, 1000 * 60)
 
+    // Used when one has successfully linked his account from another one by using a code
+    const { params } = this.props.navigation.state
+    if (params && params.accountLinked) {
+      this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
+    }
+    dataStore
+      .isAccountLinked()
+      .then(res => {
+        if (res) {
+          dataStore.fetchCloudData().then(() => {
+            this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords })
+          })
+        } else {
+          this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords })
+        }
+      })
+      .catch(err => this.setState({ fetching: false, groupedRecords: dataStore.groupedRecords }))
+
     if (auth().currentUser && auth().currentUser.photoURL) {
       this.props.navigation.setParams({ userPhoto: auth().currentUser.photoURL })
     }
-    const { params } = this.props.navigation.state
-    if (params) {
-      if (params.saveRemote) {
-        console.warn('about to remote save')
-        dataStore.saveToCloud()
-      }
-      // Used when one has successfully linked his account from another one by using a code
-      if (params && params.accountLinked) {
-        this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.accountLinked') })
-      }
-    }
-    //await dataStore.fetchCloudData()
-    const groupedRecords = dataStore.groupedRecords
-    this.setState({ fetching: false, groupedRecords })
   }
 
   componentWillUnmount() {
@@ -156,10 +159,6 @@ class HomeScreen extends Component {
   }
 
   hideDialog = dialog => () => this.setState({ [dialog]: false })
-
-  fetchMore = () => {
-    // dataStore.fetchGroup()
-  }
 
   ///
 
@@ -219,7 +218,7 @@ class HomeScreen extends Component {
 
   editGroupDialog = () => {
     const { colors, palette } = this.props.theme
-    let { currentGroup, newGroup } = this.state
+    let { newGroup } = this.state
     if (!newGroup) {
       return false
     }
@@ -248,6 +247,7 @@ class HomeScreen extends Component {
             description={description.join(', ')}
             right={() => (
               <TouchableRipple
+                accessibilityLabel={i18n.t('a11y.deleteData')}
                 onPress={() => {
                   newGroup.group = [...newGroup.group.filter(item => item.date !== entry.date)]
                   this.setState({ newGroup })
@@ -263,18 +263,19 @@ class HomeScreen extends Component {
     return (
       <Portal>
         <Dialog visible={this.state.editGroupDialog} onDismiss={this.hideDialog('editGroupDialog')}>
-          <Dialog.Title>{moment.unix(currentGroup.day).format('dddd')}</Dialog.Title>
+          <Dialog.Title>{moment.unix(newGroup.day).format('dddd')}</Dialog.Title>
           <Dialog.ScrollArea style={styles.containerDialog}>
             <ScrollView>{data}</ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions style={styles.popupButtonsContainer}>
-            <Button color={palette.buttonColor} onPress={this.hideDialog('editGroupDialog')}>
+            <Button accessibilityLabel={i18n.t('cancel')} color={palette.buttonColor} onPress={this.hideDialog('editGroupDialog')}>
               {i18n.t('cancel')}
             </Button>
             <Button
+              accessibilityLabel={i18n.t('ok')}
               color={palette.buttonColor}
-              onPress={async () => {
-                await dataStore.updateGroup(currentGroup, newGroup)
+              onPress={() => {
+                dataStore.updateGroup(this.state.currentGroup, newGroup)
                 this.setState({ editGroupDialog: false, groupedRecords: dataStore.groupedRecords })
               }}
             >
@@ -327,19 +328,10 @@ class HomeScreen extends Component {
           accessibilityLabel={i18n.t('a11y.loggedInIcon')}
           icon={() => (
             <Image
-              style={{ width: 32, height: 32, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 16 }}
+              style={{ flex: 1, backgroundColor: this.props.theme.colors.primaryDarkColor, borderRadius: 16, margin: -4 }}
               source={{ uri: auth().currentUser.photoURL }}
             />
           )}
-          // onPress={() => {}}
-        />
-      )
-    } else {
-      return (
-        <Appbar.Action
-          accessibilityLabel={i18n.t('a11y.signInIcon')}
-          icon="account-circle"
-          onPress={() => signIn(name => this.setState({ showSnackbar: true, snackBarMessage: i18n.t('home.greeting', { name }) }))}
         />
       )
     }
@@ -359,7 +351,6 @@ class HomeScreen extends Component {
               extraData={groupedRecords}
               extractData={groupedRecords.length}
               keyExtractor={item => `${item.key}`}
-              onEndReached={() => this.fetchMore()}
               renderItem={this.renderItem}
             />
           </>
