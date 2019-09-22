@@ -91,6 +91,8 @@
     "suggestion": "Suggerimento",
     "bug": "Bug",
     "desc": "Aggiungi alcuni dettagli",
+    "notConnected": "Se desideri ricevere una risposta, accedi. Puoi inviare il tuo feedback in modo anonimo.",
+    "loginWithGoogle": "Accedi con Google",
     "sent": "Il tuo feedback è stato inviato. Grazie !",
     "errors": {
       "radio": "Devi selezionare un'opzione",
@@ -105,13 +107,14 @@
     "timerRunning": "Il timer è in esecuzione",
     "addEntryIcon": "Aggiungi voce",
     "buttonTimer": "%{timer} timer",
+    "durationPlaceholder": "Inserisci la durata in minuti",
     "removeml": "Rimuovi 10mL",
     "addml": "Aggiungi 10mL",
     "sliderml": "Regola quantità in mL",
     "loadingIcon": "Caricamento",
     "sendFeedbackIcon": "Invia feedback",
     "sendInviteIcon": "Spedire un invito",
-    "deleteData": "Elimina questa voce",
+    "deleteData": "Elimina la voce alle %{date}",
     "vitaminD": "Controlla se hai dato vitamina D",
     "cloud": "Condivisione dei dati nel cloud"
   }

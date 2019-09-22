@@ -91,6 +91,8 @@
     "suggestion": "Suggestion",
     "bug": "Problème",
     "desc": "Description",
+    "notConnected": "Si vous souhaitez recevoir une réponse, veuillez vous connecter. Vous pouvez envoyer vos commentaires anonymement.",
+    "loginWithGoogle": "Connectez-vous avec Google",
     "sent": "Votre retour a été transmis. Merci !",
     "errors": {
       "radio": "Vous devez sélectionner une option",
@@ -103,15 +105,16 @@
     "backIcon": "Retour",
     "goToAdd": "Aller à l'écran d’Ajout",
     "timerRunning": "Le chronomètre tourne",
-    "addEntryIcon": "Ajouter une saisie",
+    "addEntryIcon": "Valider l’ajout",
     "buttonTimer": "Chronomètre %{timer}",
+    "durationPlaceholder": "Entrez la durée en minutes",
     "removeml": "Retirer 10mL",
     "addml": "Ajouter 10mL",
     "sliderml": "Ajuster la quantité en mL",
     "loadingIcon": "Chargement",
     "sendFeedbackIcon": "Envoyer un commentaire",
     "sendInviteIcon": "Envoyer une invitation",
-    "deleteData": "Supprimer cette saisie",
+    "deleteData": "Supprimer saisie faite à %{date}",
     "vitaminD": "Cochez si vous avez donné de la vitamine D",
     "cloud": "Partage des données dans le Nuage"
   }

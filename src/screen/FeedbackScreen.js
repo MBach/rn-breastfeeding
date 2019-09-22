@@ -1,10 +1,22 @@
 import React, { Component } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { withTheme, ActivityIndicator, Appbar, Caption, RadioButton, Text, TextInput, Snackbar, Subheading } from 'react-native-paper'
+import {
+  withTheme,
+  ActivityIndicator,
+  Appbar,
+  Button,
+  Caption,
+  RadioButton,
+  Text,
+  TextInput,
+  Snackbar,
+  Subheading
+} from 'react-native-paper'
 import { inject, observer } from 'mobx-react'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database'
 import moment from 'moment'
+import { signIn } from '../hooks/SignIn'
 import i18n from '../locales/i18n'
 
 const styles = StyleSheet.create({
@@ -38,7 +50,8 @@ class FeedbackScreen extends Component {
       description: '',
       showSnackbar: false,
       snackBarMessage: '',
-      sending: false
+      sending: false,
+      isAnonymous: !auth().currentUser || (auth().currentUser && auth().currentUser.isAnonymous)
     }
   }
 
@@ -91,13 +104,25 @@ class FeedbackScreen extends Component {
         </RadioButton.Group>
         <TextInput
           accessibilityLabel={i18n.t('feedback.desc')}
-          style={styles.mt}
           mode={'outlined'}
           label={`${i18n.t('feedback.desc')} *`}
           value={this.state.description}
           multiline
           onChangeText={description => this.setState({ description })}
         />
+        {this.state.isAnonymous && (
+          <>
+            <Subheading>{i18n.t('feedback.notConnected')}</Subheading>
+            <Button
+              mode="contained"
+              icon="account-circle"
+              style={styles.mt}
+              onPress={() => signIn(() => this.setState({ isAnonymous: false }))}
+            >
+              {i18n.t('feedback.loginWithGoogle')}
+            </Button>
+          </>
+        )}
       </ScrollView>
       {this.renderSnackBar()}
     </View>

@@ -286,6 +286,7 @@ class AddEntryScreen extends Component {
           <Dialog.Title>{i18n.t('add.manualEntry')}</Dialog.Title>
           <Dialog.Content>
             <TextInput
+              accessibilityLabel={i18n.t('a11y.durationPlaceholder')}
               label={i18n.t('add.durationPlaceholder')}
               value={this.state.manualTimer}
               keyboardType="numeric"

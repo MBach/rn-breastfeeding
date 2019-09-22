@@ -247,7 +247,7 @@ class HomeScreen extends Component {
             description={description.join(', ')}
             right={() => (
               <TouchableRipple
-                accessibilityLabel={i18n.t('a11y.deleteData')}
+                accessibilityLabel={i18n.t('a11y.deleteData', { date: i18n.formatTime(entry.date) })}
                 onPress={() => {
                   newGroup.group = [...newGroup.group.filter(item => item.date !== entry.date)]
                   this.setState({ newGroup })

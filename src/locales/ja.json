@@ -91,6 +91,8 @@
     "suggestion": "提案",
     "bug": "バグ",
     "desc": "詳細を追加する",
+    "notConnected": "応答を受け取りたい場合は、サインインしてください。フィードバックを匿名で送信できます。",
+    "loginWithGoogle": "Googleでログイン",
     "sent": "フィードバックが送信されました。ありがとうございます！",
     "errors": {
       "radio": "オプションを選択する必要があります",
@@ -105,13 +107,14 @@
     "timerRunning": "タイマーが作動しています",
     "addEntryIcon": "エントリの追加",
     "buttonTimer": "%{timer}タイマー",
+    "durationPlaceholder": "時間を分単位で入力してください",
     "removeml": "10mLを削除",
     "addml": "10mLを追加",
     "sliderml": "mL単位での量の調整",
     "loadingIcon": "読み込み中",
     "sendFeedbackIcon": "フィードバックを送信",
     "sendInviteIcon": "招待状を送信",
-    "deleteData": "このエントリを削除",
+    "deleteData": "午後%{date}にエントリを削除",
     "vitaminD": "ビタミンDを投与したかどうかを確認してください",
     "cloud": "クラウドへのデータの共有"
   }

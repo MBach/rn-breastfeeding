@@ -91,6 +91,8 @@
     "suggestion": "Sugestão",
     "bug": "bug",
     "desc": "Adicione alguns detalhes",
+    "notConnected": "Se você deseja receber uma resposta, faça login. Você pode enviar seus comentários anonimamente.",
+    "loginWithGoogle": "Faça login com o Google",
     "sent": "Seus comentários foram enviados. Obrigado!",
     "erros": {
       "radio": "Você deve selecionar uma opção",
@@ -105,13 +107,14 @@
     "timerRunning": "O cronômetro está em execução",
     "addEntryIcon": "Adicionar entrada",
     "buttonTimer": "%{timer} cronômetro",
+    "durationPlaceholder": "Digite a duração em minutos",
     "removeml": "Remova 10 mL",
     "addml": "Adicione 10 mL",
     "sliderml": "Ajustar quantidade em mL",
     "loadingIcon": "Carregando",
     "sendFeedbackIcon": "Enviar feedback",
     "sendInviteIcon": "Enviar convite",
-    "deleteData": "Excluir esta entrada",
+    "deleteData": "Excluir entrada às %{date}",
     "vitaminD": "Verifique se você administrou vitamina D",
     "cloud": "Compartilhando dados na nuvem"
   }
