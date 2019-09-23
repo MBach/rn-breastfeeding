@@ -238,7 +238,7 @@ class AddEntryScreen extends Component {
             }
           }}
         >
-          -10mL
+          {i18n.t('add.removeml')}
         </Button>
         <View style={{ flex: 1, marginTop: 23 }}>
           <Slider
@@ -254,7 +254,7 @@ class AddEntryScreen extends Component {
             onValueChange={bottle => this.setState({ bottle })}
           />
           <ThemedText palette={palette} style={styles.smallTimer}>
-            {`${this.state.bottle}mL`}
+            {i18n.t('add.ml', { ml: this.state.bottle })}
           </ThemedText>
         </View>
         <Button
@@ -269,7 +269,7 @@ class AddEntryScreen extends Component {
             }
           }}
         >
-          +10mL
+          {i18n.t('add.addml')}
         </Button>
       </View>
     )

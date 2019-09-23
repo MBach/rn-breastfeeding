@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name"> الرضاعة الطبيعية </string>
+    <string name="channel"> الكرونومتر </string>
+    <string name="description"> كم من الوقت منذ بدء الكرونومتر </string>
+    <string name="pause"> إيقاف مؤقت </string>
+    <string name="resume"> استئناف </string>
+    <string name="on_hold"> قيد الانتظار </string>
+</resources>

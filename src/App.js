@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Platform, StatusBar } from 'react-native'
+import { Dimensions, I18nManager, Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import { createAppContainer, createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import QuickActions from 'react-native-quick-actions'
@@ -42,6 +42,7 @@ const DrawerNavigator = createDrawerNavigator(
     RootStack: RootStack
   },
   {
+    drawerPosition: I18nManager.isRTL ? 'right' : 'left',
     drawerWidth: Math.min(width, height) * 0.8,
     overlayColor: 'rgba(0, 0, 0, 0.6)',
     contentComponent: Menu

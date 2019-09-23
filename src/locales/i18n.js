@@ -22,6 +22,18 @@ export const loadLocale = async () => {
       i18n.locale = locale.languageCode
       i18n.uses24HourClock = RNLocalize.uses24HourClock()
       switch (locale.languageCode) {
+        case 'ar':
+          import('./ar.json').then(ar => {
+            i18n.translations = { ar }
+            i18n.leftButton = require('../assets/ar/left.png')
+            i18n.rightButton = require('../assets/ar/right.png')
+            shortHumanizer.languages.short = {
+              m: () => 'min',
+              s: () => 's'
+            }
+            import('moment/locale/ar').then(() => moment.locale('ar'))
+          })
+          break
         case 'de':
           import('./de.json').then(de => {
             i18n.translations = { de }
@@ -127,6 +139,15 @@ export const loadLocale = async () => {
 i18n.formatItem = n => {
   let item = ''
   switch (i18n.locale) {
+    case 'ar':
+      if (n == 1) {
+        item = `${n} الرضاعة الطبيعية`
+      } else if (n == 2) {
+        item = `${n} التغذية`
+      } else {
+        item = `${n} وجبات`
+      }
+      break
     case 'de':
       if (n == 1) {
         item = '1 Futtermittel'
@@ -193,6 +214,11 @@ i18n.humanize = date => {
   }
   const duration = moment.duration(moment().diff(moment.unix(date)))
   switch (language) {
+    case 'ar':
+      return `${humanizeDuration(duration, {
+        conjunction: 'و',
+        ...defaultOptions
+      })}`
     case 'de':
       return `Vor ${humanizeDuration(duration, {
         conjunction: ' und ',
@@ -242,6 +268,7 @@ i18n.formatLongDay = date => {
     default:
     case 'en':
       return moment.unix(date).format('dddd, MMMM Do YYYY')
+    case 'ar':
     case 'de':
     case 'es':
     case 'fr':
@@ -259,6 +286,7 @@ i18n.formatDay = date => {
     default:
     case 'en':
       return date.format('MM/DD/YY')
+    case 'ar':
     case 'de':
     case 'es':
     case 'fr':

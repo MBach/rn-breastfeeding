@@ -51,12 +51,12 @@ class FeedbackScreen extends Component {
       showSnackbar: false,
       snackBarMessage: '',
       sending: false,
-      isAnonymous: !auth().currentUser || (auth().currentUser && auth().currentUser.isAnonymous)
+      isAnonymous: !(auth().currentUser && auth().currentUser.uid)
     }
   }
 
   sendFeedback = async () => {
-    const { radio, description } = this.state
+    const { radio, description, isAnonymous } = this.state
     if (radio === '') {
       this.setState({ showSnackbar: true, snackBarMessage: i18n.t('feedback.errors.radio') })
     } else if (description.length < 20) {
@@ -64,7 +64,7 @@ class FeedbackScreen extends Component {
     } else {
       this.setState({ sending: true })
       const ref = database().ref(`/feedback/${moment().unix()}`)
-      await ref.set({ user: auth().currentUser.uid, type: radio, description })
+      await ref.set({ user: isAnonymous ? 'anonymous' : auth().currentUser.uid, type: radio, description })
       this.setState({ sending: false, showSnackbar: true, snackBarMessage: i18n.t('feedback.sent') })
     }
   }

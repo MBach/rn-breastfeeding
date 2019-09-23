@@ -66,7 +66,9 @@ class Menu extends Component {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: colors.background }}>
         <Drawer.Section>
-          <Title style={{ paddingLeft: 12, paddingVertical: 16, color: lightTheme.colors.primary }}>{i18n.t('navigation.title')}</Title>
+          <Title style={{ paddingHorizontal: 12, paddingVertical: 16, color: lightTheme.colors.primary }}>
+            {i18n.t('navigation.title')}
+          </Title>
         </Drawer.Section>
         <Drawer.Section>
           <Drawer.Item
