@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, I18nManager, Platform, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
-import { createAppContainer, createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createDrawerNavigator } from 'react-navigation-drawer'
+import { createStackNavigator } from 'react-navigation-stack'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import auth, { firebase } from '@react-native-firebase/auth'
@@ -42,6 +44,7 @@ const DrawerNavigator = createDrawerNavigator(
     RootStack: RootStack
   },
   {
+    drawerLockMode: 'unlocked',
     drawerPosition: I18nManager.isRTL ? 'right' : 'left',
     drawerWidth: Math.min(width, height) * 0.8,
     overlayColor: 'rgba(0, 0, 0, 0.6)',

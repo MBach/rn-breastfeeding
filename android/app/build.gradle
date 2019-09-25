@@ -11,7 +11,7 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 def enableSeparateBuildPerCPUArchitecture = false
 
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 def useIntlJsc = false
 
@@ -28,8 +28,8 @@ android {
         applicationId "io.matierenoire.breastfeeding"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "2.0.4"
+        versionCode 13
+        versionName "2.0.5"
     }
     splits {
         abi {
@@ -89,6 +89,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     // JSC from node_modules
     if (useIntlJsc) {
         implementation 'org.webkit:android-jsc-intl:+'
