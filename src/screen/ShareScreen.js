@@ -344,7 +344,7 @@ class ShareScreen extends Component {
       const { colors } = this.props.theme
       return (
         <View style={styles.inputContainer}>
-          <Avatar.Icon size={48} icon="person-add" />
+          <Avatar.Icon size={48} icon="account-plus" />
           <TextInput
             autoCapitalize="none"
             keyboardType="email-address"
@@ -377,7 +377,7 @@ class ShareScreen extends Component {
         />
       )
     } else {
-      return <List.Icon icon={() => <Avatar.Icon size={48} icon="person" />} />
+      return <List.Icon icon={() => <Avatar.Icon size={48} icon="account" />} />
     }
   }
 

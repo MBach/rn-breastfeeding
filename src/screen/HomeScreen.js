@@ -206,7 +206,7 @@ class HomeScreen extends Component {
         <List.Section title={i18n.formatLongDay(item.day)}>
           <List.Item
             title={i18n.formatItem(item.group.length)}
-            left={() => <List.Icon icon="edit" color={colors.text} style={{ opacity: 0.75 }} />}
+            left={() => <List.Icon icon="pencil" color={colors.text} style={{ opacity: 0.75 }} />}
             right={() => item.hasVitaminD && <List.Icon color={colors.text} style={{ opacity: 0.5 }} icon="brightness-5" />}
           />
         </List.Section>
@@ -295,7 +295,7 @@ class HomeScreen extends Component {
           <FAB
             accessibilityLabel={i18n.t('a11y.goToAdd')}
             style={[styles.fab, { backgroundColor: colors.primary }]}
-            icon={'add'}
+            icon="plus"
             onPress={() =>
               this.props.navigation.navigate('AddEntry', {
                 autoRefresh: () => {

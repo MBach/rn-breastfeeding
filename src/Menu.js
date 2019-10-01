@@ -81,7 +81,7 @@ class Menu extends Component {
           />
           <Drawer.Item
             theme={{ colors: { primary: lightTheme.colors.primary } }}
-            icon="add"
+            icon="plus"
             label={i18n.t('navigation.addEntry')}
             active={currentRoute === 'AddEntry'}
             style={styles.drawerItems}
@@ -107,7 +107,7 @@ class Menu extends Component {
           />
           <Drawer.Item
             theme={{ colors: { primary: lightTheme.colors.primary } }}
-            icon="feedback"
+            icon="message-alert-outline"
             label={i18n.t('menu.feedback')}
             style={styles.drawerItems}
             active={currentRoute === 'Feedback'}
@@ -117,7 +117,7 @@ class Menu extends Component {
         <Drawer.Section title={i18n.t('menu.title')}>
           <Drawer.Item
             theme={{ colors: { primary: lightTheme.colors.primary } }}
-            icon="wb-sunny"
+            icon="white-balance-sunny"
             label={i18n.t('menu.day')}
             active={dataStore.theme === 'day'}
             style={styles.drawerItems}
