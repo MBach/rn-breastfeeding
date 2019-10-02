@@ -117,6 +117,7 @@
     "loadingIcon": "読み込み中",
     "sendFeedbackIcon": "フィードバックを送信",
     "sendInviteIcon": "招待状を送信",
+    "useCode": "受け取ったコードを入力してください",
     "deleteData": "午後%{date}にエントリを削除",
     "vitaminD": "ビタミンDを投与したかどうかを確認してください",
     "cloud": "クラウドへのデータの共有"

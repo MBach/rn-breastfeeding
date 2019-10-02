@@ -124,7 +124,7 @@ class CodeScreen extends Component {
             <Subheading>{i18n.t('code.descriptionConnected')}</Subheading>
           )}
           <TextInput
-            accessibilityLabel={i18n.t('code.label')}
+            accessibilityLabel={i18n.t('a11y.useCode')}
             label={i18n.t('code.label')}
             placeholder={i18n.t('code.placeholder')}
             keyboardType="numeric"

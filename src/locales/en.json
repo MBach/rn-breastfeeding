@@ -117,6 +117,7 @@
     "loadingIcon": "Loading",
     "sendFeedbackIcon": "Send feedback",
     "sendInviteIcon": "Send invitation",
+    "useCode": "Enter the code that you have received",
     "deleteData": "Delete this entry at %{date}",
     "vitaminD": "Check if you have given vitamin D",
     "cloud": "Sharing data into the Cloud"

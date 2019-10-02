@@ -117,6 +117,7 @@
     "loadingIcon": "Chargement",
     "sendFeedbackIcon": "Envoyer un commentaire",
     "sendInviteIcon": "Envoyer une invitation",
+    "useCode": "Entrez le code que vous avez reçu",
     "deleteData": "Supprimer saisie faite à %{date}",
     "vitaminD": "Cochez si vous avez donné de la vitamine D",
     "cloud": "Partage des données dans le Nuage"

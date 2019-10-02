@@ -117,6 +117,7 @@
     "loadingIcon": "Carregando",
     "sendFeedbackIcon": "Enviar feedback",
     "sendInviteIcon": "Enviar convite",
+    "useCode": "Digite o código que você recebeu",
     "deleteData": "Excluir entrada às %{date}",
     "vitaminD": "Verifique se você administrou vitamina D",
     "cloud": "Compartilhando dados na nuvem"
