@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native'
 
 const { RNBreastFeedingModule } = NativeModules
-const { addTime, changeTo, pauseResumeTimer, stopTimers } = RNBreastFeedingModule
-const RNBreastFeeding = { addTime, changeTo, pauseResumeTimer, stopTimers }
+const { addTime, changeTo, pauseResumeTimer, setTheme, stopTimers } = RNBreastFeedingModule
+const RNBreastFeeding = { addTime, changeTo, pauseResumeTimer, setTheme, stopTimers }
 
 export default RNBreastFeeding

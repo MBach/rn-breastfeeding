@@ -1,5 +1,6 @@
 package io.matierenoire.breastfeeding;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -56,7 +57,6 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -177,7 +177,6 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
     }
 
-
     Notification getNotification(String timerId) {
         if (notification == null) {
             Intent resultIntent = new Intent(reactContext, ChronoService.class);
@@ -194,10 +193,23 @@ public class RNBreastFeedingModule extends ReactContextBaseJavaModule {
         }
     }
 
-
     @ReactMethod
     public void pauseResumeTimer(final String timerId) {
         startService(timerId, ACTION_PAUSE_RESUME, null);
+    }
+
+    @ReactMethod
+    public void setTheme(final String theme) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Activity activity = getCurrentActivity();
+            if (activity != null) {
+                if ("day".equals(theme)) {
+                    activity.setTheme(R.style.AppThemeLight);
+                } else {
+                    activity.setTheme(R.style.AppThemeDark);
+                }
+            }
+        }
     }
 
     @ReactMethod

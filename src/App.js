@@ -7,7 +7,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import QuickActions from 'react-native-quick-actions'
 import { Provider as PaperProvider, Portal } from 'react-native-paper'
 import auth, { firebase } from '@react-native-firebase/auth'
-import { GoogleSignin } from 'react-native-google-signin'
+import { GoogleSignin } from '@react-native-community/google-signin'
 
 import { Provider } from 'mobx-react'
 import { create } from 'mobx-persist'
@@ -17,6 +17,7 @@ import { AddEntryScreen, CodeScreen, FeedbackScreen, HomeScreen, LoadingScreen, 
 import stores from './stores'
 import { darkTheme, lightTheme } from './styles'
 import Menu from './Menu'
+import RNBreastFeeding from './RNBreastFeeding'
 
 const { width, height } = Dimensions.get('screen')
 const uriPrefix = 'rnbreastfeeding://rnbreastfeeding'
@@ -115,6 +116,7 @@ export default function App() {
   const updateTheme = key => {
     const theme = getTheme(key)
     if (Platform.OS === 'android') StatusBar.setBackgroundColor(theme.palette.primaryDarkColor)
+    RNBreastFeeding.setTheme(key)
     setTheme(theme)
   }
 

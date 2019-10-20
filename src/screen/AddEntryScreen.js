@@ -3,7 +3,7 @@ import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TouchableOpacity, Vie
 import { NavigationActions, StackActions } from 'react-navigation'
 import { withTheme, ActivityIndicator, Appbar, Button, Dialog, FAB, Paragraph, Portal, Switch, TextInput } from 'react-native-paper'
 import Slider from '@react-native-community/slider'
-import DateTimePicker from 'react-native-modal-datetime-picker'
+import RNDateTimePicker from '@react-native-community/datetimepicker'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
 
@@ -134,23 +134,23 @@ class AddEntryScreen extends Component {
 
   showDatePicker = () => this.setState({ isDatePickerVisible: true })
   hideDatePicker = () => this.setState({ isDatePickerVisible: false })
-  handleDatePicked = date => {
+  handleDatePicked = (event, date) => {
     let { day } = this.state
     const mDate = moment(date)
     day.year(mDate.year())
     day.dayOfYear(mDate.dayOfYear())
     dataStore.day = day.unix()
-    this.setState({ day })
+    this.setState({ day, isDatePickerVisible: false })
     this.hideDatePicker()
   }
 
-  handleTimePicked = time => {
+  handleTimePicked = (event, time) => {
     let { day } = this.state
     const mTime = moment(time)
     day.hour(mTime.hour())
     day.minute(mTime.minute())
     dataStore.day = day.unix()
-    this.setState({ day })
+    this.setState({ day, isTimePickerVisible: false })
     this.hideTimePicker()
   }
   showTimePicker = () => this.setState({ isTimePickerVisible: true })
@@ -420,14 +420,16 @@ class AddEntryScreen extends Component {
             <ThemedText palette={palette}>{i18n.t('bottle')}</ThemedText>
             {this.renderBottle()}
           </View>
-          <DateTimePicker isVisible={isDatePickerVisible} onConfirm={this.handleDatePicked} onCancel={this.hideDatePicker} mode="date" />
-          <DateTimePicker
-            isVisible={isTimePickerVisible}
-            onConfirm={this.handleTimePicked}
-            onCancel={this.hideTimePicker}
-            mode="time"
-            is24Hour={i18n.uses24HourClock}
-          />
+          {isDatePickerVisible && <RNDateTimePicker value={day.toDate()} onChange={this.handleDatePicked} mode="date" display="default" />}
+          {isTimePickerVisible && (
+            <RNDateTimePicker
+              value={day.toDate()}
+              onChange={this.handleTimePicked}
+              mode="time"
+              display="default"
+              is24Hour={i18n.uses24HourClock}
+            />
+          )}
           {this.renderEditDurationDialog()}
           {this.renderErrorDialog()}
         </View>

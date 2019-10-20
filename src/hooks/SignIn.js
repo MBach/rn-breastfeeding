@@ -1,5 +1,5 @@
 import React from 'react'
-import { GoogleSignin, statusCodes } from 'react-native-google-signin'
+import { GoogleSignin, statusCodes } from '@react-native-community/google-signin'
 import auth, { firebase } from '@react-native-firebase/auth'
 
 const signIn = async callback => {
