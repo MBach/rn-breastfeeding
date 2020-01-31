@@ -150,9 +150,9 @@ i18n.formatItem = n => {
       break
     case 'de':
       if (n == 1) {
-        item = '1 Futtermittel'
+        item = '1 Mahlzeit'
       } else {
-        item = `${n} Fütterungen`
+        item = `${n} Mahlzeiten`
       }
       break
     default:

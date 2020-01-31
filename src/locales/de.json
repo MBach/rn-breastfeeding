@@ -20,12 +20,12 @@
   "cancel": "Stornieren",
   "ok": "OK",
   "left": "Links",
-  "right": "Recht",
+  "right": "Rechts",
   "bottle": "Flasche",
   "minutes": "min",
   "home": {
     "noEntry": "Es wurde noch nicht gestillt",
-    "lastEntry": "Letzte Fütterung vor %{date}",
+    "lastEntry": "Letzte Mahlzeit vor %{date}",
     "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
     "groupedEntries": {
       "noData": "Keine Daten"
