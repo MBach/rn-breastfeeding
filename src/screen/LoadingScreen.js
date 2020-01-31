@@ -16,7 +16,7 @@ import queryString from 'query-string'
  */
 class LoadingScreen extends Component {
   static navigationOptions = {
-    header: null
+    headerShown: false
   }
 
   async componentDidMount() {

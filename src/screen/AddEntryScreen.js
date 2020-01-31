@@ -84,7 +84,7 @@ function ThemedText({ style, palette, children }) {
 @observer
 class AddEntryScreen extends Component {
   static navigationOptions = {
-    header: null
+    headerShown: false
   }
 
   constructor(props) {

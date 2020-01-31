@@ -74,7 +74,7 @@ class ShareScreen extends Component {
     return {
       title: i18n.t('navigation.contact'),
       headerStyle: { backgroundColor: screenProps.primary },
-      headerRight: (
+      headerRight: () => (
         <IconButton
           accessibilityLabel={i18n.t('a11y.sendInviteIcon')}
           icon="check"

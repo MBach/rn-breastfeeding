@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 @observer
 class HomeScreen extends Component {
   static navigationOptions = {
-    header: null
+    headerShown: false
   }
 
   constructor(props) {

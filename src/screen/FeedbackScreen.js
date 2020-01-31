@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 @observer
 class FeedbackScreen extends Component {
   static navigationOptions = {
-    header: null
+    headerShown: false
   }
 
   constructor(props) {
