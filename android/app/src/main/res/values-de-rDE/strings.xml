@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Stillen</string>
     <string name="channel">Zeitmesser</string>
-    <string name="description">Wie viel Zeit seitdem Beginn des Chronometers ist</string>
-    <string name="on_hold">In Wartestellung</string>
+    <string name="description">Wie viel Zeit seit dem Start verstrichen ist</string>
+    <string name="on_hold">Pausiert</string>
     <string name="pause">Pause</string>
-    <string name="resume">Zusammenfassung</string>
+    <string name="resume">Weiter</string>
 </resources>
