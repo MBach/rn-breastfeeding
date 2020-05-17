@@ -8,7 +8,7 @@
     "feedback": "Feedback"
   },
   "menu": {
-    "share": "Aktie",
+    "share": "Teilen",
     "selectContact": "Wählen Sie einen Kontakt aus",
     "code": "Verwenden Sie einen Code",
     "feedback": "Feedback",
@@ -28,10 +28,10 @@
     "lastEntry": "Letzte Mahlzeit vor %{date}",
     "add": "Tippen Sie auf die Schaltfläche +, um zu beginnen",
     "groupedEntries": {
-      "noData": "Keine Daten"
+      "noData": "Keine Einträge"
     },
     "greeting": "Hallo %{name}!",
-    "accountLinked": "Herzlichen Glückwunsch, Ihr Konto wurde verlinkt !"
+    "accountLinked": "Herzlichen Glückwunsch, Ihr Konto wurde verlinkt!"
   },
   "add": {
     "date": "Datum",
@@ -58,28 +58,28 @@
       "description": "Ihre Eingaben werden nicht geteilt mit:"
     },
     "mail": {
-      "subject": "%{name} hat Beiträge mit Ihnen geteilt",
-      "body": "%{name} (%{email})  hat Beiträge mit Ihnen geteilt.",
-      "code": "Verwenden Sie diesen Code, um die Eingaben anzuzeigen:",
-      "download": "Um die App zu erhalten, checke diesen Link aus : %{url}"
+      "subject": "%{name} hat Stilleinträge mit Ihnen geteilt",
+      "body": "%{name} (%{email}) hat Stilleinträge mit Ihnen geteilt.",
+      "code": "Verwenden Sie diesen Code, um die Einträge anzuzeigen:",
+      "download": "Um die App zu installieren, folgen Sie diesem Link: %{url}"
     },
     "removeDialog": {
       "title": "Eingeladenen Kontakt entfernen?",
-      "description": "Wenn Sie fortfahren, kann %{email} Sie nicht mehr visualisieren oder mit Ihnen interagieren."
+      "description": "Wenn Sie fortfahren, kann %{email} Ihre Einträge nicht mehr sehen oder für Sie eintragen."
     },
     "inviteStatus": {
       "active": "Aktiv",
-      "pending": "Anstehend"
+      "pending": "Ausstehend"
     },
     "leaveButton": "Verlassen",
     "leaveDialog": {
-      "description": "Entfernen Sie sich von den mit Ihnen geteilten Eingaben ?"
+      "description": "Geteilte Einträge nicht mehr synchronisieren?"
     }
   },
   "code": {
     "title": "Sie haben einen Code von jemandem erhalten?",
-    "description": "Um auf gemeinsame Eingaben zuzugreifen, melden Sie sich an und geben Sie den Validierungscode ein.",
-    "descriptionConnected": "Geben Sie den Validierungscode ein, um auf gemeinsam genutzte Eingänge zuzugreifen.",
+    "description": "Um auf gemeinsame Einträge zuzugreifen, melden Sie sich an und geben Sie den Validierungscode ein.",
+    "descriptionConnected": "Geben Sie den Validierungscode ein, um auf gemeinsame Einträge zuzugreifen.",
     "signIn": "Anmelden",
     "label": "Code",
     "placeholder": "4-stelliger Code",
@@ -93,10 +93,10 @@
     "comment": "Kommentar",
     "suggestion": "Vorschlag",
     "bug": "Fehler",
-    "desc": "Fügen Sie einige Details hinzu",
+    "desc": "Langbeschreibung",
     "notConnected": "Wenn Sie eine Antwort erhalten möchten, melden Sie sich bitte an. Sie können Ihr Feedback anonym senden.",
     "loginWithGoogle": "Mit Google anmelden",
-    "sent": "Ihr Feedback wurde gesendet. Vielen Dank !",
+    "sent": "Ihr Feedback wurde gesendet. Vielen Dank!",
     "errors": {
       "radio": "Sie müssen eine Option auswählen",
       "desc": "Bitte schreiben Sie mindestens 20 Zeichen"
@@ -105,8 +105,8 @@
   "a11y": {
     "menuIcon": "Menü",
     "loggedInIcon": "Sie sind bereits verbunden",
-    "backIcon": "Geh zurück",
-    "goToAdd": "Zum Bildschirm Eintrag hinzufügen",
+    "backIcon": "Zurück",
+    "goToAdd": "Zum Eintragedialog",
     "timerRunning": "Timer läuft",
     "addEntryIcon": "Eintrag hinzufügen",
     "buttonTimer": "%{timer} timer",
@@ -118,7 +118,7 @@
     "sendFeedbackIcon": "Feedback senden",
     "sendInviteIcon": "Einladung senden",
     "useCode": "Geben Sie den Code ein, den Sie erhalten haben",
-    "deleteData": "Eintrag um %{date} löschen",
+    "deleteData": "Eintrag von %{date} löschen",
     "vitaminD": "Überprüfen Sie, ob Sie Vitamin D gegeben haben",
     "cloud": "Daten in der Cloud teilen"
   }
