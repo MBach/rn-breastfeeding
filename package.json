@@ -25,7 +25,7 @@
     "humanize-duration": "^3.22.0",
     "i18n-js": "^3.5.1",
     "jsc-android": "^241213.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mobx": "^5.15.4",
     "mobx-persist": "^0.4.1",
     "mobx-react": "5.4.4",
